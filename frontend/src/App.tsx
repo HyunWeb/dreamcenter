@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 
 import "./App.css";
-import axios from "axios";
 import { getposts } from "./api/postApi";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./components/pages/Client/Main";
@@ -20,6 +19,7 @@ import AdminReservationPage from "./components/pages/Admin/AdminReservationPage"
 import AdminQuestionsPage from "./components/pages/Admin/AdminQuestionsPage";
 import LayoutPage from "./components/pages/Client/LayoutPage";
 import QuestionWritePage from "./components/pages/Client/QuestionWritePage";
+import NaverLogin from "./components/pages/Client/NaverLogin";
 
 function App() {
   useEffect(() => {
@@ -45,6 +45,7 @@ function App() {
           <Route path="reservation" element={<ReservationPage />} />
           <Route path="questions" element={<QuestionsPage />} />
           <Route path="questions/write" element={<QuestionWritePage />} />
+          <Route path="naver/callback" element={<NaverLogin />} />
         </Route>
 
         {/* 관리자(admin) 페이지 */}

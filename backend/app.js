@@ -3,7 +3,12 @@ const cors = require("cors");
 const app = express();
 const postRoutes = require("./routes/index");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // API 라우터 연결
