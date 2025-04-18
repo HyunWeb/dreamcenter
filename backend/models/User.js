@@ -1,23 +1,45 @@
 const { DataTypes } = require("sequelize");
 
-module.exports = (sequelize) => {
-  const User = sequelize.define(
-    "User",
-    {
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define("User", {
+    sns_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
-    {
-      tableName: "users",
-      timestamp: false,
-    }
-  );
+    provider: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "naver",
+    },
+    name: {
+      type: DataTypes.STRING,
+    },
+    nickname: {
+      type: DataTypes.STRING,
+    },
+    email: {
+      type: DataTypes.STRING,
+    },
+    profile_image: {
+      type: DataTypes.STRING,
+    },
+    age: {
+      type: DataTypes.STRING,
+    },
+    gender: {
+      type: DataTypes.STRING,
+    },
+    mobile: {
+      type: DataTypes.STRING,
+    },
+    birthyear: {
+      type: DataTypes.STRING,
+    },
+    birthday: {
+      type: DataTypes.STRING,
+    },
+  });
 
   return User;
 };

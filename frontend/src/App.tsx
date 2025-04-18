@@ -1,7 +1,4 @@
-import React, { useEffect } from "react";
-
 import "./App.css";
-import { getposts } from "./api/postApi";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./components/pages/Client/Main";
 import AboutPage from "./components/pages/Client/AboutPage";
@@ -22,18 +19,10 @@ import QuestionWritePage from "./components/pages/Client/QuestionWritePage";
 import NaverLogin from "./components/pages/Client/NaverLogin";
 
 function App() {
-  useEffect(() => {
-    getposts()
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/naver/callback" element={<NaverLogin />} />
         {/* 클라이언트(사용자) 페이지 */}
         <Route path="/" element={<LayoutPage />}>
           <Route index element={<Main />} />
@@ -45,7 +34,7 @@ function App() {
           <Route path="reservation" element={<ReservationPage />} />
           <Route path="questions" element={<QuestionsPage />} />
           <Route path="questions/write" element={<QuestionWritePage />} />
-          <Route path="naver/callback" element={<NaverLogin />} />
+          {/* <Route path="naver/callback" element={<NaverLogin />} /> */}
         </Route>
 
         {/* 관리자(admin) 페이지 */}

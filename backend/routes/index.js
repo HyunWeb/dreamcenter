@@ -1,9 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { getPosts, postLogin } = require("../controllers/Cmain");
+const {
+  getPosts,
+  postLogin,
+  getLogin,
+  postLogout,
+} = require("../controllers/Cmain");
 
-// Get /api/post
-router.get("/post", getPosts);
 router.post("/naver/callback", postLogin);
+router.post("/auth/logout", postLogout);
 
 module.exports = router;

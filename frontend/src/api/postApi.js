@@ -2,20 +2,17 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+// 로그인 요청
 export const postLogin = async ({ code, state }) => {
   try {
-    const response = await API.post(
-      `/api/naver/callback`,
-      { code, state },
-      { withCredentials: true }
-    );
+    const response = await API.post(`/api/naver/callback`, { code, state });
     const storedState = localStorage.getItem("naver_oauth_state");
-    console.log(state);
 
     if (state !== storedState) {
       alert("위조된 요청일 가능성이 있습니다. 로그인 취소");
@@ -29,6 +26,11 @@ export const postLogin = async ({ code, state }) => {
   }
 };
 
-export const getposts = () => {
-  return API.get(`/api/post`);
+export const postLogout = async () => {
+  try {
+    const response = await API.post(`/api/auth/logout`, {});
+    return response.data;
+  } catch (err) {
+    console.error("로그아웃 실패", err);
+  }
 };

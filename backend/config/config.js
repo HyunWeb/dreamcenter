@@ -8,7 +8,7 @@ const development = {
   port: process.env.DB_PORT || 3306,
   dialect: process.env.DB_DIALECT,
   timezone: process.env.DB_TIMEZONE,
-  logging: process.env.DB_LOGGING,
+  logging: console.log,
 };
 
 const test = {};
