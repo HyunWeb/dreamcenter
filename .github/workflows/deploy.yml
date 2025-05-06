@@ -26,7 +26,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu/dreamCenter
+            cd /home/ubuntu/dreamcenter
             git pull origin main
 
             cd frontend
