@@ -34,3 +34,16 @@ export const postLogout = async () => {
     console.error("로그아웃 실패", err);
   }
 };
+
+export const postUpload = async (formData) => {
+  try {
+    const response = await API.post(`/api/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("업로드 실패", err);
+  }
+};

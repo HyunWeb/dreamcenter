@@ -1,7 +1,54 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
+
+const multer = require("multer");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { v4: uuidv4 } = require("uuid");
+const path = require("path");
 require("dotenv").config();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+exports.postUpload = [
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const file = req.file;
+      if (!file)
+        return res.status(400).json({ message: "제공된 파일이 없습니다." });
+
+      const ext = path.extname(file.originalname); // 확장자 추출
+      const key = `uploads/${uuidv4()}_${ext}`;
+      console.log(key);
+
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: key,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+
+      await s3.send(new PutObjectCommand(uploadParams));
+
+      const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+
+      res.status(200).json({ url: fileUrl });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Upload failed" });
+    }
+  },
+];
 
 exports.postLogin = async (req, res) => {
   const { code, state } = req.body;
