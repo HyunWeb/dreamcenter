@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu/dreamcenter
+            cd /home/ubuntu/dreamcenter/backend
             git pull origin main
 
             docker-compose down
