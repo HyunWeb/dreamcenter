@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to EC2 (Dockerized)
 
 on:
   push:
@@ -13,11 +13,6 @@ jobs:
       - name: Checkout source code # GitHub 저장소의 코드를 EC2에 클론하는 역할
         uses: actions/checkout@v3
 
-      - name: Setup Node.js # GitHub Actions 서버에서 Node.js 환경 구성
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
       - name: Deploy to EC2 via SSH # 진짜 배포 동작을 수행
         uses: appleboy/ssh-action@master
         with:
@@ -29,10 +24,6 @@ jobs:
             cd /home/ubuntu/dreamcenter
             git pull origin main
 
-            cd frontend
-            npm install
-            npm run build
+            docker-compose down
 
-            cd ../backend
-            npm install --legacy-peer-deps
-            pm2 restart all
+            docker-compose up --build -d

@@ -14,7 +14,7 @@ export default function Main() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React 테스트입니다.
+          Learn React 도커 완료입니다.
         </a>
       </header>
     </div>

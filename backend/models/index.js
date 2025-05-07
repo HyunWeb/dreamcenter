@@ -9,7 +9,19 @@ const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config
+  {
+    host: config.host,
+    dialect: "mysql",
+    retry: {
+      max: 10, // 최대 재시도 횟수
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 60000, // 최대 30초까지 연결 대기
+      idle: 10000,
+    },
+  }
 );
 
 fs.readdirSync(__dirname)
