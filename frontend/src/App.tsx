@@ -1,4 +1,6 @@
 import "./App.css";
+import "./style/reset.css";
+import "./style/global.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./components/pages/Client/Main";
 import AboutPage from "./components/pages/Client/AboutPage";
@@ -38,13 +40,13 @@ function App() {
         </Route>
 
         {/* 관리자(admin) 페이지 */}
-        <Route path="/admin/*" element={<AdminLayout />}>
+        {/* <Route path="/admin/*" element={<AdminLayout />}>
           <Route path="news" element={<AdminNewsPage />} />
           <Route path="gallery" element={<AdminGalleryPage />} />
           <Route path="review" element={<AdminReviewPage />} />
           <Route path="reservation" element={<AdminReservationPage />} />
           <Route path="questions" element={<AdminQuestionsPage />} />
-        </Route>
+        </Route> */}
       </Routes>
     </BrowserRouter>
   );

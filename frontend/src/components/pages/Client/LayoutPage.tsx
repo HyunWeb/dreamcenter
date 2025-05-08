@@ -38,7 +38,7 @@ export default function LayoutPage() {
 
   return (
     <div>
-      LayoutPage
+      LayoutPage 안녕하세요 반갑습니다.
       {isLogin ? (
         <h1>{name}님 환영합니다!</h1>
       ) : (
