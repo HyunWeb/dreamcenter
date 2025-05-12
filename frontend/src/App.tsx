@@ -2,10 +2,9 @@ import "./App.css";
 import "./style/reset.css";
 import "./style/global.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Main from "./components/pages/Client/Main";
+import Main from "./components/pages/Client/main/Main";
 import AboutPage from "./components/pages/Client/AboutPage";
 import LocationPage from "./components/pages/Client/LocationPage";
-import ReviewPage from "./components/pages/Client/ReviewPage";
 import ReservationPage from "./components/pages/Client/ReservationPage";
 import QuestionsPage from "./components/pages/Client/QuestionsPage";
 import AdminLayout from "./components/pages/Admin/AdminLayout";
@@ -29,14 +28,14 @@ function App() {
         <Route path="/" element={<LayoutPage />}>
           <Route index element={<Main />} />
           <Route path="about" element={<AboutPage />} />
-          <Route path="location" element={<LocationPage />} />
+          <Route path="office" element={<AboutPage />} />
           <Route path="news" element={<NewsPage />} />
-          <Route path="gallery" element={<GalleryPage />} />
-          <Route path="review" element={<ReviewPage />} />
-          <Route path="reservation" element={<ReservationPage />} />
           <Route path="questions" element={<QuestionsPage />} />
+          <Route path="reservation" element={<ReservationPage />} />
+          <Route path="gallery" element={<GalleryPage />} />
+          <Route path="location" element={<LocationPage />} />
+          <Route path="adminReservation" element={<AdminReservationPage />} />
           <Route path="questions/write" element={<QuestionWritePage />} />
-          {/* <Route path="naver/callback" element={<NaverLogin />} /> */}
         </Route>
 
         {/* 관리자(admin) 페이지 */}
@@ -44,7 +43,7 @@ function App() {
           <Route path="news" element={<AdminNewsPage />} />
           <Route path="gallery" element={<AdminGalleryPage />} />
           <Route path="review" element={<AdminReviewPage />} />
-          <Route path="reservation" element={<AdminReservationPage />} />
+          
           <Route path="questions" element={<AdminQuestionsPage />} />
         </Route> */}
       </Routes>
