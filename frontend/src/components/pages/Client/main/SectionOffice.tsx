@@ -13,12 +13,6 @@ const Section = styled.section`
     h2 {
       margin-bottom: 12px;
     }
-    a {
-      position: absolute;
-      top: 50%;
-      right: 0px;
-      transform: translateY(-50%);
-    }
   }
 `;
 

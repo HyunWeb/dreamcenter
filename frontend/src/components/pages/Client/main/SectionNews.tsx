@@ -43,6 +43,7 @@ const Header = styled.div`
 
   padding: 24px 16px;
   margin-bottom: 30px;
+  position: relative;
 `;
 export default function SectionNews() {
   return (

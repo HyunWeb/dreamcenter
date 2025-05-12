@@ -21,3 +21,12 @@ body {
   font-weight: 500;
   color: #888888;
 }
+/* 메인 페이지 갤러리 라이브러리 */
+.my-masonry-grid {
+  display: flex;
+  margin-left: -16px;
+}
+.my-masonry-grid_column {
+  padding-left: 16px;
+  background-clip: padding-box;
+}

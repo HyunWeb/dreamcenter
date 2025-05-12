@@ -7,6 +7,7 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 `;
 
 const Header = styled.header`
