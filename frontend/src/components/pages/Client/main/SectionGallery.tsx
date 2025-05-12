@@ -11,6 +11,7 @@ const breakpointColumnsObj = {
 const Section = styled.section`
   position: relative;
   z-index: 1;
+  padding-bottom: 150px;
 
   img {
     width: 100%;

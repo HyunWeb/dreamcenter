@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import Gnb from "../../common/Gnb";
 import styled from "styled-components";
+import FooterLayout from "../../common/FooterLayout";
 
 const Layout = styled.div`
   display: flex;
@@ -40,6 +41,7 @@ export default function LayoutPage() {
       <Main>
         <Outlet />
       </Main>
+      <FooterLayout />
     </Layout>
   );
 }
