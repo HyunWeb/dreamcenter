@@ -5,6 +5,7 @@ import { postUpload } from "../../../../api/postApi";
 import SectionAbout from "./SectionAbout";
 import SectionOffice from "./SectionOffice";
 import SectionNews from "./SectionNews";
+import SectionGallery from "./SectionGallery";
 
 export default function Main() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -37,6 +38,7 @@ export default function Main() {
       <SectionAbout />
       <SectionOffice />
       <SectionNews />
+      <SectionGallery />
     </div>
   );
 }
