@@ -3,6 +3,8 @@ import axios from "axios";
 import { postUpload } from "../../../../api/postApi";
 
 import SectionAbout from "./SectionAbout";
+import SectionOffice from "./SectionOffice";
+import SectionNews from "./SectionNews";
 
 export default function Main() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -33,6 +35,8 @@ export default function Main() {
       {/* <input type="file" accept="image/*" onChange={handleChange} />
         <button onClick={handleSubmit}>업로드</button> */}
       <SectionAbout />
+      <SectionOffice />
+      <SectionNews />
     </div>
   );
 }

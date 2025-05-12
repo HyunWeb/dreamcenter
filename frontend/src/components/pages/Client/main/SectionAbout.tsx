@@ -9,6 +9,7 @@ const AboutSection = styled.section<{ imageUrl: string }>`
   text-align: center;
   position: relative;
   color: white;
+  margin-bottom: 120px;
 
   height: 633px;
   overflow: hidden;
