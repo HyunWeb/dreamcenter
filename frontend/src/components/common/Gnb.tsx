@@ -6,6 +6,7 @@ import LoginControl from "./LoginControl";
 const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #dddddd;
 `;
 const Ul = styled.ul`
   display: flex;

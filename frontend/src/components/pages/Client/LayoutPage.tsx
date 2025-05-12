@@ -14,6 +14,7 @@ const Layout = styled.div`
 const Header = styled.header`
   width: 100%;
   max-width: 1200px;
+  margin-bottom: 30px;
 `;
 
 const LogoDiv = styled.div`

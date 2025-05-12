@@ -1,5 +1,10 @@
 import React from "react";
+import NaverMap from "./location/NaverMap";
 
 export default function LocationPage() {
-  return <div>LocationPage</div>;
+  return (
+    <div>
+      <NaverMap />
+    </div>
+  );
 }

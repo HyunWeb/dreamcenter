@@ -48,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@types/navermaps": "^3.7.10",
     "@types/styled-components": "^5.1.34"
   }
 }
