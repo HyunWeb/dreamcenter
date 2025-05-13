@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code # GitHub 저장소의 코드를 EC2에 클론하는 역할
+      - name: Checkout source code # GitHub 저장소의 코드를 GitHub Actions 런너에 클론하여 작업 시작
         uses: actions/checkout@v3
 
       - name: Deploy to EC2 via SSH # 진짜 배포 동작을 수행
@@ -26,11 +26,19 @@ jobs:
             # 최신 코드 pull
             git pull origin main
 
+            echo "[디스크 사용량 확인]"
+            df -h
+            echo "[Docker 리소스 상태 확인]"
+            docker system df
+
             # 디스크 공간 확보
             docker system prune -af --volumes
 
-
+            # 현재 실행 중인 컨테이너들 모두 중단하고 제거
             docker-compose down
 
+            # 새로 받은 소스코드로부터 도커 이미지 다시 빌드
             docker-compose build
+
+            # 빌드된 이미지를 기반으로 컨테이너 실행 (서비스 시작)
             docker-compose up -d
