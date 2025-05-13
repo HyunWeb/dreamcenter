@@ -22,11 +22,15 @@ jobs:
           port: 22
           script: |
             cd /home/ubuntu/dreamcenter/backend
+
+            # 최신 코드 pull
             git pull origin main
+
+            # 디스크 공간 확보
+            docker system prune -af --volumes
+
 
             docker-compose down
 
-            docker-compose up --build -d
-
-      - name: Free up Docker space
-        run: docker system prune -a -f --volumes
+            docker-compose build --no-cache
+            docker-compose up -d
