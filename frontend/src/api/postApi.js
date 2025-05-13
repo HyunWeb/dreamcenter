@@ -47,3 +47,12 @@ export const postUpload = async (formData) => {
     console.error("업로드 실패", err);
   }
 };
+
+export const getNews = async () => {
+  try {
+    const response = await API.get(`/api/rss`);
+    return response.data;
+  } catch (err) {
+    console.error("뉴스 받아오기 실패", err);
+  }
+};

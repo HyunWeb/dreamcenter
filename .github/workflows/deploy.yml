@@ -27,3 +27,6 @@ jobs:
             docker-compose down
 
             docker-compose up --build -d
+
+      - name: Free up Docker space
+        run: docker system prune -a -f --volumes

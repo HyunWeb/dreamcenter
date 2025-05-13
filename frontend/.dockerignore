@@ -1,0 +1,8 @@
+node_modules
+.git
+build
+public/defaultBanner.png
+public/temp/
+dist
+.env
+*.log
