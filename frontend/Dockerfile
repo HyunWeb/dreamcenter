@@ -13,7 +13,9 @@ FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Nginx 설정 파일 덮어씌우고 싶다면 필요시 추가 가능
-# COPY ./nginx.conf /etc/nginx/nginx.conf
+# 새로고침시 404페이지 오류뜨는것 대응
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
 
 EXPOSE 80
 
