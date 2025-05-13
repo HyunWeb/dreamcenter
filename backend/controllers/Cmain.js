@@ -10,6 +10,7 @@ require("dotenv").config();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const { parseStringPromise } = require("xml2js");
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -128,4 +129,34 @@ exports.postLogout = async (req, res) => {
   });
 
   res.status(200).json({ message: "로그아웃 완료" });
+};
+
+exports.getNews = async (req, res) => {
+  const rssUrl = "https://blog.rss.naver.com/makedoc.xml";
+  try {
+    const response = await axios.get(rssUrl, { responseType: "text" });
+    const parsed = await parseStringPromise(response.data);
+    const items = parsed.rss.channel[0].item;
+
+    const simplified = items.map((item) => {
+      const rawDescription = item.description?.[0] || ""; // 설명 전체
+      // 이미지 태그를 만난 부분부터 닫는 태그까지 탐색을 진행하다 src=를 만나면 "'를 제외한 글자가 연속으로 나오는 부분을 캡쳐해라 대소문자 상관없이
+      const imgMatch = rawDescription.match(/<img[^>]*src=["']([^"']+)["']/i);
+      const imgUrl = imgMatch ? imgMatch[1] : null; // 첫번째 배열은 이미지 태그 전체, 두번째가 내가 캡쳐한 주소 부분
+      // 이미지 태그 <img 부터 탐색을 시작해서 >를 제외한 이전 모든 부분을 탐색한다. g = 글로벌하게 글 속의 모든 img태그를 찾는다 i = 대소문자 구분없이 탐색
+      const cleanDescription = rawDescription.replace(/<img[^>]*/gi, "").trim();
+      return {
+        title: item.title[0],
+        link: item.link[0],
+        date: item.pubDate[0],
+        description: cleanDescription,
+        img: imgUrl,
+      };
+    });
+    console.log(simplified);
+
+    res.status(200).json({ message: simplified });
+  } catch (err) {
+    console.error("rss 받아오기 실패", err);
+  }
 };

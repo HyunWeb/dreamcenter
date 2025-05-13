@@ -9,6 +9,7 @@ const AboutSection = styled.section<{ imageUrl: string }>`
   text-align: center;
   position: relative;
   color: white;
+  margin-bottom: 120px;
 
   height: 633px;
   overflow: hidden;
@@ -86,7 +87,9 @@ const AboutSection = styled.section<{ imageUrl: string }>`
 `;
 
 export default function SectionAbout() {
-  const [imageUrl, setImageUrl] = useState<string>("./defaultBanner.png");
+  const [imageUrl, setImageUrl] = useState<string>(
+    "https://dreamcenter-image-bucket.s3.ap-northeast-2.amazonaws.com/uploads/Layer+3.png"
+  );
   return (
     <AboutSection imageUrl={imageUrl}>
       <button>

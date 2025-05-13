@@ -3,3 +3,30 @@ body {
   color: #111111;
   font-size: 16px;
 }
+.Section-title {
+  font-size: 32px;
+  font-weight: 700;
+}
+.Section-description {
+  font-size: 16px;
+  color: #888888;
+}
+.Section-NewsTitle {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.Section-NewsDate {
+  font-size: 14px;
+  font-weight: 500;
+  color: #888888;
+}
+/* 메인 페이지 갤러리 라이브러리 */
+.my-masonry-grid {
+  display: flex;
+  margin-left: -16px;
+}
+.my-masonry-grid_column {
+  padding-left: 16px;
+  background-clip: padding-box;
+}

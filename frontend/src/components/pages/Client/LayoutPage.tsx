@@ -2,16 +2,19 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import Gnb from "../../common/Gnb";
 import styled from "styled-components";
+import FooterLayout from "../../common/FooterLayout";
 
 const Layout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 `;
 
 const Header = styled.header`
   width: 100%;
   max-width: 1200px;
+  margin-bottom: 30px;
 `;
 
 const LogoDiv = styled.div`
@@ -39,6 +42,7 @@ export default function LayoutPage() {
       <Main>
         <Outlet />
       </Main>
+      <FooterLayout />
     </Layout>
   );
 }
