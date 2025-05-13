@@ -30,3 +30,17 @@ body {
   padding-left: 16px;
   background-clip: padding-box;
 }
+.middle-title {
+  font-size: 24px;
+  font-weight: 700;
+}
+.description {
+  font-size: 14px;
+  color: #888888;
+  font-weight: 400;
+}
+
+.paragraph {
+  font-size: 16px;
+  font-weight: 400;
+}
