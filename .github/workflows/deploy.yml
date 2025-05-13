@@ -23,23 +23,16 @@ jobs:
           script: |
             cd /home/ubuntu/dreamcenter/backend
 
-            echo ">> STEP 1: git pull"
             git pull origin main
 
-            echo ">> STEP 2: 디스크 상태 확인"
-            df -h
-            docker system df
-
-            echo ">> STEP 3: 도커 정리"
             docker system prune -af --volumes
 
-            echo ">> STEP 4: 컨테이너 종료"
             docker-compose down
 
-            echo ">> STEP 5: 도커 빌드"
-            docker-compose build
+            docker build --no-cache -t myapp:latest .
 
-            echo ">> STEP 6: 컨테이너 시작"
             docker-compose up -d
+
+            docker system df
 
             echo "✅ 모든 작업 완료"
