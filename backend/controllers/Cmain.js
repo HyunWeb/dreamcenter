@@ -145,15 +145,30 @@ exports.getNews = async (req, res) => {
       const imgUrl = imgMatch ? imgMatch[1] : null; // 첫번째 배열은 이미지 태그 전체, 두번째가 내가 캡쳐한 주소 부분
       // 이미지 태그 <img 부터 탐색을 시작해서 >를 제외한 이전 모든 부분을 탐색한다. g = 글로벌하게 글 속의 모든 img태그를 찾는다 i = 대소문자 구분없이 탐색
       const cleanDescription = rawDescription.replace(/<img[^>]*/gi, "").trim();
+
+      const year = new Date(item.pubDate[0]).getFullYear();
+      const month = String(new Date(item.pubDate[0]).getMonth() + 1).padStart(
+        2,
+        "0"
+      );
+      const date = String(new Date(item.pubDate[0]).getDate()).padStart(2, "0");
+      const hour = String(new Date(item.pubDate[0]).getHours()).padStart(
+        2,
+        "0"
+      );
+      const minutes = String(new Date(item.pubDate[0]).getMinutes()).padStart(
+        2,
+        "0"
+      );
+      const Dates = `${year}.${month}.${date}.${hour}:${minutes}`;
       return {
         title: item.title[0],
         link: item.link[0],
-        date: item.pubDate[0],
+        date: Dates,
         description: cleanDescription,
         img: imgUrl,
       };
     });
-    console.log(simplified);
 
     res.status(200).json({ message: simplified });
   } catch (err) {
