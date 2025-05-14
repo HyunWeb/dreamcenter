@@ -3,12 +3,10 @@ import NaverMap from "./location/NaverMap";
 import styled from "styled-components";
 import CurrentRoot from "../../common/CurrentRoot";
 import { Link } from "react-router-dom";
+import PageHeader from "../../common/PageHeader";
 
 const Div = styled.div`
   text-align: center;
-  h2 {
-    margin-bottom: 12px;
-  }
 
   strong {
     display: block;
@@ -90,8 +88,7 @@ const Article = styled.article`
 export default function LocationPage() {
   return (
     <Div>
-      <h2 className="Section-title">오시는 길</h2>
-      <CurrentRoot root1={"오시는 길"} />
+      <PageHeader title={"오시는 길"} root={"오시는 길"} />
       <strong>※ 유학원 방문 상담은 꼭 사전에 예약하셔야 됩니다.</strong>
       <section>
         <NaverMap />

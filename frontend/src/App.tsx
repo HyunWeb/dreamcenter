@@ -18,6 +18,7 @@ import AdminQuestionsPage from "./components/pages/Admin/AdminQuestionsPage";
 import LayoutPage from "./components/pages/Client/LayoutPage";
 import QuestionWritePage from "./components/pages/Client/QuestionWritePage";
 import NaverLogin from "./components/pages/Client/NaverLogin";
+import Office from "./components/pages/Client/Office";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
         <Route path="/" element={<LayoutPage />}>
           <Route index element={<Main />} />
           <Route path="about" element={<AboutPage />} />
-          <Route path="office" element={<AboutPage />} />
+          <Route path="office" element={<Office />} />
           <Route path="news" element={<NewsPage />} />
           <Route path="questions" element={<QuestionsPage />} />
           <Route path="reservation" element={<ReservationPage />} />

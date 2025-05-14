@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getNews } from "../../../api/postApi";
-import CurrentRoot from "../../common/CurrentRoot";
+
 import styled from "styled-components";
+import NewsCard from "./News/NewsCard";
+import PageHeader from "../../common/PageHeader";
 
 interface NewsDataProps {
   date: string;
@@ -30,66 +32,40 @@ const Div = styled.div`
     margin-bottom: 60px;
   }
 `;
+const Section = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 
-const LinkBlock = styled.a<{ $imageUrl: string }>`
-  display: block;
-  text-decoration: none;
-  color: inherit;
-
-  padding: 40px 28px;
-  border-radius: 10px;
-  width: 30%;
-  background-color: #f8f8f8;
-  text-align: left;
-
-  h3 {
-    margin-bottom: 8px;
-    line-height: 1.4;
-  }
-  p {
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 5; /* 최대 4줄까지만 보이게 */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-`;
-const Source = styled.span`
-  color: #49b736;
-  display: block;
-  margin-bottom: 16px;
-`;
-const Date = styled.span`
-  display: block;
-  margin-bottom: 16px;
+  margin-bottom: 120px;
 `;
 export default function NewsPage() {
   const [newsList, setNewsList] = useState<NewsDataProps[]>([]);
 
+  const fetchNews = async () => {
+    const res = await getNews();
+    setNewsList(res.message.slice(0, 9));
+  };
+
   useEffect(() => {
-    const axiosData = async () => {
-      const res = await getNews();
-      console.log(res.message);
-      setNewsList(res.message);
-    };
-    axiosData();
+    fetchNews();
   }, []);
+
+  const handleSyncClick = () => {
+    fetchNews(); // 동일 함수 재사용
+  };
 
   return (
     <Div>
-      <h2 className="Section-title">오시는 길</h2>
-      <CurrentRoot root1={"소식"} />
-      <button>블로그 동기화</button>
-      <section>
-        <LinkBlock href={newsList[0]?.link} $imageUrl={newsList[0]?.img}>
-          <article>
-            <Source>네이버 블로그</Source>
-            <h3 className="middle-title">{newsList[0]?.title}</h3>
-            <Date className="description">{newsList[0]?.date}</Date>
-            <p className="paragraph">{newsList[0]?.description}</p>
-          </article>
-        </LinkBlock>
-      </section>
+      <PageHeader title={"소식"} root={"소식"} />
+
+      <button onClick={handleSyncClick}>블로그 동기화</button>
+      <Section>
+        {newsList &&
+          newsList?.map((item, index) => {
+            return <NewsCard key={index} {...item} />;
+          })}
+      </Section>
     </Div>
   );
 }
