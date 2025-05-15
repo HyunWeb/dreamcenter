@@ -4,6 +4,8 @@ import styled from "styled-components";
 interface TabSwitchProps {
   selectTab: boolean;
   setSelectTab: React.Dispatch<React.SetStateAction<boolean>>;
+  Title1: string;
+  Title2: string;
 }
 
 const Ul = styled.ul`
@@ -30,7 +32,12 @@ const DeSelected = styled(Selected)`
   cursor: pointer;
 `;
 
-export default function TabSwitch({ selectTab, setSelectTab }: TabSwitchProps) {
+export default function TabSwitch({
+  selectTab,
+  setSelectTab,
+  Title1,
+  Title2,
+}: TabSwitchProps) {
   const ChangeTab = () => {
     setSelectTab((prev: boolean) => !prev);
   };
@@ -38,20 +45,20 @@ export default function TabSwitch({ selectTab, setSelectTab }: TabSwitchProps) {
     <Ul role="tablist">
       <li>
         {selectTab ? (
-          <Selected role="tab">작성하기</Selected>
+          <Selected role="tab">{Title1}</Selected>
         ) : (
           <DeSelected role="tab" onClick={ChangeTab}>
-            작성하기
+            {Title1}
           </DeSelected>
         )}
       </li>
       <li>
         {selectTab ? (
           <DeSelected role="tab" onClick={ChangeTab}>
-            미리보기
+            {Title2}
           </DeSelected>
         ) : (
-          <Selected role="tab">미리보기</Selected>
+          <Selected role="tab">{Title2}</Selected>
         )}
       </li>
     </Ul>

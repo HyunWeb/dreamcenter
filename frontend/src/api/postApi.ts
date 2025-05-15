@@ -9,7 +9,7 @@ const API = axios.create({
 });
 
 // 로그인 요청
-export const postLogin = async ({ code, state }) => {
+export const postLogin = async ({ code, state }: any) => {
   try {
     const response = await API.post(`/api/naver/callback`, { code, state });
     const storedState = localStorage.getItem("naver_oauth_state");
@@ -35,7 +35,7 @@ export const postLogout = async () => {
   }
 };
 
-export const postUpload = async (formData) => {
+export const postUpload = async (formData: FormData) => {
   try {
     const response = await API.post(`/api/upload`, formData, {
       headers: {
@@ -54,5 +54,42 @@ export const getNews = async () => {
     return response.data;
   } catch (err) {
     console.error("뉴스 받아오기 실패", err);
+  }
+};
+
+export const PostAboutImages = async (formData: FormData) => {
+  try {
+    const response = await API.post(`/api/about/imgUpdate`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("About 페이지 이미지 전송 실패", err);
+  }
+};
+
+export const GetAboutImages = async () => {
+  try {
+    const response = await API.get(`/api/about/imgGet`);
+    return response.data;
+  } catch (err) {
+    console.error("About 페이지 이미지 불러오기 실패", err);
+  }
+};
+
+interface EditAboutImgesProps {
+  image_url: string;
+  name: string;
+  sort_order: number;
+}
+export const EditAboutImges = async (newArray: EditAboutImgesProps[]) => {
+  try {
+    console.log(newArray);
+    const response = await API.post(`/api/about/imgEdit`, newArray);
+    return response;
+  } catch (err) {
+    console.error("About 페이지 이미지 수정하기 실패", err);
   }
 };

@@ -31,7 +31,7 @@ export default function AboutPage() {
     <Div>
       <PageHeader title={"드림유학원"} root={"드림유학원"} />
       <Section>
-        <ImgViewBox />
+        <ImgViewBox setIsModalOpen={setIsModalOpen} />
         <ImgListBox />
       </Section>
       {editSection ? (
@@ -43,7 +43,7 @@ export default function AboutPage() {
           ChangeState={ChangeState}
         />
       )}
-      {isModalOpen && <EditModal />}
+      {isModalOpen && <EditModal setIsModalOpen={setIsModalOpen} />}
     </Div>
   );
 }

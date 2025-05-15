@@ -29,7 +29,12 @@ export default function WriteBox({
   const [selectTab, setSelectTab] = useState(true);
   return (
     <WriteSection>
-      <TabSwitch selectTab={selectTab} setSelectTab={setSelectTab} />
+      <TabSwitch
+        selectTab={selectTab}
+        setSelectTab={setSelectTab}
+        Title1="작성하기"
+        Title2="미리보기"
+      />
       {selectTab ? (
         <Wysiwyg content={content} setContent={setContent} />
       ) : (

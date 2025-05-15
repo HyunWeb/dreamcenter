@@ -3,6 +3,10 @@ import styled from "styled-components";
 import ImgMovBtn from "./ImgMovBtn";
 import Button from "../../../common/Button";
 
+interface ImgViewBoxProps {
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 const ViewBox = styled.div`
   display: flex;
   justify-content: center;
@@ -31,10 +35,18 @@ const ImgContainer = styled.div`
   }
 `;
 
-export default function ImgViewBox() {
+export default function ImgViewBox({ setIsModalOpen }: ImgViewBoxProps) {
+  const OpenModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
   return (
     <ViewBox>
-      <EditButton name="이미지 수정" Bgcolor="green" TitleColor="white" />
+      <EditButton
+        name="이미지 수정"
+        Bgcolor="green"
+        TitleColor="white"
+        onClick={OpenModal}
+      />
       <ImgMovBtn direction={"leftBig"} />
       <ImgContainer>
         <img src="./office0.jpg" alt="" />
