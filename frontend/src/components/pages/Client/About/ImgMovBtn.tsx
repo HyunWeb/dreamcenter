@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface ImgMovBtnProps {
   direction: "leftBig" | "rightBig" | "leftSmall" | "rightSmall";
+  onClick?: () => void;
 }
 
 const Button = styled.button`
@@ -52,13 +53,13 @@ const SmallRightButton = styled(Button)`
   top: 0;
 `;
 
-export default function ImgMovBtn({ direction }: ImgMovBtnProps) {
+export default function ImgMovBtn({ direction, onClick }: ImgMovBtnProps) {
   let type;
 
   switch (direction) {
     case "leftBig":
       type = (
-        <LeftButton>
+        <LeftButton onClick={onClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -78,7 +79,7 @@ export default function ImgMovBtn({ direction }: ImgMovBtnProps) {
 
     case "rightBig":
       type = (
-        <RightButton>
+        <RightButton onClick={onClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -97,7 +98,7 @@ export default function ImgMovBtn({ direction }: ImgMovBtnProps) {
       break;
     case "leftSmall":
       type = (
-        <SmallLeftButton>
+        <SmallLeftButton onClick={onClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -116,7 +117,7 @@ export default function ImgMovBtn({ direction }: ImgMovBtnProps) {
       break;
     case "rightSmall":
       type = (
-        <SmallRightButton>
+        <SmallRightButton onClick={onClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

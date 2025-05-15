@@ -4,7 +4,7 @@ import styled from "styled-components";
 interface ButtonProps {
   name: string;
   Bgcolor: "grey" | "green" | "red";
-  TitleColor: "white" | "black";
+  TitleColor: "white" | "black" | "darkGrey";
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
 }
@@ -32,6 +32,7 @@ export default function Button({
     red: "#C93E3E",
     white: "#ffffff",
     black: "#111111",
+    darkGrey: "#888888",
   } as const;
   return (
     <DefualtButton

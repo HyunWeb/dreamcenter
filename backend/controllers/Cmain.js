@@ -1,6 +1,7 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const { User, AboutSlide } = require("../models");
+const { sequelize } = require("../models");
 
 const multer = require("multer");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
@@ -173,5 +174,75 @@ exports.getNews = async (req, res) => {
     res.status(200).json({ message: simplified });
   } catch (err) {
     console.error("rss 받아오기 실패", err);
+  }
+};
+
+exports.PostAboutImgUpload = [
+  upload.array("images", 100),
+  async (req, res) => {
+    const files = req.files;
+    if (!files)
+      return res.status(400).json({ message: "제공된 파일이 없습니다." });
+    try {
+      const uploadedUrls = [];
+
+      for (const file of files) {
+        const ext = path.extname(file.originalname);
+        const key = `uploads/${uuidv4()}${ext}`;
+
+        const uploadParams = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: key,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        };
+
+        await s3.send(new PutObjectCommand(uploadParams));
+
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        uploadedUrls.push(fileUrl);
+      }
+
+      const SlideData = uploadedUrls.map((url, index) => ({
+        image_url: url,
+        sort_order: index + 1,
+        name: files[index].originalname,
+      }));
+
+      await AboutSlide.bulkCreate(SlideData); // bulkCreate > 레코드 여러 개 한 번에 생성
+
+      res.status(200).json({ urls: uploadedUrls });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "서버에서 이미지 받기 실패" });
+    }
+  },
+];
+
+exports.GetAboutImgUpload = async (req, res) => {
+  try {
+    const slides = await AboutSlide.findAll({
+      order: [["sort_order", "ASC"]], // 슬라이드 순서대로 정렬
+    });
+    res.status(200).json({ slides });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "슬라이드 목록 조회 실패" });
+  }
+};
+
+exports.EditAboutImgUpload = async (req, res) => {
+  const newArray = req.body;
+  const tx = await sequelize.transaction();
+  try {
+    console.log("데이터", newArray);
+    await AboutSlide.destroy({ where: {}, transaction: tx });
+    await AboutSlide.bulkCreate(newArray, { transaction: tx });
+    await tx.commit();
+    res.status(200).json({ message: newArray });
+  } catch (err) {
+    await tx.rollback();
+    console.error(err);
+    res.status(500).json({ message: "슬라이드 목록 수정 실패" });
   }
 };

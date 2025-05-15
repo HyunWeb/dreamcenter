@@ -3,7 +3,6 @@ import "./style/reset.css";
 import "./style/global.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./components/pages/Client/main/Main";
-import AboutPage from "./components/pages/Client/AboutPage";
 import LocationPage from "./components/pages/Client/LocationPage";
 import ReservationPage from "./components/pages/Client/ReservationPage";
 import QuestionsPage from "./components/pages/Client/QuestionsPage";
@@ -19,6 +18,7 @@ import LayoutPage from "./components/pages/Client/LayoutPage";
 import QuestionWritePage from "./components/pages/Client/QuestionWritePage";
 import NaverLogin from "./components/pages/Client/NaverLogin";
 import Office from "./components/pages/Client/Office";
+import AboutPage from "./components/pages/Client/AboutPage";
 
 function App() {
   return (
