@@ -6,7 +6,7 @@ import Button from "../../../common/Button";
 
 interface ViewBoxProps {
   content: string;
-  setContent: () => void;
+  setContent: React.Dispatch<React.SetStateAction<string>>;
   ChangeState: () => void;
 }
 
