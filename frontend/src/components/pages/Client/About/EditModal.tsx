@@ -27,7 +27,8 @@ const Div = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 880px;
+  width: 55vw;
+  max-width: 880px;
   height: 500px;
   border-radius: 20px;
   background-color: white;

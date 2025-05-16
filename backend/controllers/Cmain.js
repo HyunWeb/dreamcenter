@@ -4,6 +4,7 @@ const { User, AboutSlide } = require("../models");
 const { sequelize } = require("../models");
 
 const multer = require("multer");
+const sharp = require("sharp");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
@@ -190,11 +191,17 @@ exports.PostAboutImgUpload = [
         const ext = path.extname(file.originalname);
         const key = `uploads/${uuidv4()}${ext}`;
 
+        // 파일 압축
+        const compressedBuffer = await sharp(file.buffer)
+          .resize({ width: 800 })
+          .webp({ quality: 80 })
+          .toBuffer();
+
         const uploadParams = {
           Bucket: process.env.AWS_BUCKET_NAME,
           Key: key,
-          Body: file.buffer,
-          ContentType: file.mimetype,
+          Body: compressedBuffer,
+          ContentType: "image/webp",
         };
 
         await s3.send(new PutObjectCommand(uploadParams));
@@ -203,9 +210,11 @@ exports.PostAboutImgUpload = [
         uploadedUrls.push(fileUrl);
       }
 
+      const currentCount = await AboutSlide.count();
+
       const SlideData = uploadedUrls.map((url, index) => ({
         image_url: url,
-        sort_order: index + 1,
+        sort_order: currentCount + index,
         name: files[index].originalname,
       }));
 

@@ -12,6 +12,19 @@ const Section = styled.section`
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+
+  div {
+    color: #dddddd;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
 `;
 
 const PreviewImg = styled.div`
@@ -70,28 +83,34 @@ export default function LoadImgSection({
           </svg>
         )}
       </PreviewImg>
-      <ReactSortable
-        tag="ul"
-        list={existingImages}
-        setList={setExistingImages}
-        animation={150}
-        style={{
-          width: "50%",
-          overflowY: "auto",
-          height: "100%",
-          scrollbarWidth: "thin",
-        }}
-      >
-        {existingImages.map((file, index) => (
-          <PreviewImgList
-            file={file}
-            key={index}
-            existingImages={existingImages}
-            setExistingImages={setExistingImages}
-            setPrevImg={setPrevImg}
-          />
-        ))}
-      </ReactSortable>
+      {existingImages.length ? (
+        <ReactSortable
+          tag="ul"
+          list={existingImages}
+          setList={setExistingImages}
+          animation={150}
+          style={{
+            width: "50%",
+            overflowY: "auto",
+            height: "100%",
+            scrollbarWidth: "thin",
+          }}
+        >
+          {existingImages.map((file, index) => (
+            <PreviewImgList
+              file={file}
+              key={index}
+              existingImages={existingImages}
+              setExistingImages={setExistingImages}
+              setPrevImg={setPrevImg}
+            />
+          ))}
+        </ReactSortable>
+      ) : (
+        <div>
+          <span>이미지가 없습니다.</span>
+        </div>
+      )}
     </Section>
   );
 }

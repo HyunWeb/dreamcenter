@@ -44,3 +44,11 @@ body {
   font-size: 16px;
   font-weight: 400;
 }
+
+.selected {
+  border: 8px solid #49b736;
+  padding: 0px;
+}
+.deSelected {
+  padding: 5px;
+}

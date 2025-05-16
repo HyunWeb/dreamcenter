@@ -62,6 +62,8 @@ export default function SwichButtons({
       sort_order: index,
     }));
 
+    console.log(newArray);
+
     const response = await EditAboutImges(newArray);
   };
   return (

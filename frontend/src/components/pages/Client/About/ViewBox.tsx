@@ -1,11 +1,7 @@
+import { WriteAboutStore } from "@/store/userStore";
 import Button from "../../../common/Button";
 import React from "react";
 import styled from "styled-components";
-
-interface ViewBoxProps {
-  content: string;
-  ChangeState: () => void;
-}
 
 const ViewSection = styled.section`
   margin-bottom: 120px;
@@ -21,7 +17,16 @@ const EditButton = styled(Button)`
   transform: translateY(-100%);
 `;
 
-export default function ViewBox({ content, ChangeState }: ViewBoxProps) {
+export default function ViewBox() {
+  const { content, setEditSection, setContent, aboutTextData } =
+    WriteAboutStore();
+
+  const OpenHandler = () => {
+    setEditSection(false);
+    setContent(aboutTextData);
+    console.log("About", aboutTextData);
+    console.log("content", content);
+  };
   return (
     <ViewSection>
       {/* <EditButton onClick={ChangeState}>수정하기</EditButton> */}
@@ -29,11 +34,11 @@ export default function ViewBox({ content, ChangeState }: ViewBoxProps) {
         name="내용 수정"
         Bgcolor="green"
         TitleColor="white"
-        onClick={ChangeState}
+        onClick={OpenHandler}
       />
       <div
         className="editor-preview"
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: aboutTextData }}
       />
     </ViewSection>
   );

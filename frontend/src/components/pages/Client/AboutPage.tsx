@@ -7,14 +7,15 @@ import ImgListBox from "./About/ImgListBox";
 import ViewBox from "./About/ViewBox";
 import WriteBox from "./About/WriteBox";
 import EditModal from "./About/EditModal";
+import { ImgPreviewStore, WriteAboutStore } from "@/store/userStore";
 
-type Slide = {
-  created_at: string;
-  id: number;
-  name: string;
-  image_url: string;
-  sort_order: number;
-};
+// type Slide = {
+//   created_at: string;
+//   id: number;
+//   name: string;
+//   image_url: string;
+//   sort_order: number;
+// };
 
 const Div = styled.div`
   text-align: center;
@@ -28,41 +29,25 @@ const Section = styled.section`
 `;
 
 export default function AboutPage() {
-  const [content, setContent] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editSection, setEditSection] = useState(true);
-  const [imgList, setImgList] = useState<Slide[]>([]);
-  const [imgPreview, setImagePreview] = useState("");
+  // const [editSection, setEditSection] = useState(true);
+  const { setImagePreview, imgList } = ImgPreviewStore();
+  const { content, editSection } = WriteAboutStore();
 
   useEffect(() => {
     if (!imgList) return;
     setImagePreview(imgList[0]?.image_url);
-  }, [imgList]);
-
-  const ChangeState = () => {
-    setEditSection((prev) => !prev);
-  };
+    console.log(imgList);
+  }, [imgList, setImagePreview]);
 
   return (
     <Div>
       <PageHeader title={"드림유학원"} root={"드림유학원"} />
       <Section>
-        <ImgViewBox setIsModalOpen={setIsModalOpen} imgPreview={imgPreview} />
-        <ImgListBox
-          setImagePreview={setImagePreview}
-          setImgList={setImgList}
-          imgList={imgList}
-        />
+        <ImgViewBox setIsModalOpen={setIsModalOpen} />
+        <ImgListBox />
       </Section>
-      {editSection ? (
-        <ViewBox content={content} ChangeState={ChangeState} />
-      ) : (
-        <WriteBox
-          content={content}
-          setContent={setContent}
-          ChangeState={ChangeState}
-        />
-      )}
+      {editSection ? <ViewBox /> : <WriteBox />}
       {isModalOpen && <EditModal setIsModalOpen={setIsModalOpen} />}
     </Div>
   );

@@ -3,12 +3,7 @@ import styled from "styled-components";
 import TabSwitch from "./TabSwitch";
 import Wysiwyg from "./Wysiwyg";
 import Button from "../../../common/Button";
-
-interface ViewBoxProps {
-  content: string;
-  setContent: React.Dispatch<React.SetStateAction<string>>;
-  ChangeState: () => void;
-}
+import { WriteAboutStore } from "@/store/userStore";
 
 const WriteSection = styled.section`
   margin-bottom: 120px;
@@ -21,12 +16,31 @@ const ButtonWrap = styled.div`
   margin-top: 20px;
 `;
 
-export default function WriteBox({
-  content,
-  setContent,
-  ChangeState,
-}: ViewBoxProps) {
+export default function WriteBox() {
   const [selectTab, setSelectTab] = useState(true);
+  const {
+    content,
+    setContent,
+    editSection,
+    setEditSection,
+    aboutTextData,
+    setAboutTextData,
+  } = WriteAboutStore();
+
+  const CancleHandler = () => {
+    setContent("");
+    setEditSection(true);
+    console.log("About", aboutTextData);
+    console.log("content", content);
+  };
+
+  const SaveHandler = () => {
+    setEditSection(true);
+    setAboutTextData(content);
+    console.log("About", aboutTextData);
+    console.log("content", content);
+  };
+  console.log("About", aboutTextData);
   return (
     <WriteSection>
       <TabSwitch
@@ -40,7 +54,7 @@ export default function WriteBox({
       ) : (
         <div
           className="editor-preview"
-          dangerouslySetInnerHTML={{ __html: content }}
+          dangerouslySetInnerHTML={{ __html: aboutTextData }}
         />
       )}
       <ButtonWrap>
@@ -48,9 +62,14 @@ export default function WriteBox({
           name="취소"
           Bgcolor="grey"
           TitleColor="black"
-          onClick={ChangeState}
+          onClick={CancleHandler}
         />
-        <Button name="등록" Bgcolor="green" TitleColor="white" />
+        <Button
+          name="등록"
+          Bgcolor="green"
+          TitleColor="white"
+          onClick={SaveHandler}
+        />
       </ButtonWrap>
     </WriteSection>
   );
