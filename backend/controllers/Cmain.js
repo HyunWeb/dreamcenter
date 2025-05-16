@@ -1,6 +1,6 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-const { User, AboutSlide } = require("../models");
+const { User, AboutSlide, AboutWrite } = require("../models");
 const { sequelize } = require("../models");
 
 const multer = require("multer");
@@ -253,5 +253,34 @@ exports.EditAboutImgUpload = async (req, res) => {
     await tx.rollback();
     console.error(err);
     res.status(500).json({ message: "슬라이드 목록 수정 실패" });
+  }
+};
+
+exports.PostAboutWrite = async (req, res) => {
+  try {
+    const content = req.body.content;
+
+    const existing = await AboutWrite.findOne({ where: { id: 1 } });
+    if (existing) {
+      await existing.update({ content });
+    } else {
+      await AboutWrite.create({ id: 1, content });
+    }
+    return res.status(200).json({ message: "저장 및 업데이트 완료" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "About 페이지 텍스트 수정 실패(서버)" });
+  }
+};
+
+exports.GetAboutWrite = async (req, res) => {
+  try {
+    const existing = await AboutWrite.findOne({ where: { id: 1 } });
+    return res.status(200).json({ result: existing });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "About 페이지 텍스트 가져오기 실패(서버)" });
   }
 };

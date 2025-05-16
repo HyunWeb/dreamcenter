@@ -1,7 +1,8 @@
 import { WriteAboutStore } from "@/store/userStore";
 import Button from "../../../common/Button";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { GetAboutWrite } from "@/api/postApi";
 
 const ViewSection = styled.section`
   margin-bottom: 120px;
@@ -18,14 +19,20 @@ const EditButton = styled(Button)`
 `;
 
 export default function ViewBox() {
-  const { content, setEditSection, setContent, aboutTextData } =
+  const { setEditSection, setContent, aboutTextData, setAboutTextData } =
     WriteAboutStore();
+
+  useEffect(() => {
+    const fetchText = async () => {
+      const res = await GetAboutWrite();
+      setAboutTextData(res.result.content);
+    };
+    fetchText();
+  }, []);
 
   const OpenHandler = () => {
     setEditSection(false);
     setContent(aboutTextData);
-    console.log("About", aboutTextData);
-    console.log("content", content);
   };
   return (
     <ViewSection>

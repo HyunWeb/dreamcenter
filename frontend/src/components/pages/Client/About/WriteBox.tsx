@@ -4,6 +4,7 @@ import TabSwitch from "./TabSwitch";
 import Wysiwyg from "./Wysiwyg";
 import Button from "../../../common/Button";
 import { WriteAboutStore } from "@/store/userStore";
+import { GetAboutWrite, PostAboutWrite } from "@/api/postApi";
 
 const WriteSection = styled.section`
   margin-bottom: 120px;
@@ -21,7 +22,6 @@ export default function WriteBox() {
   const {
     content,
     setContent,
-    editSection,
     setEditSection,
     aboutTextData,
     setAboutTextData,
@@ -30,17 +30,15 @@ export default function WriteBox() {
   const CancleHandler = () => {
     setContent("");
     setEditSection(true);
-    console.log("About", aboutTextData);
-    console.log("content", content);
   };
 
-  const SaveHandler = () => {
+  const submitHandler = async () => {
     setEditSection(true);
-    setAboutTextData(content);
-    console.log("About", aboutTextData);
-    console.log("content", content);
+    if (content === "") return;
+    await PostAboutWrite(content);
+    const res = await GetAboutWrite();
+    setAboutTextData(res.result.content);
   };
-  console.log("About", aboutTextData);
   return (
     <WriteSection>
       <TabSwitch
@@ -54,7 +52,7 @@ export default function WriteBox() {
       ) : (
         <div
           className="editor-preview"
-          dangerouslySetInnerHTML={{ __html: aboutTextData }}
+          dangerouslySetInnerHTML={{ __html: content }}
         />
       )}
       <ButtonWrap>
@@ -68,7 +66,7 @@ export default function WriteBox() {
           name="등록"
           Bgcolor="green"
           TitleColor="white"
-          onClick={SaveHandler}
+          onClick={submitHandler}
         />
       </ButtonWrap>
     </WriteSection>

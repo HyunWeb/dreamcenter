@@ -86,10 +86,26 @@ interface EditAboutImgesProps {
 }
 export const EditAboutImges = async (newArray: EditAboutImgesProps[]) => {
   try {
-    console.log(newArray);
     const response = await API.post(`/api/about/imgEdit`, newArray);
     return response;
   } catch (err) {
     console.error("About 페이지 이미지 수정하기 실패", err);
+  }
+};
+
+export const PostAboutWrite = async (content: string) => {
+  try {
+    const response = await API.post(`/api/about/postWrite`, { content });
+    return response;
+  } catch (err) {
+    console.error("About 페이지 텍스트 저장 실패", err);
+  }
+};
+export const GetAboutWrite = async () => {
+  try {
+    const response = await API.get("/api/about/getWrite");
+    return response.data;
+  } catch (err) {
+    console.error("About 페이지 이미지 불러오기 실패", err);
   }
 };
