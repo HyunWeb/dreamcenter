@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactSortable } from "react-sortablejs";
-import PreviewImgList from "../Modal/PreviewImgList";
+import PreviewImgList from "./PreviewImgList";
 
 const Section = styled.section`
   display: flex;

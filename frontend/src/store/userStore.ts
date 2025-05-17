@@ -35,20 +35,24 @@ interface ImgPreviewProps {
   index: number;
   imgList: Slide[];
   BtnDirection: string;
+  imgLength: number;
   setImagePreview: (url: string) => void;
   setIndex: (index: number) => void;
   setImgList: (slide: Slide[]) => void;
   setBtnDirection: (dir: string) => void;
+  setImgLength: (num: number) => void;
 }
 export const ImgPreviewStore = create<ImgPreviewProps>((set) => ({
   imgPreview: "",
   index: 0,
   imgList: [],
   BtnDirection: "",
+  imgLength: 0,
   setImagePreview: (url: string) => set({ imgPreview: url }),
   setIndex: (index: number) => set({ index: index }),
   setImgList: (slide: Slide[]) => set({ imgList: slide }),
   setBtnDirection: (dir: string) => set({ BtnDirection: dir }),
+  setImgLength: (num: number) => set({ imgLength: num }),
 }));
 
 interface WriteAboutStoreProps {
@@ -66,4 +70,13 @@ export const WriteAboutStore = create<WriteAboutStoreProps>((set) => ({
   setContent: (text: string) => set({ content: text }),
   setAboutTextData: (text: string) => set({ aboutTextData: text }),
   setEditSection: (state: boolean) => set({ editSection: state }),
+}));
+
+interface AboutAndOfficeStoreProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (state: boolean) => void;
+}
+export const AboutAndOfficeStore = create<AboutAndOfficeStoreProps>((set) => ({
+  isModalOpen: false,
+  setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
 }));

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import UploadFile from "../Modal/UploadFile";
-import ImgListItem from "../Modal/ImgListItem";
+import UploadFile from "./UploadFile";
+import ImgListItem from "./ImgListItem";
 import { ReactSortable } from "react-sortablejs";
 
 type FileItem = {

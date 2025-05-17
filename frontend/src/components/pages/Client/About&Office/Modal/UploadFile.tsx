@@ -44,7 +44,6 @@ export default function UploadFile({ files, setFiles }: UploadFilesProps) {
       file,
     }));
     setFiles((prev) => [...prev, ...newItems]);
-    console.log(files);
   };
   return (
     <>

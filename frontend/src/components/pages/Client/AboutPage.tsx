@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../../common/PageHeader";
 import styled from "styled-components";
-import ImgViewBox from "./About/ImgViewBox";
-import ImgListBox from "./About/ImgListBox";
 
-import ViewBox from "./About/ViewBox";
-import WriteBox from "./About/WriteBox";
-import EditModal from "./About/EditModal";
-import { ImgPreviewStore, WriteAboutStore } from "@/store/userStore";
+import ViewBox from "./About&Office/ViewBox";
+import WriteBox from "./About&Office/WriteBox";
+import EditModal from "./About&Office/EditModal";
+import {
+  AboutAndOfficeStore,
+  ImgPreviewStore,
+  WriteAboutStore,
+} from "@/store/userStore";
+import ImgSlice from "./About&Office/ImgSlice";
+import { GetAboutImages } from "@/api/postApi";
 
 // type Slide = {
 //   created_at: string;
@@ -20,35 +24,38 @@ import { ImgPreviewStore, WriteAboutStore } from "@/store/userStore";
 const Div = styled.div`
   text-align: center;
 `;
-const Section = styled.section`
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 100px;
-`;
 
 export default function AboutPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [editSection, setEditSection] = useState(true);
-  const { setImagePreview, imgList } = ImgPreviewStore();
-  const { content, editSection } = WriteAboutStore();
+  const { setImagePreview, imgList, setIndex, setImgList, setImgLength } =
+    ImgPreviewStore();
+  const { editSection, setEditSection } = WriteAboutStore();
+  const { isModalOpen, setIsModalOpen } = AboutAndOfficeStore();
+  // const [imgLength, setImgLength] = useState<number>(0);
+
+  // 저장되어있던 이미지 데이터 불러오기
+  useEffect(() => {
+    setEditSection(true);
+    setIsModalOpen(false);
+    const getImg = async () => {
+      const response: any = await GetAboutImages();
+      setImgList(response.slides);
+      setImgLength(response.slides.length);
+      setIndex(0);
+    };
+    getImg();
+  }, []);
 
   useEffect(() => {
     if (!imgList) return;
     setImagePreview(imgList[0]?.image_url);
-    console.log(imgList);
   }, [imgList, setImagePreview]);
 
   return (
     <Div>
       <PageHeader title={"드림유학원"} root={"드림유학원"} />
-      <Section>
-        <ImgViewBox setIsModalOpen={setIsModalOpen} />
-        <ImgListBox />
-      </Section>
+      <ImgSlice />
       {editSection ? <ViewBox /> : <WriteBox />}
-      {isModalOpen && <EditModal setIsModalOpen={setIsModalOpen} />}
+      {isModalOpen && <EditModal />}
     </Div>
   );
 }

@@ -1,6 +1,12 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-const { User, AboutSlide, AboutWrite } = require("../models");
+const {
+  User,
+  AboutSlide,
+  AboutWrite,
+  OfficeSlide,
+  OfficeWrite,
+} = require("../models");
 const { sequelize } = require("../models");
 
 const multer = require("multer");
@@ -193,6 +199,7 @@ exports.PostAboutImgUpload = [
 
         // 파일 압축
         const compressedBuffer = await sharp(file.buffer)
+          .rotate()
           .resize({ width: 800 })
           .webp({ quality: 80 })
           .toBuffer();
@@ -227,6 +234,56 @@ exports.PostAboutImgUpload = [
     }
   },
 ];
+exports.PostOfficeImgUpload = [
+  upload.array("images", 100),
+  async (req, res) => {
+    const files = req.files;
+    if (!files)
+      return res.status(400).json({ message: "제공된 파일이 없습니다." });
+    try {
+      const uploadedUrls = [];
+
+      for (const file of files) {
+        const ext = path.extname(file.originalname);
+        const key = `uploads/${uuidv4()}${ext}`;
+
+        // 파일 압축
+        const compressedBuffer = await sharp(file.buffer)
+          .rotate()
+          .resize({ width: 800 })
+          .webp({ quality: 80 })
+          .toBuffer();
+
+        const uploadParams = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: key,
+          Body: compressedBuffer,
+          ContentType: "image/webp",
+        };
+
+        await s3.send(new PutObjectCommand(uploadParams));
+
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        uploadedUrls.push(fileUrl);
+      }
+
+      const currentCount = await OfficeSlide.count();
+
+      const SlideData = uploadedUrls.map((url, index) => ({
+        image_url: url,
+        sort_order: currentCount + index,
+        name: files[index].originalname,
+      }));
+
+      await OfficeSlide.bulkCreate(SlideData); // bulkCreate > 레코드 여러 개 한 번에 생성
+
+      res.status(200).json({ urls: uploadedUrls });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "서버에서 이미지 받기 실패" });
+    }
+  },
+];
 
 exports.GetAboutImgUpload = async (req, res) => {
   try {
@@ -236,7 +293,18 @@ exports.GetAboutImgUpload = async (req, res) => {
     res.status(200).json({ slides });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "슬라이드 목록 조회 실패" });
+    res.status(500).json({ message: "AboutSlide 슬라이드 목록 조회 실패" });
+  }
+};
+exports.GetOfficeImgUpload = async (req, res) => {
+  try {
+    const slides = await OfficeSlide.findAll({
+      order: [["sort_order", "ASC"]], // 슬라이드 순서대로 정렬
+    });
+    res.status(200).json({ slides });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "WriteSlide 슬라이드 목록 조회 실패" });
   }
 };
 
@@ -244,7 +312,6 @@ exports.EditAboutImgUpload = async (req, res) => {
   const newArray = req.body;
   const tx = await sequelize.transaction();
   try {
-    console.log("데이터", newArray);
     await AboutSlide.destroy({ where: {}, transaction: tx });
     await AboutSlide.bulkCreate(newArray, { transaction: tx });
     await tx.commit();
@@ -252,13 +319,28 @@ exports.EditAboutImgUpload = async (req, res) => {
   } catch (err) {
     await tx.rollback();
     console.error(err);
-    res.status(500).json({ message: "슬라이드 목록 수정 실패" });
+    res.status(500).json({ message: "AboutSlide 슬라이드 목록 수정 실패" });
+  }
+};
+exports.EditOfficeImgUpload = async (req, res) => {
+  const newArray = req.body;
+  const tx = await sequelize.transaction();
+  try {
+    await OfficeSlide.destroy({ where: {}, transaction: tx });
+    await OfficeSlide.bulkCreate(newArray, { transaction: tx });
+    await tx.commit();
+    res.status(200).json({ message: newArray });
+  } catch (err) {
+    await tx.rollback();
+    console.error(err);
+    res.status(500).json({ message: "OfficeSlide 슬라이드 목록 수정 실패" });
   }
 };
 
 exports.PostAboutWrite = async (req, res) => {
   try {
-    const content = req.body.content;
+    const content =
+      typeof req.body.content === "string" ? req.body.content : "";
 
     const existing = await AboutWrite.findOne({ where: { id: 1 } });
     if (existing) {
@@ -272,15 +354,52 @@ exports.PostAboutWrite = async (req, res) => {
     res.status(500).json({ message: "About 페이지 텍스트 수정 실패(서버)" });
   }
 };
+exports.PostOfficeWrite = async (req, res) => {
+  try {
+    const content =
+      typeof req.body.content === "string" ? req.body.content : "";
+
+    const existing = await OfficeWrite.findOne({ where: { id: 1 } });
+    if (existing) {
+      await existing.update({ content });
+    } else {
+      await OfficeWrite.create({ id: 1, content });
+    }
+    return res.status(200).json({ message: "저장 및 업데이트 완료" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Office 페이지 텍스트 수정 실패(서버)" });
+  }
+};
 
 exports.GetAboutWrite = async (req, res) => {
   try {
     const existing = await AboutWrite.findOne({ where: { id: 1 } });
+    if (!existing) {
+      // 초기 페이지 로딩 시에 row가 없으면 기본값으로 응답
+      return res.status(200).json({ result: { content: "" } });
+    }
     return res.status(200).json({ result: existing });
   } catch (err) {
     console.error(err);
     res
       .status(500)
       .json({ message: "About 페이지 텍스트 가져오기 실패(서버)" });
+  }
+};
+exports.GetOfficeWrite = async (req, res) => {
+  try {
+    const existing = await OfficeWrite.findOne({ where: { id: 1 } });
+
+    if (!existing) {
+      // 초기 페이지 로딩 시에 row가 없으면 기본값으로 응답
+      return res.status(200).json({ result: { content: "" } });
+    }
+    return res.status(200).json({ result: existing });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "Office 페이지 텍스트 가져오기 실패(서버)" });
   }
 };

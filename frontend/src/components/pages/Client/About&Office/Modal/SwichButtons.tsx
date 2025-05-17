@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Button from "../../../../common/Button";
-import { EditAboutImges, PostAboutImages } from "../../../../../api/postApi";
+import {
+  EditAboutImges,
+  EditOfficeImges,
+  PostAboutImages,
+  PostOfficeImages,
+} from "../../../../../api/postApi";
+import { AboutAndOfficeStore } from "@/store/userStore";
+import { useLocation } from "react-router-dom";
 
 const StyledButton = styled(Button)`
   padding: 12px 45px;
@@ -28,21 +35,21 @@ type FileItem = {
 };
 interface SwitchButtonsProps {
   selectTab: boolean;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   existingImages: Slide[];
   files: FileItem[];
   setFiles: React.Dispatch<React.SetStateAction<FileItem[]>>;
 }
 export default function SwichButtons({
   selectTab,
-  setIsModalOpen,
   existingImages,
   files,
   setFiles,
 }: SwitchButtonsProps) {
+  const { setIsModalOpen } = AboutAndOfficeStore();
   const CloseModal = () => {
-    setIsModalOpen((prev) => !prev);
+    setIsModalOpen(false);
   };
+  const location = useLocation();
 
   const handleSubmit = async () => {
     const formData = new FormData();
@@ -51,7 +58,12 @@ export default function SwichButtons({
       formData.append("images", item.file);
     });
 
-    await PostAboutImages(formData);
+    if (location.pathname.includes("/about")) {
+      await PostAboutImages(formData);
+    } else if (location.pathname.includes("/office")) {
+      await PostOfficeImages(formData);
+    }
+
     setFiles([]);
   };
 
@@ -62,9 +74,11 @@ export default function SwichButtons({
       sort_order: index,
     }));
 
-    console.log(newArray);
-
-    const response = await EditAboutImges(newArray);
+    if (location.pathname.includes("/about")) {
+      await EditAboutImges(newArray);
+    } else if (location.pathname.includes("/office")) {
+      await EditOfficeImges(newArray);
+    }
   };
   return (
     <ButtonWrap>

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ImgMovBtn from "./ImgMovBtn";
-import { GetAboutImages } from "../../../../api/postApi";
 import { ImgPreviewStore } from "@/store/userStore";
 
 const Div = styled.div`
@@ -53,22 +52,22 @@ const ImgListItem = styled.li<{ $imgLeng: number }>`
   }
 `;
 export default function ImgListBox() {
-  const [imgLength, setImgLength] = useState<number>(0);
+  // const [imgLength, setImgLength] = useState<number>(0);
   const ulRef = useRef<HTMLUListElement>(null);
 
-  const { setImagePreview, setIndex, setImgList, imgList, index } =
+  const { setImagePreview, setIndex, imgList, index, imgLength } =
     ImgPreviewStore();
 
   // 저장되어있던 이미지 데이터 불러오기
-  useEffect(() => {
-    const getImg = async () => {
-      const response = await GetAboutImages();
-      setImgList(response.slides);
-      setImgLength(response.slides.length);
-      setIndex(0);
-    };
-    getImg();
-  }, []);
+  // useEffect(() => {
+  //   const getImg = async () => {
+  //     const response = await GetAboutImages();
+  //     setImgList(response.slides);
+  //     setImgLength(response.slides.length);
+  //     setIndex(0);
+  //   };
+  //   getImg();
+  // }, []);
 
   const handleRightMov = () => {
     if (!imgList.length) return;

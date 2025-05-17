@@ -2,11 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import ImgMovBtn from "./ImgMovBtn";
 import Button from "../../../common/Button";
-import { ImgPreviewStore } from "@/store/userStore";
-
-interface ImgViewBoxProps {
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { AboutAndOfficeStore, ImgPreviewStore } from "@/store/userStore";
 
 const ViewBox = styled.div`
   width: 100%;
@@ -50,11 +46,12 @@ const ImgContainer = styled.div`
   }
 `;
 
-export default function ImgViewBox({ setIsModalOpen }: ImgViewBoxProps) {
+export default function ImgViewBox() {
   const { imgPreview, index, imgList, setImagePreview, setIndex } =
     ImgPreviewStore();
+  const { setIsModalOpen } = AboutAndOfficeStore();
   const OpenModal = () => {
-    setIsModalOpen((prev) => !prev);
+    setIsModalOpen(true);
   };
 
   const handleRightMove = () => {

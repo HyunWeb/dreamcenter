@@ -4,7 +4,13 @@ import TabSwitch from "./TabSwitch";
 import Wysiwyg from "./Wysiwyg";
 import Button from "../../../common/Button";
 import { WriteAboutStore } from "@/store/userStore";
-import { GetAboutWrite, PostAboutWrite } from "@/api/postApi";
+import {
+  GetAboutWrite,
+  GetOfficeWrite,
+  PostAboutWrite,
+  PostOfficeWrite,
+} from "@/api/postApi";
+import { useLocation } from "react-router-dom";
 
 const WriteSection = styled.section`
   margin-bottom: 120px;
@@ -26,6 +32,7 @@ export default function WriteBox() {
     aboutTextData,
     setAboutTextData,
   } = WriteAboutStore();
+  const location = useLocation();
 
   const CancleHandler = () => {
     setContent("");
@@ -34,9 +41,20 @@ export default function WriteBox() {
 
   const submitHandler = async () => {
     setEditSection(true);
-    if (content === "") return;
-    await PostAboutWrite(content);
-    const res = await GetAboutWrite();
+
+    if (location.pathname.includes("/about")) {
+      await PostAboutWrite(content);
+    } else if (location.pathname.includes("/office")) {
+      await PostOfficeWrite(content);
+    }
+
+    let res;
+    if (location.pathname.includes("/about")) {
+      res = await GetAboutWrite();
+    } else if (location.pathname.includes("/office")) {
+      res = await GetOfficeWrite();
+    }
+
     setAboutTextData(res.result.content);
   };
   return (
