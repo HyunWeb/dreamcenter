@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import UploadFile from "../Modal/UploadFile";
-import ImgListItem from "../Modal/ImgListItem";
+import UploadFile from "./UploadFile";
+import ImgListItem from "./ImgListItem";
 import { ReactSortable } from "react-sortablejs";
 
 type FileItem = {
@@ -26,10 +26,22 @@ const Section = styled.section`
 `;
 
 const ImgList = styled.div`
-  width: 50%;
+  width: 40%;
   overflow-y: auto;
   height: 100%;
   scrollbar-width: thin;
+  div {
+    color: #dddddd;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
   li {
     display: flex;
     align-items: center;
@@ -67,16 +79,27 @@ export default function SaveImgSection({
     <Section>
       <UploadFile files={files} setFiles={setFiles} />
       <ImgList>
-        <ReactSortable tag="ul" list={files} setList={setFiles} animation={150}>
-          {files.map((file, index) => (
-            <ImgListItem
-              file={file}
-              index={index}
-              files={files}
-              setFiles={setFiles}
-            />
-          ))}
-        </ReactSortable>
+        {files.length ? (
+          <ReactSortable
+            tag="ul"
+            list={files}
+            setList={setFiles}
+            animation={150}
+          >
+            {files.map((file, index) => (
+              <ImgListItem
+                file={file}
+                index={index}
+                files={files}
+                setFiles={setFiles}
+              />
+            ))}
+          </ReactSortable>
+        ) : (
+          <div>
+            <span>파일을 선택해주세요.</span>
+          </div>
+        )}
       </ImgList>
     </Section>
   );

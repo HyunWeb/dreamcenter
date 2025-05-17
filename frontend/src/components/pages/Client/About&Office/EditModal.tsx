@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { GetAboutImages, PostAboutImages } from "../../../../api/postApi";
+import {
+  GetAboutImages,
+  GetOfficeImages,
+  PostAboutImages,
+} from "../../../../api/postApi";
 import TabSwitch from "./TabSwitch";
 
 import SaveImgSection from "./Modal/SaveImgSection";
 import LoadImgSection from "./Modal/LoadImgSection";
 import SwichButtons from "./Modal/SwichButtons";
-interface EditModalProps {
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { useLocation } from "react-router-dom";
+
 type FileItem = {
   id: string;
   file: File;
@@ -27,7 +30,8 @@ const Div = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 880px;
+  width: 55vw;
+  max-width: 880px;
   height: 500px;
   border-radius: 20px;
   background-color: white;
@@ -36,14 +40,21 @@ const Div = styled.div`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
-export default function EditModal({ setIsModalOpen }: EditModalProps) {
+export default function EditModal() {
   const [files, setFiles] = useState<FileItem[]>([]);
   const [existingImages, setExistingImages] = useState<Slide[]>([]);
   const [selectTab, setSelectTab] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     const getImageFetch = async () => {
-      const response = await GetAboutImages();
+      let response;
+      if (location.pathname.includes("/about")) {
+        response = await GetAboutImages();
+      } else if (location.pathname.includes("/office")) {
+        response = await GetOfficeImages();
+      }
+
       setExistingImages(response.slides);
     };
     getImageFetch();
@@ -67,7 +78,6 @@ export default function EditModal({ setIsModalOpen }: EditModalProps) {
       )}
       <SwichButtons
         selectTab={selectTab}
-        setIsModalOpen={setIsModalOpen}
         existingImages={existingImages}
         files={files}
         setFiles={setFiles}

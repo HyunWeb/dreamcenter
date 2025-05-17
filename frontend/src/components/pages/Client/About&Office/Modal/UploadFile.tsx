@@ -13,8 +13,15 @@ const Label = styled.label`
   color: #888888;
   border: 3px dashed #dddddd;
   box-sizing: border-box;
-  padding: 50px 71px;
+  /* padding: 50px 71px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   cursor: pointer;
+  border-radius: 20px;
+  width: 40%;
+  height: 100%;
 
   svg {
     width: 45px;
@@ -37,7 +44,6 @@ export default function UploadFile({ files, setFiles }: UploadFilesProps) {
       file,
     }));
     setFiles((prev) => [...prev, ...newItems]);
-    console.log(files);
   };
   return (
     <>

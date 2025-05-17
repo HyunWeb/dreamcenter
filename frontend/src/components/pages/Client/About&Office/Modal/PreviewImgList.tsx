@@ -16,6 +16,7 @@ type Slide = {
 };
 
 const List = styled.li`
+  text-align: left;
   list-style: none;
   display: flex;
   align-items: center;
@@ -44,6 +45,7 @@ const List = styled.li`
     }
   }
   p {
+    padding-left: 10px;
     width: 100%;
     overflow: hidden;
     white-space: nowrap;

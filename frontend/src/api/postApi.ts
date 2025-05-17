@@ -69,6 +69,18 @@ export const PostAboutImages = async (formData: FormData) => {
     console.error("About 페이지 이미지 전송 실패", err);
   }
 };
+export const PostOfficeImages = async (formData: FormData) => {
+  try {
+    const response = await API.post(`/api/office/imgUpdate`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Office 페이지 이미지 전송 실패", err);
+  }
+};
 
 export const GetAboutImages = async () => {
   try {
@@ -76,6 +88,14 @@ export const GetAboutImages = async () => {
     return response.data;
   } catch (err) {
     console.error("About 페이지 이미지 불러오기 실패", err);
+  }
+};
+export const GetOfficeImages = async () => {
+  try {
+    const response = await API.get(`/api/office/imgGet`);
+    return response.data;
+  } catch (err) {
+    console.error("Office 페이지 이미지 불러오기 실패", err);
   }
 };
 
@@ -86,10 +106,55 @@ interface EditAboutImgesProps {
 }
 export const EditAboutImges = async (newArray: EditAboutImgesProps[]) => {
   try {
-    console.log(newArray);
     const response = await API.post(`/api/about/imgEdit`, newArray);
     return response;
   } catch (err) {
     console.error("About 페이지 이미지 수정하기 실패", err);
+  }
+};
+interface EditOfficeImgesProps {
+  image_url: string;
+  name: string;
+  sort_order: number;
+}
+export const EditOfficeImges = async (newArray: EditOfficeImgesProps[]) => {
+  try {
+    const response = await API.post(`/api/office/imgEdit`, newArray);
+    return response;
+  } catch (err) {
+    console.error("Office 페이지 이미지 수정하기 실패", err);
+  }
+};
+
+export const PostAboutWrite = async (content: string) => {
+  try {
+    const response = await API.post(`/api/about/postWrite`, { content });
+    return response;
+  } catch (err) {
+    console.error("About 페이지 텍스트 저장 실패", err);
+  }
+};
+export const PostOfficeWrite = async (content: string) => {
+  try {
+    const response = await API.post(`/api/office/postWrite`, { content });
+    return response;
+  } catch (err) {
+    console.error("About 페이지 텍스트 저장 실패", err);
+  }
+};
+export const GetAboutWrite = async () => {
+  try {
+    const response = await API.get("/api/about/getWrite");
+    return response.data;
+  } catch (err) {
+    console.error("About 페이지 이미지 불러오기 실패", err);
+  }
+};
+export const GetOfficeWrite = async () => {
+  try {
+    const response = await API.get("/api/office/getWrite");
+    return response.data;
+  } catch (err) {
+    console.error("Office 페이지 이미지 불러오기 실패", err);
   }
 };
