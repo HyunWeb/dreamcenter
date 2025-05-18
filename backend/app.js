@@ -24,7 +24,7 @@ db.sequelize
   });
 
 // API 라우터 연결
-app.use("/", postRoutes);
+app.use("/api", postRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
