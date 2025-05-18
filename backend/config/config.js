@@ -23,4 +23,4 @@ const production = {
   logging: console.log,
 };
 
-module.exports = { production };
+module.exports = { development, production };
