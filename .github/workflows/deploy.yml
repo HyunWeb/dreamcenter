@@ -21,6 +21,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+
+            set -e  # 스크립트 에러 발생 시 즉시 종료
+
             cd /home/ubuntu/dreamcenter/backend
 
             git pull origin main
@@ -30,7 +33,7 @@ jobs:
             docker-compose down
 
             echo "🏗 Building Docker images (prevent idle timeout)..."
-            (while true; do echo "⏳ Building..."; sleep 300; done) &
+            (while true; do echo "⏳ Building..."; sleep 60; done) &
             ECHO_PID=$!
 
             docker-compose build --no-cache
@@ -42,3 +45,4 @@ jobs:
             docker system df
 
             echo "✅ 모든 작업 완료"
+            exit 0
