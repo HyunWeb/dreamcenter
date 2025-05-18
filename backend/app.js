@@ -5,9 +5,10 @@ const app = express();
 const postRoutes = require("./routes/index");
 const db = require("./models");
 
+// 배포시 수정
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://13.124.176.128:82"],
     credentials: true,
   })
 );
