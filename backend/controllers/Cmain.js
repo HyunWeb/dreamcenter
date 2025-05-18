@@ -354,6 +354,7 @@ exports.PostAboutWrite = async (req, res) => {
     res.status(500).json({ message: "About 페이지 텍스트 수정 실패(서버)" });
   }
 };
+
 exports.PostOfficeWrite = async (req, res) => {
   try {
     const content =
