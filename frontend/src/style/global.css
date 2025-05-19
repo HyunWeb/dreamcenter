@@ -52,3 +52,23 @@ body {
 .deSelected {
   padding: 5px;
 }
+.required {
+  color: red;
+}
+
+.readOnlyInput {
+  background-color: transparent;
+  color: #111111;
+  border: none;
+  cursor: default;
+  outline: none;
+}
+
+.DataPicker {
+  box-sizing: border-box;
+  height: 40px;
+  border: 1px solid #dddddd;
+  padding-left: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}

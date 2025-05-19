@@ -80,3 +80,35 @@ export const AboutAndOfficeStore = create<AboutAndOfficeStoreProps>((set) => ({
   isModalOpen: false,
   setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
 }));
+
+type FileItem = {
+  id: string;
+  file: File;
+};
+
+interface ReservationInputProps {
+  selectedDate: Date | null;
+  file: FileItem[];
+  userId: string;
+  name: string;
+  setSelectedDate: (date: Date | null) => void;
+  setFiles: (value: FileItem[] | ((prev: FileItem[]) => FileItem[])) => void;
+  setUserId: (Id: string) => void;
+  setName: (name: string) => void;
+}
+export const ReservationInputStore = create<ReservationInputProps>((set) => ({
+  selectedDate: null,
+  file: [],
+  userId: "jong****",
+  name: "",
+  setSelectedDate: (date: Date | null) => set({ selectedDate: date }),
+  setFiles: (updater) =>
+    set((state) => ({
+      file:
+        typeof updater === "function"
+          ? (updater as (prev: FileItem[]) => FileItem[])(state.file)
+          : updater,
+    })),
+  setUserId: (Id: string) => set({ userId: Id }),
+  setName: (name: string) => set({ name: name }),
+}));
