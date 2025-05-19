@@ -1,3 +1,4 @@
+import { ReservationInputStore } from "@/store/userStore";
 import React from "react";
 import styled from "styled-components";
 
@@ -27,13 +28,20 @@ const Wrapper = styled.div`
 `;
 
 export default function UserIdInputGroup() {
+  const { userId, setUserId } = ReservationInputStore();
+
+  // useEffect로 받아오면 설정하도록 변경
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserId(e.target.value);
+  };
+
   return (
     <>
       <input
         id="userId"
         name="userId"
         readOnly
-        value="jong****"
+        value={userId}
         className="readOnlyInput"
       />
     </>

@@ -1,3 +1,4 @@
+import { ReservationInputStore } from "@/store/userStore";
 import React from "react";
 import styled from "styled-components";
 
@@ -10,6 +11,10 @@ const SingleInput = styled.input`
 `;
 
 export default function NameInputGroup() {
+  const { name, setName } = ReservationInputStore();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
   return (
     <>
       <SingleInput
@@ -18,6 +23,8 @@ export default function NameInputGroup() {
         name="name"
         placeholder="홍길동"
         required
+        value={name}
+        onChange={handleChange}
       />
     </>
   );
