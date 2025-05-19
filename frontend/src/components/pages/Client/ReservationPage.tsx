@@ -13,10 +13,10 @@ export default function ReservationPage() {
   return (
     <Div>
       <PageHeader
-        title="예약관리"
-        root="예약관리"
+        title="예약상담"
+        root="예약상담"
         root1Url="/reservation"
-        root2="예약관리"
+        root2="예약상담"
       />
       <TabSwitch
         Title1="예약상담"
