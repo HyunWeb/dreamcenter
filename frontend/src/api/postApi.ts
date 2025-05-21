@@ -8,6 +8,15 @@ const API = axios.create({
   },
 });
 
+export const getUserInfo = async () => {
+  try {
+    const response = await API.get(`/api/user/getInfo`);
+    return response.data;
+  } catch (err) {
+    console.error("유저 데이터 불러오기 실패", err);
+  }
+};
+
 // 로그인 요청
 export const postLogin = async ({ code, state }: any) => {
   try {
@@ -156,5 +165,25 @@ export const GetOfficeWrite = async () => {
     return response.data;
   } catch (err) {
     console.error("Office 페이지 이미지 불러오기 실패", err);
+  }
+};
+
+export const PostReservation = async (formdata: FormData) => {
+  try {
+    const response = await API.post(`/api/reservation/postSubmit`, formdata, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response;
+  } catch (err) {
+    console.error("예약 상담 제출 실패", err);
+  }
+};
+
+export const GetReservation = async () => {
+  try {
+    const response = await API.get(`/api/reservation/getSubmit`);
+    return response.data;
+  } catch (err) {
+    console.error("상담 신청내역 불러오기 실패", err);
   }
 };

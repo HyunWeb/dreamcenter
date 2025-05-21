@@ -1,11 +1,14 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
+
 const {
   User,
   AboutSlide,
   AboutWrite,
   OfficeSlide,
   OfficeWrite,
+  ReservationSubmit,
+  Users,
 } = require("../models");
 const { sequelize } = require("../models");
 
@@ -61,6 +64,7 @@ exports.postUpload = [
 
 exports.postLogin = async (req, res) => {
   const { code, state } = req.body;
+
   try {
     // 네이버로부터 엑세스 토큰 요청
     const tokenResponse = await axios.get(
@@ -68,15 +72,15 @@ exports.postLogin = async (req, res) => {
       {
         params: {
           grant_type: "authorization_code",
-          client_id: "ZrPAGA0oGqag2F39pAFq",
-          client_secret: "8HZ6xintJn",
+          client_id: process.env.NAVER_CLIENT_ID,
+          client_secret: process.env.NAVER_CLIENT_SECRET,
           code,
           state,
         },
       }
     );
-
     const { access_token } = tokenResponse.data;
+    console.log("@@@@@여기까진 성공", access_token);
 
     // access_token을 가지고 사용자 정보 요청
     const profileResponse = await axios.get(
@@ -91,7 +95,7 @@ exports.postLogin = async (req, res) => {
     const userData = profileResponse.data.response;
     // DB에 해당 유저가 저장되어 있는지 확인
     let existingUser = await User.findOne({ where: { sns_id: userData.id } });
-    console.log("유저데이타", existingUser);
+    // console.log("유저데이타", existingUser);
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
     if (!existingUser) {
@@ -125,7 +129,7 @@ exports.postLogin = async (req, res) => {
     res.status(200).json({ message: "로그인 성공", user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "로그인 실패" });
+    res.status(500).json({ message: "로그인 실패(서버)" });
   }
 };
 
@@ -402,5 +406,99 @@ exports.GetOfficeWrite = async (req, res) => {
     res
       .status(500)
       .json({ message: "Office 페이지 텍스트 가져오기 실패(서버)" });
+  }
+};
+
+exports.getUserInfo = async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ message: "로그인 필요" });
+  try {
+    // 사용자 토큰 제작시 사용했던 ID 추출
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userID;
+    const userData = await User.findOne({ where: { sns_id: userId } });
+
+    return res.status(200).json({ result: userData });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "Office 페이지 텍스트 가져오기 실패(서버)" });
+  }
+};
+
+exports.PostReservationSubmit = [
+  upload.array("images", 100),
+  async (req, res) => {
+    const files = req.files;
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: "로그인 필요" });
+    try {
+      // 사용자 토큰 제작시 사용했던 ID 추출
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(decoded.userID);
+      console.log(req.body);
+      const uploadedUrls = [];
+      for (const file of files) {
+        const ext = path.extname(file.originalname);
+        const key = `upload/${uuidv4()}${ext}`;
+
+        // 이미지 압축
+        const compressedBuffer = await sharp(file.buffer)
+          .rotate()
+          .resize({ width: 800 })
+          .webp({ quality: 80 })
+          .toBuffer();
+
+        // s3 업로드
+        const uploadParams = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: key,
+          Body: compressedBuffer,
+          ContentType: "image/webp",
+        };
+
+        await s3.send(new PutObjectCommand(uploadParams));
+
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        uploadedUrls.push(fileUrl);
+      }
+      req.body.files = uploadedUrls;
+
+      const submitData = {
+        ...req.body,
+        sns_id: decoded.userID,
+        agreePrivacy: req.body.agreePrivacy === "true",
+        file: JSON.stringify(uploadedUrls),
+        is_confirmed: false,
+      };
+
+      await ReservationSubmit.create(submitData);
+
+      res.status(201).json({ message: "예약 상담이 등록되었습니다." });
+    } catch (err) {
+      console.error(err);
+      res
+        .status(500)
+        .json({ message: "Reservation 예약 상담 전송 실패(서버)" });
+    }
+  },
+];
+
+exports.GetReservationSubmit = async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ message: "로그인 필요" });
+  try {
+    // 사용자 토큰 제작시 사용했던 ID 추출
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userID;
+    const userData = await ReservationSubmit.findAll({
+      where: { sns_id: userId },
+    });
+
+    return res.status(200).json({ result: userData });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "내 신청내역 가져오기 실패(서버)" });
   }
 };

@@ -1,4 +1,5 @@
-import React from "react";
+import { ReservationInputStore } from "@/store/userStore";
+import React, { SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const SingleInput = styled.input`
@@ -13,6 +14,32 @@ const PhoneDash = styled.span`
 `;
 
 export default function PhoneInputGroup() {
+  const [start, setStart] = useState("");
+  const [middle, setMiddle] = useState("");
+  const [end, setEnd] = useState("");
+  const { phone, setPhone } = ReservationInputStore(); //Zustand
+
+  useEffect(() => {
+    setPhone(`${start}-${middle}-${end}`);
+  }, [start, middle, end]);
+
+  useEffect(() => {
+    if (phone !== "") return;
+    setStart("");
+    setMiddle("");
+    setEnd("");
+  }, [phone]);
+
+  const handleChange = (
+    setter: React.Dispatch<SetStateAction<string>>,
+    maxLength: number
+  ) => {
+    return (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value.replace(/\D/g, "").slice(0, maxLength);
+      setter(value);
+    };
+  };
+
   return (
     <>
       <SingleInput
@@ -22,6 +49,8 @@ export default function PhoneInputGroup() {
         maxLength={3}
         placeholder="010"
         required
+        value={start}
+        onChange={handleChange(setStart, 3)}
       />
       <PhoneDash>-</PhoneDash>
       <SingleInput
@@ -31,6 +60,8 @@ export default function PhoneInputGroup() {
         maxLength={4}
         placeholder="1234"
         required
+        value={middle}
+        onChange={handleChange(setMiddle, 4)}
       />
       <PhoneDash>-</PhoneDash>
       <SingleInput
@@ -40,6 +71,8 @@ export default function PhoneInputGroup() {
         maxLength={4}
         placeholder="5678"
         required
+        value={end}
+        onChange={handleChange(setEnd, 4)}
       />
     </>
   );

@@ -2,26 +2,18 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type UserState = {
-  name: string;
   isLogin: boolean;
-  setLogin: (name: string) => void;
-  setLogout: () => void;
+  userName: string;
+  setIsLogin: (state: boolean) => void;
+  setUserName: (name: string) => void;
 };
 
-export const useUserStore = create(
-  persist<UserState>(
-    (set) => ({
-      name: "",
-      isLogin: false,
-      setLogin: (name) => set({ name, isLogin: true }),
-      setLogout: () => set({ name: "", isLogin: false }),
-    }),
-    {
-      name: "user-storage",
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
-);
+export const useUserStore = create<UserState>((set) => ({
+  isLogin: false,
+  userName: "",
+  setIsLogin: (state) => set({ isLogin: state }),
+  setUserName: (name) => set({ userName: name }),
+}));
 
 type Slide = {
   created_at: string;
@@ -91,16 +83,45 @@ interface ReservationInputProps {
   file: FileItem[];
   userId: string;
   name: string;
+  phone: string;
+  date: string;
+  time: string;
+  age: string;
+  school: string;
+  admission: string;
+  recommender: string;
+  message: string;
+  agreePrivacy: boolean;
   setSelectedDate: (date: Date | null) => void;
   setFiles: (value: FileItem[] | ((prev: FileItem[]) => FileItem[])) => void;
   setUserId: (Id: string) => void;
   setName: (name: string) => void;
+  setPhone: (PhoneNum: string) => void;
+  setDate: (date: string) => void;
+  setTime: (time: string) => void;
+  setAge: (num: string) => void;
+  setSchool: (school: string) => void;
+  setAdmission: (admission: string) => void;
+  setRecommender: (recommender: string) => void;
+  setMessage: (message: string) => void;
+  setAgreePrivacy: (agreePrivacy: boolean) => void;
+  resetForm: () => void;
 }
+
 export const ReservationInputStore = create<ReservationInputProps>((set) => ({
   selectedDate: null,
   file: [],
-  userId: "jong****",
+  userId: "",
   name: "",
+  phone: "",
+  date: "",
+  time: "",
+  age: "",
+  school: "",
+  admission: "",
+  recommender: "",
+  message: "",
+  agreePrivacy: false,
   setSelectedDate: (date: Date | null) => set({ selectedDate: date }),
   setFiles: (updater) =>
     set((state) => ({
@@ -111,4 +132,30 @@ export const ReservationInputStore = create<ReservationInputProps>((set) => ({
     })),
   setUserId: (Id: string) => set({ userId: Id }),
   setName: (name: string) => set({ name: name }),
+  setPhone: (PhoneNum: string) => set({ phone: PhoneNum }),
+  setDate: (date: string) => set({ date: date }),
+  setTime: (time: string) => set({ time: time }),
+  setAge: (num: string) => set({ age: num }),
+  setSchool: (school: string) => set({ school: school }),
+  setAdmission: (admission: string) => set({ admission: admission }),
+  setRecommender: (recommender: string) => set({ recommender: recommender }),
+  setMessage: (message: string) => set({ message: message }),
+  setAgreePrivacy: (agreePrivacy: boolean) =>
+    set({ agreePrivacy: agreePrivacy }),
+  resetForm: () => {
+    set({
+      name: "",
+      phone: "",
+      date: "",
+      selectedDate: null,
+      time: "",
+      age: "",
+      school: "",
+      admission: "",
+      recommender: "",
+      message: "",
+      agreePrivacy: false,
+      file: [],
+    });
+  },
 }));

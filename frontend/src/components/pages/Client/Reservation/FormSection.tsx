@@ -13,6 +13,8 @@ import SchoolInputGroup from "./InputGroup/SchoolInputGroup";
 import AdmissionInputGroup from "./InputGroup/AdmissionInputGroup";
 import RecommenderInputGroup from "./InputGroup/RecommenderInputGroup";
 import ImgInputGroup from "./InputGroup/ImgInputGroup";
+import { ReservationInputStore } from "@/store/userStore";
+import { PostReservation } from "@/api/postApi";
 
 const Description = styled.p`
   line-height: 1.5;
@@ -22,15 +24,18 @@ const Description = styled.p`
 `;
 
 const Form = styled.form`
+  position: relative;
   display: flex;
   justify-content: center;
-  padding: 0px 150px;
+
+  width: 100%;
 `;
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  padding: 0px 150px;
 `;
 
 const Span = styled.span`
@@ -48,6 +53,7 @@ const Textarea = styled.textarea`
 `;
 
 const AgreeLabel = styled.label`
+  box-sizing: border-box;
   position: relative;
   margin-top: 38px;
   align-self: center;
@@ -57,7 +63,7 @@ const AgreeLabel = styled.label`
   gap: 10px;
   cursor: pointer;
   width: 100%;
-  border-top: 1px solid #dddddd;
+  /* border-top: 1px solid #dddddd; */
   padding: 38px;
 
   input {
@@ -67,20 +73,88 @@ const AgreeLabel = styled.label`
   a {
     color: #888888;
   }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    max-width: 1200px;
+    height: 1px;
+    background-color: #dddddd;
+  }
 `;
 
 const SubmitButton = styled.button`
-  padding: 12px 45px;
+  padding: 15px 60px;
   color: white;
   background-color: #49b736;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   margin-bottom: 178px;
+  font-size: 16px;
 `;
 
 export default function FormSection() {
-  const [message, setMessage] = useState("");
+  const {
+    setMessage,
+    setAgreePrivacy,
+    message,
+    agreePrivacy,
+    userId,
+    name,
+    phone,
+    date,
+    time,
+    age,
+    school,
+    admission,
+    recommender,
+    file,
+    resetForm,
+  } = ReservationInputStore();
+
+  const handleAgreePrivacy = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAgreePrivacy(e.target.checked);
+  };
+
+  const handleSubmit = async () => {
+    if (
+      name === "" ||
+      phone.length !== 13 ||
+      date === "" ||
+      time === "" ||
+      age === "" ||
+      school === "" ||
+      admission === "" ||
+      agreePrivacy === false
+    ) {
+      alert("필수 항목을 모두 입력해주세요");
+      return;
+    }
+    const formData = new FormData();
+
+    formData.append("userId", userId);
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("date", date);
+    formData.append("time", time);
+    formData.append("age", age);
+    formData.append("school", school);
+    formData.append("admission", admission);
+    formData.append("recommender", recommender);
+    formData.append("message", message);
+    formData.append("agreePrivacy", String(agreePrivacy));
+    file.forEach(({ file }) => {
+      formData.append("images", file);
+    });
+    const res = await PostReservation(formData);
+    alert(res?.data.message);
+    resetForm();
+  };
 
   return (
     <div>
@@ -160,7 +234,13 @@ export default function FormSection() {
           </FormRow>
 
           <AgreeLabel>
-            <input type="checkbox" name="agreePrivacy" required />
+            <input
+              type="checkbox"
+              name="agreePrivacy"
+              required
+              checked={agreePrivacy}
+              onChange={handleAgreePrivacy}
+            />
             개인정보 수집에 동의합니다.
             <a href="/privacy" target="_blank" rel="noopener noreferrer">
               내용 보기
@@ -168,7 +248,7 @@ export default function FormSection() {
           </AgreeLabel>
         </Fieldset>
       </Form>
-      <SubmitButton>등록</SubmitButton>
+      <SubmitButton onClick={handleSubmit}>등록</SubmitButton>
     </div>
   );
 }
