@@ -17,8 +17,12 @@ const {
   PostOfficeWrite,
   GetAboutWrite,
   GetOfficeWrite,
+  PostReservationSubmit,
+  getUserInfo,
+  GetReservationSubmit,
 } = require("../controllers/Cmain");
 
+router.get("/user/getInfo", getUserInfo);
 router.post("/naver/callback", postLogin);
 router.post("/auth/logout", postLogout);
 router.post("/upload", postUpload);
@@ -33,5 +37,7 @@ router.post("/about/postWrite", PostAboutWrite);
 router.post("/office/postWrite", PostOfficeWrite);
 router.get("/about/getWrite", GetAboutWrite);
 router.get("/office/getWrite", GetOfficeWrite);
+router.post("/reservation/postSubmit", PostReservationSubmit);
+router.get("/reservation/getSubmit", GetReservationSubmit);
 
 module.exports = router;

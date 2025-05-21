@@ -8,7 +8,7 @@ export default function NaverLogin() {
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
   const state = searchParams.get("state");
-  const { setLogin } = useUserStore();
+  const { setIsLogin, setUserName } = useUserStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,7 +17,8 @@ export default function NaverLogin() {
       postLogin({ code, state })
         .then((userData) => {
           console.log("유저 데이터", userData.user.name);
-          setLogin(userData.user.name);
+          setIsLogin(true);
+          setUserName(userData.user.name);
           // 로그인 완료 시 다시 페이지 이동
           const redirectTo =
             localStorage.getItem("naver_redirect_after_login") || "/";
@@ -28,6 +29,8 @@ export default function NaverLogin() {
           console.error("로그인 실패", error);
           alert("로그인에 실패하였습니다.");
         });
+    } else {
+      alert("로그인에 필요한 url 코드가 없습니다.");
     }
   }, [code]);
   return null;

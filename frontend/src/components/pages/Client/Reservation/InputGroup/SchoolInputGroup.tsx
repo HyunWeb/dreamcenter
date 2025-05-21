@@ -1,3 +1,4 @@
+import { ReservationInputStore } from "@/store/userStore";
 import React from "react";
 import styled from "styled-components";
 
@@ -9,6 +10,11 @@ const SingleInput = styled.input`
   font-size: 16px;
 `;
 export default function SchoolInputGroup() {
+  const { school, setSchool } = ReservationInputStore();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSchool(e.target.value);
+  };
   return (
     <>
       <SingleInput
@@ -16,6 +22,8 @@ export default function SchoolInputGroup() {
         id="school"
         placeholder="ex) 한국대학교 경영학과 재학중"
         required
+        value={school}
+        onChange={handleChange}
       />
     </>
   );

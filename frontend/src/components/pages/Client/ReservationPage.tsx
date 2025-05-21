@@ -1,15 +1,28 @@
 import PageHeader from "@/components/common/PageHeader";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TabSwitch from "./About&Office/TabSwitch";
 import FormSection from "./Reservation/FormSection";
+import { useUserStore } from "@/store/userStore";
+import { useNavigate } from "react-router-dom";
+import MyListSection from "./Reservation/MyListSection";
 
 const Div = styled.div`
   text-align: center;
+  margin-bottom: 170px;
 `;
 
 export default function ReservationPage() {
   const [selectTab, setSelectTab] = useState(true);
+  const { isLogin } = useUserStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLogin) {
+      alert("로그인 후 이용해주세요");
+      navigate("/", { replace: true });
+    }
+  }, []);
   return (
     <Div>
       <PageHeader
@@ -24,7 +37,7 @@ export default function ReservationPage() {
         selectTab={selectTab}
         setSelectTab={setSelectTab}
       />
-      {selectTab ? <FormSection /> : <section>2</section>}
+      {selectTab ? <FormSection /> : <MyListSection />}
     </Div>
   );
 }
