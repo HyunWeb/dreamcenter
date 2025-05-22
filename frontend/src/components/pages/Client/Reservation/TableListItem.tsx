@@ -1,3 +1,4 @@
+import { ReservationMyListStore } from "@/store/userStore";
 import { FormData } from "@/types/forms";
 import React from "react";
 import styled from "styled-components";
@@ -23,16 +24,25 @@ const TableRow = styled.tr<{ $form: boolean }>`
 `;
 
 export default function TableListItem({ form, orderNum }: TableListItemProps) {
+  const { checkedList, setCheckedList } = ReservationMyListStore();
   const dateObj = new Date(form.createdAt);
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, "0");
   const date = String(dateObj.getDate()).padStart(2, "0");
-  console.log(`${year}.${month}.${date}`);
-  console.log(form);
+
+  const handleChange = () => {
+    const newArray = [...checkedList];
+    newArray[orderNum] = !newArray[orderNum];
+    setCheckedList(newArray);
+  };
   return (
     <TableRow $form={form.is_confirmed}>
       <td>
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          checked={checkedList[orderNum] || false}
+          onChange={handleChange}
+        />
       </td>
       <td>{orderNum + 1}</td>
       <td>{form.userId}</td>

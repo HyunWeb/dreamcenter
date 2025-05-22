@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import TableListItem from "./TableListItem";
 import { GetReservation } from "@/api/postApi";
-import { FormData } from "@/types/forms";
+import { TableFormProps } from "@/types/forms";
 import styled from "styled-components";
+import { ReservationMyListStore } from "@/store/userStore";
 
 const Table = styled.table`
   width: 100%;
@@ -16,25 +17,19 @@ const TableRow = styled.tr`
   th {
     padding: 20px 0;
   }
-  .select-th {
-  }
-  .number-th {
-  }
-  .name-th {
-  }
-  .date-th {
-  }
-  .comfirm-th {
-  }
 `;
 
-export default function TableForm() {
-  const [form, setForm] = useState<FormData[]>([]);
+export default function TableForm({ form, setForm }: TableFormProps) {
+  const { setCheckedList } = ReservationMyListStore();
+
+  // 데이터가 들어오면 개수를 파악해서 체크상태 유동적으로 설정
+  useEffect(() => {
+    setCheckedList(new Array(form.length).fill(false));
+  }, [form]);
 
   useEffect(() => {
     const fetchSubmitData = async () => {
       const res = await GetReservation();
-      console.log(res.result);
       setForm(res.result);
     };
     fetchSubmitData();
@@ -43,11 +38,11 @@ export default function TableForm() {
     <Table>
       <thead>
         <TableRow>
-          <th className="select-th">선택</th>
-          <th className="number-th">번호</th>
-          <th className="name-th">신청인</th>
-          <th className="date-th">등록일</th>
-          <th className="comfirm-th">확인여부</th>
+          <th>선택</th>
+          <th>번호</th>
+          <th>신청인</th>
+          <th>등록일</th>
+          <th>확인여부</th>
         </TableRow>
       </thead>
       <tbody>

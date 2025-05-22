@@ -159,3 +159,14 @@ export const ReservationInputStore = create<ReservationInputProps>((set) => ({
     });
   },
 }));
+
+interface ReservationMyListStoreProps {
+  checkedList: boolean[];
+  setCheckedList: (state: boolean[]) => void;
+}
+export const ReservationMyListStore = create<ReservationMyListStoreProps>(
+  (set) => ({
+    checkedList: [],
+    setCheckedList: (state: boolean[]) => set({ checkedList: state }),
+  })
+);

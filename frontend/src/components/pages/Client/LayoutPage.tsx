@@ -9,6 +9,7 @@ const Layout = styled.div`
   flex-direction: column;
   align-items: center;
   overflow: hidden;
+  min-height: 100vh;
 `;
 
 const Header = styled.header`
@@ -26,6 +27,7 @@ const LogoDiv = styled.div`
 const Main = styled.main`
   width: 100%;
   max-width: 1200px;
+  flex-grow: 1;
 `;
 
 export default function LayoutPage() {

@@ -20,6 +20,7 @@ const {
   PostReservationSubmit,
   getUserInfo,
   GetReservationSubmit,
+  PostReservationDelete,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -39,5 +40,6 @@ router.get("/about/getWrite", GetAboutWrite);
 router.get("/office/getWrite", GetOfficeWrite);
 router.post("/reservation/postSubmit", PostReservationSubmit);
 router.get("/reservation/getSubmit", GetReservationSubmit);
+router.post("/reservation/postDelete", PostReservationDelete);
 
 module.exports = router;

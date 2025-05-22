@@ -40,7 +40,6 @@ export default function ViewBox() {
       } else if (location.pathname.includes("/office")) {
         res = await GetOfficeWrite();
       }
-      console.log(res);
       setAboutTextData(res.result.content);
     };
     fetchText();
@@ -50,7 +49,6 @@ export default function ViewBox() {
     setEditSection(false);
     setContent(aboutTextData);
   };
-  console.log(aboutTextData);
   return (
     <ViewSection>
       <EditButton

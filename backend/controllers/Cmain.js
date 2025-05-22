@@ -41,7 +41,6 @@ exports.postUpload = [
 
       const ext = path.extname(file.originalname); // 확장자 추출
       const key = `uploads/${uuidv4()}_${ext}`;
-      console.log(key);
 
       const uploadParams = {
         Bucket: process.env.AWS_BUCKET_NAME,
@@ -80,7 +79,6 @@ exports.postLogin = async (req, res) => {
       }
     );
     const { access_token } = tokenResponse.data;
-    console.log("@@@@@여기까진 성공", access_token);
 
     // access_token을 가지고 사용자 정보 요청
     const profileResponse = await axios.get(
@@ -95,7 +93,6 @@ exports.postLogin = async (req, res) => {
     const userData = profileResponse.data.response;
     // DB에 해당 유저가 저장되어 있는지 확인
     let existingUser = await User.findOne({ where: { sns_id: userData.id } });
-    // console.log("유저데이타", existingUser);
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
     if (!existingUser) {
@@ -436,8 +433,6 @@ exports.PostReservationSubmit = [
     try {
       // 사용자 토큰 제작시 사용했던 ID 추출
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decoded.userID);
-      console.log(req.body);
       const uploadedUrls = [];
       for (const file of files) {
         const ext = path.extname(file.originalname);
@@ -500,5 +495,16 @@ exports.GetReservationSubmit = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "내 신청내역 가져오기 실패(서버)" });
+  }
+};
+
+exports.PostReservationDelete = async (req, res) => {
+  try {
+    const IdArr = req.body.deleteArray;
+    await ReservationSubmit.destroy({ where: { id: IdArr } });
+    res.status(200).json({ message: "삭제 성공" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "내 신청내역 삭제하기 실패(서버)" });
   }
 };

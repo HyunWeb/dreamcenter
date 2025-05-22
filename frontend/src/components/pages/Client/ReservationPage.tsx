@@ -29,7 +29,7 @@ export default function ReservationPage() {
         title="예약상담"
         root="예약상담"
         root1Url="/reservation"
-        root2="예약상담"
+        root2={selectTab ? "예약상담" : "나의 문의/신청내역"}
       />
       <TabSwitch
         Title1="예약상담"

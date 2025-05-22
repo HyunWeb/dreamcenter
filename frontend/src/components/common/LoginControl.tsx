@@ -38,8 +38,6 @@ export default function LoginControl() {
     try {
       const response = await postLogout();
       setIsLogin(false);
-
-      console.log(response.message);
     } catch (error) {
       console.error("로그아웃 실패", error);
     }

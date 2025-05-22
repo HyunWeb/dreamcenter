@@ -12,11 +12,9 @@ export default function NaverLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(code);
     if (code) {
       postLogin({ code, state })
         .then((userData) => {
-          console.log("유저 데이터", userData.user.name);
           setIsLogin(true);
           setUserName(userData.user.name);
           // 로그인 완료 시 다시 페이지 이동
