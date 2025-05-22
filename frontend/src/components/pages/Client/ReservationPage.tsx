@@ -2,10 +2,10 @@ import PageHeader from "@/components/common/PageHeader";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TabSwitch from "./About&Office/TabSwitch";
-import FormSection from "./Reservation/FormSection";
 import { useUserStore } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
 import MyListSection from "./Reservation/MyListSection";
+import FormSection from "./Reservation/FormSection";
 
 const Div = styled.div`
   text-align: center;
