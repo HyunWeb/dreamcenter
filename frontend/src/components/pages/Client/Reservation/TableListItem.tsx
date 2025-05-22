@@ -10,6 +10,7 @@ interface TableListItemProps {
 
 const TableRow = styled.tr<{ $form: boolean }>`
   border-top: 1px solid #dddddd;
+
   td {
     padding: 20px 0;
   }
@@ -32,8 +33,9 @@ export default function TableListItem({ form, orderNum }: TableListItemProps) {
   const date = String(dateObj.getDate()).padStart(2, "0");
 
   // 목차 시작 인덱스를 현재 페이지 기반으로 재 계산
+  const limit = 1;
   useEffect(() => {
-    setStartIndex((currentPage - 1) * 2 + 1);
+    setStartIndex((currentPage - 1) * limit + 1);
   }, [currentPage]);
 
   const handleChange = () => {

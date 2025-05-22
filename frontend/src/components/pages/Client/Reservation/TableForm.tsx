@@ -7,6 +7,7 @@ import { ReservationMyListStore } from "@/store/userStore";
 
 const Table = styled.table`
   width: 100%;
+  /* table-layout: fixed; */
 
   thead {
     border-top: 1px solid #111111;
@@ -37,13 +38,6 @@ export default function TableForm({ form, setForm }: TableFormProps) {
     setCheckedList(new Array(form.length).fill(false));
   }, [form]);
 
-  // useEffect(() => {
-  //   const fetchSubmitData = async () => {
-  //     const res = await GetReservation();
-  //     setForm(res.result);
-  //   };
-  //   fetchSubmitData();
-  // }, []);
   return (
     <Table>
       <thead>

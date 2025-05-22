@@ -1,5 +1,5 @@
 import { GetPageCount } from "@/api/postApi";
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import { FormData } from "@/types/forms";
 import { ReservationMyListStore } from "@/store/userStore";
@@ -15,11 +15,11 @@ const Div = styled.div`
     border: none;
     background-color: transparent;
     color: #888888;
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     svg {
-      width: 20px;
-      height: 20px;
+      width: 35px;
+      height: 35px;
     }
 
     &:hover {
@@ -85,9 +85,28 @@ export default function PageCountUI({
   const handleChangePage = async (index: number) => {
     setCurrentPage(index);
   };
+
+  const handleDown = () => {
+    if (currentPage === 1) return;
+    setCurrentPage(currentPage - 1);
+  };
+
+  const handleUp = () => {
+    const Maxlength = pageCount.length;
+    if (currentPage === Maxlength) return;
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handleStart = () => {
+    setCurrentPage(1);
+  };
+  const handleEnd = () => {
+    const Maxlength = pageCount.length;
+    setCurrentPage(Maxlength);
+  };
   return (
     <Div>
-      <button className="arrowButton">
+      <button className="arrowButton" onClick={handleStart}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -106,7 +125,7 @@ export default function PageCountUI({
           />
         </svg>
       </button>
-      <button className="arrowButton">
+      <button className="arrowButton" onClick={handleDown}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -135,7 +154,7 @@ export default function PageCountUI({
           );
         })}
       </Ul>
-      <button className="arrowButton">
+      <button className="arrowButton" onClick={handleUp}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -150,7 +169,7 @@ export default function PageCountUI({
           />
         </svg>
       </button>
-      <button className="arrowButton">
+      <button className="arrowButton" onClick={handleEnd}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"

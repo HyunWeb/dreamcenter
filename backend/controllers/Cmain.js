@@ -515,7 +515,7 @@ exports.GetPageCount = async (req, res) => {
   const token = req.cookies.token;
   // 10개로 바꾸기
   // 한페이지에 받아올 아이템 수
-  const limit = 2;
+  const limit = 1;
 
   // 시작 인덱스 구하기
   const startIndex = (page - 1) * limit;
@@ -534,6 +534,7 @@ exports.GetPageCount = async (req, res) => {
         TotalItems = await ReservationSubmit.findAll({
           limit: limit,
           offset: startIndex,
+          order: [["createdAt", "DESC"]],
         });
         break;
 
