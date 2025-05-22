@@ -21,6 +21,7 @@ const {
   getUserInfo,
   GetReservationSubmit,
   PostReservationDelete,
+  GetPageCount,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -41,5 +42,6 @@ router.get("/office/getWrite", GetOfficeWrite);
 router.post("/reservation/postSubmit", PostReservationSubmit);
 router.get("/reservation/getSubmit", GetReservationSubmit);
 router.post("/reservation/postDelete", PostReservationDelete);
+router.get("/pagecount", GetPageCount);
 
 module.exports = router;

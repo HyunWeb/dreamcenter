@@ -6,16 +6,21 @@ import { useUserStore } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
 import MyListSection from "./Reservation/MyListSection";
 import FormSection from "./Reservation/FormSection";
+import PageCountUI from "@/components/common/PageCountUI";
+import { FormData } from "@/types/forms";
 
 const Div = styled.div`
   text-align: center;
   margin-bottom: 170px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default function ReservationPage() {
   const [selectTab, setSelectTab] = useState(true);
   const { isLogin } = useUserStore();
   const navigate = useNavigate();
+  const [form, setForm] = useState<FormData[]>([]);
 
   useEffect(() => {
     if (!isLogin) {
@@ -37,7 +42,15 @@ export default function ReservationPage() {
         selectTab={selectTab}
         setSelectTab={setSelectTab}
       />
-      {selectTab ? <FormSection /> : <MyListSection />}
+      {selectTab ? (
+        <FormSection />
+      ) : (
+        <MyListSection form={form} setForm={setForm} />
+      )}
+
+      {!selectTab && (
+        <PageCountUI form={form} setForm={setForm} type={"mySubmitList"} />
+      )}
     </Div>
   );
 }

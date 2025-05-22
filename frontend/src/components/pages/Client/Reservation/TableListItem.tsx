@@ -1,6 +1,6 @@
 import { ReservationMyListStore } from "@/store/userStore";
 import { FormData } from "@/types/forms";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface TableListItemProps {
@@ -9,9 +9,9 @@ interface TableListItemProps {
 }
 
 const TableRow = styled.tr<{ $form: boolean }>`
+  border-top: 1px solid #dddddd;
   td {
     padding: 20px 0;
-    border-top: 1px solid #dddddd;
   }
 
   input {
@@ -24,11 +24,17 @@ const TableRow = styled.tr<{ $form: boolean }>`
 `;
 
 export default function TableListItem({ form, orderNum }: TableListItemProps) {
-  const { checkedList, setCheckedList } = ReservationMyListStore();
+  const { checkedList, setCheckedList, currentPage } = ReservationMyListStore();
+  const [startIndex, setStartIndex] = useState<number>(0);
   const dateObj = new Date(form.createdAt);
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, "0");
   const date = String(dateObj.getDate()).padStart(2, "0");
+
+  // 목차 시작 인덱스를 현재 페이지 기반으로 재 계산
+  useEffect(() => {
+    setStartIndex((currentPage - 1) * 2 + 1);
+  }, [currentPage]);
 
   const handleChange = () => {
     const newArray = [...checkedList];
@@ -44,8 +50,8 @@ export default function TableListItem({ form, orderNum }: TableListItemProps) {
           onChange={handleChange}
         />
       </td>
-      <td>{orderNum + 1}</td>
-      <td>{form.userId}</td>
+      <td>{startIndex + orderNum}</td>
+      <td>{form.name}</td>
       <td>{`${year}.${month}.${date}`}</td>
       <td className="td_confirmed">
         {form.is_confirmed ? "확인완료" : "미확인"}

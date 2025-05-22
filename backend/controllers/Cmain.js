@@ -508,3 +508,43 @@ exports.PostReservationDelete = async (req, res) => {
     res.status(500).json({ message: "내 신청내역 삭제하기 실패(서버)" });
   }
 };
+
+exports.GetPageCount = async (req, res) => {
+  const type = req.query.type;
+  const page = req.query.page;
+  const token = req.cookies.token;
+  // 10개로 바꾸기
+  // 한페이지에 받아올 아이템 수
+  const limit = 2;
+
+  // 시작 인덱스 구하기
+  const startIndex = (page - 1) * limit;
+
+  if (!token) return res.status(401).json({ message: "로그인 필요" });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userID;
+    let result;
+    // 문자열에 따라 다른 조건으로 데이터를 탐색한다.
+    switch (type) {
+      case "mySubmitList":
+        result = await ReservationSubmit.count({
+          where: { sns_id: userId },
+        });
+        TotalItems = await ReservationSubmit.findAll({
+          limit: limit,
+          offset: startIndex,
+        });
+        break;
+
+      default:
+        return res.status(400).json({ message: "유효하지 않은 type" });
+    }
+    const NeedPage = Math.ceil(result / limit);
+
+    return res.status(200).json({ result: NeedPage, TotalItems: TotalItems });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "신청 내역 개수 불러오기 실패(서버)" });
+  }
+};

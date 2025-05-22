@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TableListItem from "./TableListItem";
 import { GetReservation } from "@/api/postApi";
 import { TableFormProps } from "@/types/forms";
@@ -7,13 +7,23 @@ import { ReservationMyListStore } from "@/store/userStore";
 
 const Table = styled.table`
   width: 100%;
+
+  thead {
+    border-top: 1px solid #111111;
+    border-bottom: 1px solid #111111;
+  }
+  tbody {
+    border-bottom: 1px solid #111111;
+    tr:first-child {
+      border-top: none;
+    }
+  }
 `;
 
 const TableRow = styled.tr`
   font-size: 20px;
   font-weight: 600;
-  border-top: 1px solid #111111;
-  border-bottom: 1px solid #111111;
+
   th {
     padding: 20px 0;
   }
@@ -27,13 +37,13 @@ export default function TableForm({ form, setForm }: TableFormProps) {
     setCheckedList(new Array(form.length).fill(false));
   }, [form]);
 
-  useEffect(() => {
-    const fetchSubmitData = async () => {
-      const res = await GetReservation();
-      setForm(res.result);
-    };
-    fetchSubmitData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchSubmitData = async () => {
+  //     const res = await GetReservation();
+  //     setForm(res.result);
+  //   };
+  //   fetchSubmitData();
+  // }, []);
   return (
     <Table>
       <thead>

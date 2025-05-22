@@ -1,7 +1,11 @@
-import { GetReservation, PostDeleteReservation } from "@/api/postApi";
+import {
+  GetPageCount,
+  GetReservation,
+  PostDeleteReservation,
+} from "@/api/postApi";
 import { ReservationMyListStore } from "@/store/userStore";
 import { TableFormProps } from "@/types/forms";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const Div = styled.div`
@@ -27,6 +31,21 @@ const DeleteButton = styled(Button)`
 
 export default function ButtonWrap({ form, setForm }: TableFormProps) {
   const { checkedList, setCheckedList } = ReservationMyListStore();
+  const { pageCount, setPageCount, currentPage, setCurrentPage } =
+    ReservationMyListStore();
+
+  // 페이지가 변경되면 (항목을 지워서 1로 돌아갔으면) 새로받아오기
+  useEffect(() => {
+    // 현재 페이지 값이 바뀐게 확인되어야만 데이터를 새로 요청한다.
+    PageCount();
+  }, [currentPage]);
+
+  const PageCount = async () => {
+    const res = await GetPageCount("mySubmitList", currentPage);
+    setPageCount(Array.from({ length: res.result }, (_, i) => i + 1));
+    setForm(res.TotalItems);
+  };
+
   const handleChecked = () => {
     const newArr = new Array(checkedList.length).fill(true);
     setCheckedList(newArr);
@@ -46,8 +65,9 @@ export default function ButtonWrap({ form, setForm }: TableFormProps) {
     });
 
     const res = await PostDeleteReservation(deleteArray);
-    const result = await GetReservation();
-    setForm(result.result);
+    // const result = await GetReservation();
+    // setForm(result.result);
+    setCurrentPage(1); // 지웠으면 페이지 1로 돌아가기
 
     if (res.message === "삭제 성공") {
       alert("삭제 성공");
