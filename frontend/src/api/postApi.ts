@@ -187,3 +187,26 @@ export const GetReservation = async () => {
     console.error("상담 신청내역 불러오기 실패", err);
   }
 };
+
+export const PostDeleteReservation = async (deleteArray: number[]) => {
+  try {
+    const response = await API.post(`/api/reservation/postDelete`, {
+      deleteArray,
+    });
+    return response.data;
+  } catch (err) {
+    console.error("상담 신청내역 삭제하기 실패", err);
+  }
+};
+
+export const GetPageCount = async (DB: string, index: number) => {
+  try {
+    // 받는 문자열에 맞춰서 어떤 DB에서 탐색 진행할건지를 고른다.
+    const response = await API.get(`/api/pagecount`, {
+      params: { type: DB, page: index },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("신청 내역 개수 불러오기 실패", err);
+  }
+};

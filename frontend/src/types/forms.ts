@@ -1,3 +1,5 @@
+import { SetStateAction } from "react";
+
 type FileItem = {
   id: string;
   file: File;
@@ -21,4 +23,8 @@ export interface FormData {
   file: string; // stringified array, parse on use
   createdAt: string;
   updatedAt: string;
+}
+export interface TableFormProps {
+  form: FormData[];
+  setForm: React.Dispatch<SetStateAction<FormData[]>>;
 }

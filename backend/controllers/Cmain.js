@@ -41,7 +41,6 @@ exports.postUpload = [
 
       const ext = path.extname(file.originalname); // 확장자 추출
       const key = `uploads/${uuidv4()}_${ext}`;
-      console.log(key);
 
       const uploadParams = {
         Bucket: process.env.AWS_BUCKET_NAME,
@@ -80,7 +79,6 @@ exports.postLogin = async (req, res) => {
       }
     );
     const { access_token } = tokenResponse.data;
-    console.log("@@@@@여기까진 성공", access_token);
 
     // access_token을 가지고 사용자 정보 요청
     const profileResponse = await axios.get(
@@ -95,7 +93,6 @@ exports.postLogin = async (req, res) => {
     const userData = profileResponse.data.response;
     // DB에 해당 유저가 저장되어 있는지 확인
     let existingUser = await User.findOne({ where: { sns_id: userData.id } });
-    // console.log("유저데이타", existingUser);
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
     if (!existingUser) {
@@ -436,8 +433,6 @@ exports.PostReservationSubmit = [
     try {
       // 사용자 토큰 제작시 사용했던 ID 추출
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decoded.userID);
-      console.log(req.body);
       const uploadedUrls = [];
       for (const file of files) {
         const ext = path.extname(file.originalname);
@@ -500,5 +495,57 @@ exports.GetReservationSubmit = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "내 신청내역 가져오기 실패(서버)" });
+  }
+};
+
+exports.PostReservationDelete = async (req, res) => {
+  try {
+    const IdArr = req.body.deleteArray;
+    await ReservationSubmit.destroy({ where: { id: IdArr } });
+    res.status(200).json({ message: "삭제 성공" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "내 신청내역 삭제하기 실패(서버)" });
+  }
+};
+
+exports.GetPageCount = async (req, res) => {
+  const type = req.query.type;
+  const page = req.query.page;
+  const token = req.cookies.token;
+  // 10개로 바꾸기
+  // 한페이지에 받아올 아이템 수
+  const limit = 1;
+
+  // 시작 인덱스 구하기
+  const startIndex = (page - 1) * limit;
+
+  if (!token) return res.status(401).json({ message: "로그인 필요" });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userID;
+    let result;
+    // 문자열에 따라 다른 조건으로 데이터를 탐색한다.
+    switch (type) {
+      case "mySubmitList":
+        result = await ReservationSubmit.count({
+          where: { sns_id: userId },
+        });
+        TotalItems = await ReservationSubmit.findAll({
+          limit: limit,
+          offset: startIndex,
+          order: [["createdAt", "DESC"]],
+        });
+        break;
+
+      default:
+        return res.status(400).json({ message: "유효하지 않은 type" });
+    }
+    const NeedPage = Math.ceil(result / limit);
+
+    return res.status(200).json({ result: NeedPage, TotalItems: TotalItems });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "신청 내역 개수 불러오기 실패(서버)" });
   }
 };

@@ -10,7 +10,7 @@ const Footer = styled.footer`
   div {
     max-width: 1200px;
     width: 100%;
-    padding: 40px 0;
+    padding: 20px 0;
 
     h2 {
       font-size: 18px;

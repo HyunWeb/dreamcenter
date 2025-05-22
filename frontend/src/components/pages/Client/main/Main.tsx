@@ -25,7 +25,6 @@ export default function Main() {
 
     try {
       const response = await postUpload(formData);
-      console.log("업로드 성공:", response.url);
     } catch (error) {
       console.error("업로드 실패", error);
     }
