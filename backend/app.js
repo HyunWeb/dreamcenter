@@ -27,6 +27,15 @@ db.sequelize
 app.use("/api", postRoutes);
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`현재 환경변수 서버 포트 :  ${PORT}`);
+// app.listen(PORT, () => {
+//   console.log(`현재 환경변수 서버 포트 :  ${PORT}`);
+// });
+console.log("실제 PORT 값:", PORT);
+
+const server = app.listen(PORT, () => {
+  console.log(`✅ 서버 실행 중: 포트 ${PORT}`);
+});
+
+server.on("error", (err) => {
+  console.error("❌ 서버 실행 중 오류 발생:", err);
 });
