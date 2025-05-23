@@ -515,7 +515,7 @@ exports.GetPageCount = async (req, res) => {
   const token = req.cookies.token;
   // 10개로 바꾸기
   // 한페이지에 받아올 아이템 수
-  const limit = 1;
+  const limit = 10;
 
   // 시작 인덱스 구하기
   const startIndex = (page - 1) * limit;
