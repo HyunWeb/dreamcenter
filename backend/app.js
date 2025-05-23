@@ -26,7 +26,8 @@ db.sequelize
 // API 라우터 연결
 app.use("/api", postRoutes);
 
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 // app.listen(PORT, () => {
 //   console.log(`현재 환경변수 서버 포트 :  ${PORT}`);
 // });
