@@ -33,7 +33,7 @@ const PORT = 3001;
 // });
 console.log("실제 PORT 값:", PORT);
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ 서버 실행 중: 포트 ${PORT}`);
 });
 
