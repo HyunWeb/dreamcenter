@@ -33,7 +33,7 @@ export default function TableListItem({ form, orderNum }: TableListItemProps) {
   const date = String(dateObj.getDate()).padStart(2, "0");
 
   // 목차 시작 인덱스를 현재 페이지 기반으로 재 계산
-  const limit = 1;
+  const limit = 10;
   useEffect(() => {
     setStartIndex((currentPage - 1) * limit + 1);
   }, [currentPage]);
