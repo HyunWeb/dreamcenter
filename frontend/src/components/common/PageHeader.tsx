@@ -11,6 +11,7 @@ interface HeaderProps {
 
 const Title = styled.h2`
   margin-bottom: 12px;
+  text-align: center;
 `;
 
 export default function PageHeader({

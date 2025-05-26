@@ -1,6 +1,7 @@
 import { ReservationMyListStore } from "@/store/userStore";
 import { FormData } from "@/types/forms";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 interface TableListItemProps {
@@ -22,15 +23,24 @@ const TableRow = styled.tr<{ $form: boolean }>`
   .td_confirmed {
     color: ${(props) => (props.$form ? "#49B736" : "#C93E3E")};
   }
+
+  .ClickPoint {
+    cursor: pointer;
+    border-bottom: 1px solid #111111;
+    padding-bottom: 4px;
+    display: inline-block;
+  }
 `;
 
 export default function TableListItem({ form, orderNum }: TableListItemProps) {
-  const { checkedList, setCheckedList, currentPage } = ReservationMyListStore();
+  const { checkedList, setCheckedList, currentPage, setViewMode } =
+    ReservationMyListStore();
   const [startIndex, setStartIndex] = useState<number>(0);
   const dateObj = new Date(form.createdAt);
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, "0");
   const date = String(dateObj.getDate()).padStart(2, "0");
+  const listNumber = startIndex + orderNum;
 
   // 목차 시작 인덱스를 현재 페이지 기반으로 재 계산
   const limit = 10;
@@ -43,6 +53,11 @@ export default function TableListItem({ form, orderNum }: TableListItemProps) {
     newArray[orderNum] = !newArray[orderNum];
     setCheckedList(newArray);
   };
+
+  const hancleClick = () => {
+    setViewMode(["detail", form.id]);
+    console.log(form.id);
+  };
   return (
     <TableRow $form={form.is_confirmed}>
       <td>
@@ -52,8 +67,10 @@ export default function TableListItem({ form, orderNum }: TableListItemProps) {
           onChange={handleChange}
         />
       </td>
-      <td>{startIndex + orderNum}</td>
-      <td>{form.name}</td>
+      <td>{listNumber}</td>
+      <td className="ClickPoint" onClick={hancleClick}>
+        {form.name}
+      </td>
       <td>{`${year}.${month}.${date}`}</td>
       <td className="td_confirmed">
         {form.is_confirmed ? "확인완료" : "미확인"}

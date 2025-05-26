@@ -6,6 +6,7 @@ import { ReservationMyListStore } from "@/store/userStore";
 const Div = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   margin: 70px auto 0;
 
   .arrowButton {
@@ -17,6 +18,7 @@ const Div = styled.div`
     color: #888888;
     width: 35px;
     height: 35px;
+    cursor: pointer;
     svg {
       width: 35px;
       height: 35px;
@@ -73,9 +75,18 @@ export default function PageCountUI({
 
   const PageCount = async () => {
     const res = await GetPageCount(type, currentPage);
+    if (res === undefined) {
+      console.error("데이터 결과 없음");
+      return;
+    }
+    // 결과인 숫자를 바탕으로 필요한 페이지 수만큼 배열 생성
     setPageCount(Array.from({ length: res.result }, (_, i) => i + 1));
     setForm(res.TotalItems);
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, []);
 
   useEffect(() => {
     // 현재 페이지 값이 바뀐게 확인되어야만 데이터를 새로 요청한다.

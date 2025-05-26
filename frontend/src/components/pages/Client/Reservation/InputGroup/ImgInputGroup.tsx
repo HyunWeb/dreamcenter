@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import DeleteButton from "@/components/common/DeleteButton";
 import { ReservationInputStore } from "@/store/userStore";
+import { v4 as uuidv4 } from "uuid";
 
 const ImgDiv = styled.div`
   display: flex;
@@ -83,7 +84,7 @@ export default function ImgInputGroup() {
 
     const newFiles = Array.from(selectedFile);
     const newItems = newFiles.map((file) => ({
-      id: crypto.randomUUID(), // 또는 uuid(), index.toString() 등
+      id: uuidv4(), // 또는 uuid(), index.toString() 등
       file,
     }));
     setFiles((prev) => [...prev, ...newItems]);
@@ -101,7 +102,7 @@ export default function ImgInputGroup() {
             const ArrayFile = Array.from(file);
 
             const newItems = ArrayFile.map((file, index) => ({
-              id: crypto.randomUUID(),
+              id: uuidv4(),
               file,
             }));
 
