@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
 type FileItem = {
   id: string;
   file: File;
@@ -40,7 +41,7 @@ export default function UploadFile({ files, setFiles }: UploadFilesProps) {
 
     const newFiles = Array.from(selectedFile);
     const newItems = newFiles.map((file) => ({
-      id: crypto.randomUUID(), // 또는 uuid(), index.toString() 등
+      id: uuidv4(), // 또는 uuid(), index.toString() 등
       file,
     }));
     setFiles((prev) => [...prev, ...newItems]);

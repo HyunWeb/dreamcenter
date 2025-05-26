@@ -532,12 +532,21 @@ exports.GetPageCount = async (req, res) => {
           where: { sns_id: userId },
         });
         TotalItems = await ReservationSubmit.findAll({
+          where: { sns_id: userId },
           limit: limit,
           offset: startIndex,
           order: [["createdAt", "DESC"]],
         });
         break;
 
+      case "AdminSubmitList":
+        result = await ReservationSubmit.count();
+        TotalItems = await ReservationSubmit.findAll({
+          limit: limit,
+          offset: startIndex,
+          order: [["createdAt", "DESC"]],
+        });
+        break;
       default:
         return res.status(400).json({ message: "유효하지 않은 type" });
     }
