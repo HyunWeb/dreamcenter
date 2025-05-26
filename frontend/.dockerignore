@@ -1,8 +1,8 @@
 node_modules
 .git
+.env
+*.log
 build
 public/defaultBanner.png
 public/temp/
 dist
-.env
-*.log
