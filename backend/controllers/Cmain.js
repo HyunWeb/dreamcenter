@@ -436,7 +436,7 @@ exports.PostReservationSubmit = [
       const uploadedUrls = [];
       for (const file of files) {
         const ext = path.extname(file.originalname);
-        const key = `upload/${uuidv4()}${ext}`;
+        const key = `uploads/${uuidv4()}${ext}`;
 
         // 이미지 압축
         const compressedBuffer = await sharp(file.buffer)
@@ -556,5 +556,21 @@ exports.GetPageCount = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "신청 내역 개수 불러오기 실패(서버)" });
+  }
+};
+
+exports.PostChangeState = async (req, res) => {
+  const formId = req.body.formId;
+  try {
+    const getState = await ReservationSubmit.findOne({ where: { id: formId } });
+    const response = await ReservationSubmit.update(
+      { is_confirmed: !getState.is_confirmed },
+      { where: { id: formId } }
+    );
+
+    res.status(200).json({ message: "상태가 업데이트되었습니다." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "확인 상태 변경하기 실패(서버)" });
   }
 };

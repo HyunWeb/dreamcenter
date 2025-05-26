@@ -8,9 +8,11 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { ReservationMyListStore, useUserStore } from "@/store/userStore";
 import TableForm from "./Reservation/TableForm";
 import Button from "@/components/common/Button";
+import { ChangeChackState } from "@/api/postApi";
 
 const Div = styled.div`
   text-align: center;
+  margin-bottom: 170px;
 `;
 
 const Section = styled.section<{ $viewMode: string }>`
@@ -37,6 +39,10 @@ const Ul = styled.ul`
   span {
     font-size: 16px;
   }
+
+  img {
+    width: 100%;
+  }
 `;
 
 const StyleButton = styled(Button)`
@@ -50,11 +56,11 @@ const ButtonBox = styled.div`
   gap: 24px;
   justify-content: center;
   align-items: center;
-  margin: 70px 0 170px;
+  margin-top: 70px;
 `;
 export default function AdminReservationPage() {
   const [form, setForm] = useState<FormData[]>([]);
-  const [detail, setDetail] = useState<FormData[]>([]);
+  // const [detail, setDetail] = useState<FormData[]>([]);
   const { isLogin } = useUserStore();
   const navigate = useNavigate();
   const { viewMode, setViewMode } = ReservationMyListStore();
@@ -69,7 +75,6 @@ export default function AdminReservationPage() {
     { label: "신입학/편입학", key: "admission" },
     { label: "추천인", key: "recommender" },
     { label: "핵심문의사항", key: "message" },
-    { label: "사진첨부", key: "file" },
   ];
   useEffect(() => {
     if (!isLogin) {
@@ -84,6 +89,12 @@ export default function AdminReservationPage() {
     setViewMode(["list", 0]);
   };
 
+  const handleCheck = async () => {
+    if (!currentDetail) return;
+    const res = await ChangeChackState(currentDetail?.id);
+    console.log(res.message);
+    setViewMode(["list", 0]);
+  };
   return (
     <Div>
       <PageHeader title="예약관리" root="예약관리" />
@@ -103,10 +114,6 @@ export default function AdminReservationPage() {
             {currentDetail && (
               <Ul>
                 {labelArray.map(({ label, key }) => {
-                  // 빈 배열이면 없음 처리
-                  if (currentDetail.file === "[]") {
-                    currentDetail.file = "";
-                  }
                   return (
                     <li key={key}>
                       <strong>{label}</strong>{" "}
@@ -114,6 +121,14 @@ export default function AdminReservationPage() {
                     </li>
                   );
                 })}
+                <li>
+                  <strong>사진첨부</strong>
+                  {JSON.parse(currentDetail.file).map((file: string) => {
+                    return (
+                      <img src={file} alt="예약상담 첨부 이미지" key={file} />
+                    );
+                  })}
+                </li>
               </Ul>
             )}
           </div>
@@ -121,7 +136,22 @@ export default function AdminReservationPage() {
       </Section>
       {viewMode[0] === "detail" && (
         <ButtonBox>
-          <StyleButton name="확인완료" Bgcolor="green" TitleColor="white" />
+          {currentDetail?.is_confirmed ? (
+            <StyleButton
+              name="확인취소"
+              Bgcolor="red"
+              TitleColor="white"
+              onClick={handleCheck}
+            />
+          ) : (
+            <StyleButton
+              name="확인완료"
+              Bgcolor="green"
+              TitleColor="white"
+              onClick={handleCheck}
+            />
+          )}
+
           <StyleButton
             name="목록보기"
             Bgcolor="grey"

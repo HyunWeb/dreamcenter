@@ -18,6 +18,7 @@ const Div = styled.div`
     color: #888888;
     width: 35px;
     height: 35px;
+    cursor: pointer;
     svg {
       width: 35px;
       height: 35px;

@@ -210,3 +210,14 @@ export const GetPageCount = async (DB: string, index: number) => {
     console.error("신청 내역 개수 불러오기 실패", err);
   }
 };
+
+export const ChangeChackState = async (formId: number) => {
+  try {
+    const response = await API.post(`/api/AdminReservation/ChangeState`, {
+      formId,
+    });
+    return response.data;
+  } catch (err) {
+    console.error("확인 상태 변경 실패", err);
+  }
+};
