@@ -221,3 +221,24 @@ export const ChangeChackState = async (formId: number) => {
     console.error("확인 상태 변경 실패", err);
   }
 };
+
+export const UpdateConfirm = async (confirmedIds: number[]) => {
+  try {
+    const response = await API.put(`/api/AdminReservation/confirm`, {
+      ids: confirmedIds,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("확인 완료 처리 실패", error);
+  }
+};
+export const UpdateUnConfirm = async (confirmedIds: number[]) => {
+  try {
+    const response = await API.put(`/api/AdminReservation/Unconfirm`, {
+      ids: confirmedIds,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("확인 해제 처리 실패", error);
+  }
+};

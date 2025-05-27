@@ -30,13 +30,16 @@ const Main = styled.main`
   flex-grow: 1;
 `;
 
+const Logo = styled.img`
+  max-width: 224px;
+`;
 export default function LayoutPage() {
   return (
     <Layout>
       <Header>
         <LogoDiv>
           <Link to="/">
-            <img src="./logo.png" alt="메인 로고" />
+            <Logo src="./logo.png" alt="메인 로고" />
           </Link>
         </LogoDiv>
         <Gnb />

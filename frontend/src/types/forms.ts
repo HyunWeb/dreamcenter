@@ -27,4 +27,5 @@ export interface FormData {
 export interface TableFormProps {
   form: FormData[];
   setForm: React.Dispatch<SetStateAction<FormData[]>>;
+  type?: string;
 }

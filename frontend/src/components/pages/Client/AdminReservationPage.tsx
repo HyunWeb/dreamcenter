@@ -101,7 +101,7 @@ export default function AdminReservationPage() {
       <Section $viewMode={viewMode[0]}>
         {viewMode[0] === "list" ? (
           <>
-            <ButtonWrap form={form} setForm={setForm} />
+            <ButtonWrap form={form} setForm={setForm} type="AdminPage" />
             <TableForm form={form} setForm={setForm} />
             <PageCountUI
               form={form}

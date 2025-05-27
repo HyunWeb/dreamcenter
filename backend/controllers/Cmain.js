@@ -574,3 +574,35 @@ exports.PostChangeState = async (req, res) => {
     res.status(500).json({ message: "확인 상태 변경하기 실패(서버)" });
   }
 };
+
+exports.PutUpdateConfirm = async (req, res) => {
+  const ids = req.body.ids;
+  try {
+    console.log(ids); // [ 21, 20 ]
+    const response = await ReservationSubmit.update(
+      { is_confirmed: true },
+      { where: { id: ids } }
+    );
+    console.log("업데이트 완료", response);
+    res.status(200).json({ success: true, updatedCount: response[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "확인 상태 변경하기 실패(서버)" });
+  }
+};
+
+exports.PutUnUpdateConfirm = async (req, res) => {
+  const ids = req.body.ids;
+  try {
+    console.log(ids); // [ 21, 20 ]
+    const response = await ReservationSubmit.update(
+      { is_confirmed: false },
+      { where: { id: ids } }
+    );
+    console.log("업데이트 완료", response);
+    return res.status(200).json({ success: true, updatedCount: response[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "확인 상태 변경하기 실패(서버)" });
+  }
+};

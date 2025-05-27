@@ -2,6 +2,8 @@ import {
   GetPageCount,
   GetReservation,
   PostDeleteReservation,
+  UpdateConfirm,
+  UpdateUnConfirm,
 } from "@/api/postApi";
 import { ReservationMyListStore } from "@/store/userStore";
 import { TableFormProps } from "@/types/forms";
@@ -12,6 +14,17 @@ const Div = styled.div`
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
+  justify-content: space-between;
+
+  .left-align {
+    display: flex;
+    gap: 8px;
+  }
+
+  .right-align {
+    display: flex;
+    gap: 8px;
+  }
 `;
 const Button = styled.button`
   background-color: #eaeaea;
@@ -28,8 +41,13 @@ const DeleteButton = styled(Button)`
   background-color: #c93e3e;
   color: white;
 `;
+const ConfirmButton = styled(Button)`
+  background-color: #49b736;
+  color: white;
+  margin-left: 20px;
+`;
 
-export default function ButtonWrap({ form, setForm }: TableFormProps) {
+export default function ButtonWrap({ form, setForm, type }: TableFormProps) {
   const { checkedList, setCheckedList } = ReservationMyListStore();
   const { pageCount, setPageCount, currentPage, setCurrentPage } =
     ReservationMyListStore();
@@ -74,11 +92,58 @@ export default function ButtonWrap({ form, setForm }: TableFormProps) {
     }
   };
 
+  const handleConfirm = async () => {
+    const updated = form.map((item, index) =>
+      checkedList[index] ? { ...item, is_confirmed: true } : item
+    );
+
+    setForm(updated);
+
+    const confirmedIds = form
+      .filter((_, index) => checkedList[index])
+      .map((item) => item.id);
+
+    if (confirmedIds.length > 0) {
+      const response = await UpdateConfirm(confirmedIds);
+      console.log(response);
+    }
+  };
+
+  const handleUnConfirm = async () => {
+    const updated = form.map((item, index) =>
+      checkedList[index] ? { ...item, is_confirmed: false } : item
+    );
+
+    setForm(updated);
+
+    const confirmedIds = form
+      .filter((_, index) => !checkedList[index])
+      .map((item) => item.id);
+
+    if (confirmedIds.length > 0) {
+      const response = await UpdateUnConfirm(confirmedIds);
+      console.log(response);
+    }
+  };
+
   return (
     <Div>
-      <Button onClick={handleChecked}>전체선택</Button>
-      <Button onClick={handleUnChecked}>선택해제</Button>
-      <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
+      <div className="left-align">
+        <Button onClick={handleChecked}>전체선택</Button>
+        <Button onClick={handleUnChecked}>선택해제</Button>
+      </div>
+      <div className="right-align">
+        {type === "AdminPage" && (
+          <>
+            <ConfirmButton onClick={handleConfirm}>확인완료</ConfirmButton>
+            <Button onClick={handleUnConfirm}>확인해제</Button>
+            <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
+          </>
+        )}
+      </div>
+      {type !== "AdminPage" && (
+        <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
+      )}
     </Div>
   );
 }
