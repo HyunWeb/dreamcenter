@@ -242,3 +242,25 @@ export const UpdateUnConfirm = async (confirmedIds: number[]) => {
     console.error("확인 해제 처리 실패", error);
   }
 };
+// type FileItem = {
+//   id: string;
+//   file: File;
+// };
+// type formData = {
+//   Id: string;
+//   title: string;
+//   message: string;
+//   file: FileItem[];
+//   private: boolean;
+//   privatePWD: string | null;
+// };
+export const PostQuestion = async (formData: FormData) => {
+  try {
+    const response = await API.post(`/api/Question/submit`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("질문 등록 실패", error);
+  }
+};

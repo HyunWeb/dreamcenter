@@ -25,6 +25,7 @@ const {
   PostChangeState,
   PutUpdateConfirm,
   PutUnUpdateConfirm,
+  PostQuestionSubmit,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -49,5 +50,6 @@ router.get("/pagecount", GetPageCount);
 router.post("/AdminReservation/ChangeState", PostChangeState);
 router.put("/AdminReservation/confirm", PutUpdateConfirm);
 router.put("/AdminReservation/Unconfirm", PutUnUpdateConfirm);
+router.post("/Question/submit", PostQuestionSubmit);
 
 module.exports = router;

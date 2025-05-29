@@ -6,7 +6,7 @@ import {
   UpdateUnConfirm,
 } from "@/api/postApi";
 import { ReservationMyListStore } from "@/store/userStore";
-import { TableFormProps } from "@/types/forms";
+import { FormDataTableFormProps, TableFormProps } from "@/types/forms";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
@@ -47,7 +47,11 @@ const ConfirmButton = styled(Button)`
   margin-left: 20px;
 `;
 
-export default function ButtonWrap({ form, setForm, type }: TableFormProps) {
+export default function ButtonWrap({
+  form,
+  setForm,
+  type,
+}: FormDataTableFormProps) {
   const { checkedList, setCheckedList } = ReservationMyListStore();
   const { pageCount, setPageCount, currentPage, setCurrentPage } =
     ReservationMyListStore();
@@ -59,6 +63,7 @@ export default function ButtonWrap({ form, setForm, type }: TableFormProps) {
   }, [currentPage]);
 
   const PageCount = async () => {
+    if (!setForm) return;
     const res = await GetPageCount("mySubmitList", currentPage);
     setPageCount(Array.from({ length: res.result }, (_, i) => i + 1));
     setForm(res.TotalItems);
@@ -93,6 +98,7 @@ export default function ButtonWrap({ form, setForm, type }: TableFormProps) {
   };
 
   const handleConfirm = async () => {
+    if (!setForm) return;
     const updated = form.map((item, index) =>
       checkedList[index] ? { ...item, is_confirmed: true } : item
     );
@@ -110,6 +116,7 @@ export default function ButtonWrap({ form, setForm, type }: TableFormProps) {
   };
 
   const handleUnConfirm = async () => {
+    if (!setForm) return;
     const updated = form.map((item, index) =>
       checkedList[index] ? { ...item, is_confirmed: false } : item
     );

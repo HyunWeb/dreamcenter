@@ -9,6 +9,7 @@ const {
   OfficeWrite,
   ReservationSubmit,
   Users,
+  QuestionSubmit,
 } = require("../models");
 const { sequelize } = require("../models");
 
@@ -547,6 +548,16 @@ exports.GetPageCount = async (req, res) => {
           order: [["createdAt", "DESC"]],
         });
         break;
+
+      case "QuestionSubmitList":
+        result = await QuestionSubmit.count();
+        TotalItems = await QuestionSubmit.findAll({
+          limit: limit,
+          offset: startIndex,
+          order: [["createdAt", "DESC"]],
+        });
+        break;
+
       default:
         return res.status(400).json({ message: "유효하지 않은 type" });
     }
@@ -606,3 +617,60 @@ exports.PutUnUpdateConfirm = async (req, res) => {
     res.status(500).json({ message: "확인 상태 변경하기 실패(서버)" });
   }
 };
+
+exports.PostQuestionSubmit = [
+  upload.array("images", 100),
+  async (req, res) => {
+    const form = req.body;
+    const token = req.cookies.token;
+    const files = req.files;
+
+    if (!token) return res.status(401).json({ message: "로그인 필요" });
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const uploadedUrls = [];
+
+      // 파일 저장 > 빈 배열일 경우 그냥 통과한다.
+      for (const file of files) {
+        const ext = path.extname(file.originalname);
+        const key = `uploads/${uuidv4()}${ext}`;
+
+        const compressedBuffer = await sharp(file.buffer)
+          .rotate()
+          .resize({ width: 800 })
+          .webp({ quality: 80 })
+          .toBuffer();
+
+        const uploadParams = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: key,
+          Body: compressedBuffer,
+          ContentType: "image/webp",
+        };
+
+        await s3.send(new PutObjectCommand(uploadParams));
+
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        uploadedUrls.push(fileUrl);
+      }
+      const isPrivate = req.body.private === "true";
+      const submitData = {
+        sns_id: decoded.userID,
+        nickname: form.Id,
+        title: form.title,
+        message: form.message,
+        file: uploadedUrls,
+        isPrivate: isPrivate,
+        privatePWD: form.privatePWD,
+        is_confirmed: false,
+      };
+      console.log(submitData);
+      await QuestionSubmit.create(submitData);
+
+      res.status(201).json({ message: true });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "질문 등록하기 실패(서버)" });
+    }
+  },
+];

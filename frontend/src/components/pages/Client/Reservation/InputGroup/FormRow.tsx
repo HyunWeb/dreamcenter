@@ -24,6 +24,7 @@ const Wrapper = styled.div`
   max-width: 326px;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 `;
 interface FormRowProps {
   htmlFor: string;

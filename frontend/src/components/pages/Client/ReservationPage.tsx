@@ -49,7 +49,11 @@ export default function ReservationPage() {
       )}
 
       {!selectTab && (
-        <PageCountUI form={form} setForm={setForm} type={"mySubmitList"} />
+        <PageCountUI<FormData>
+          form={form}
+          setForm={setForm}
+          type={"mySubmitList"}
+        />
       )}
     </Div>
   );

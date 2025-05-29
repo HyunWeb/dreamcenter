@@ -182,3 +182,47 @@ export const ReservationMyListStore = create<ReservationMyListStoreProps>(
     setViewMode: (state: [string, number]) => set({ viewMode: state }),
   })
 );
+
+interface QuestionWritePageProps {
+  changeName: boolean;
+  title: string;
+  message: string;
+  privateChecked: boolean;
+  privatePassword: string | null;
+  setChangeName: (state: boolean) => void;
+  setTitle: (state: string) => void;
+  setMessage: (state: string) => void;
+  setPrivateChecked: (state: boolean) => void;
+  setPrivatePassword: (state: string | null) => void;
+  resetForm: () => void;
+}
+
+export const QuestionWritePageStore = create<QuestionWritePageProps>((set) => ({
+  changeName: true,
+  title: "",
+  message: "",
+  privateChecked: false,
+  privatePassword: null,
+  setChangeName: (state) => set({ changeName: state }),
+  setTitle: (state) => set({ title: state }),
+  setMessage: (state) => set({ message: state }),
+  setPrivateChecked: (state) => set({ privateChecked: state }),
+  setPrivatePassword: (state) => set({ privatePassword: state }),
+  resetForm: () =>
+    set({
+      title: "",
+      message: "",
+      privateChecked: false,
+      privatePassword: null,
+      changeName: true,
+    }),
+}));
+
+interface ControlModalProps {
+  viewModal: boolean;
+  setViewModal: (state: boolean) => void;
+}
+export const ControlModalStore = create<ControlModalProps>((set) => ({
+  viewModal: false,
+  setViewModal: (state) => set({ viewModal: state }),
+}));
