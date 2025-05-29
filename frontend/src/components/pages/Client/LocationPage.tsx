@@ -51,12 +51,15 @@ const Div = styled.div`
 `;
 
 const Article = styled.article`
-  background-color: #cfcfcf;
+  background-image: url("./Reservation.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   position: relative;
   height: 150px;
   text-align: center;
   line-height: 150px;
-  font-size: 25px;
+  font-size: 30px;
   font-weight: 600;
   margin-bottom: 170px;
 

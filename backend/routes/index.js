@@ -23,6 +23,9 @@ const {
   PostReservationDelete,
   GetPageCount,
   PostChangeState,
+  PutUpdateConfirm,
+  PutUnUpdateConfirm,
+  PostQuestionSubmit,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -45,5 +48,8 @@ router.get("/reservation/getSubmit", GetReservationSubmit);
 router.post("/reservation/postDelete", PostReservationDelete);
 router.get("/pagecount", GetPageCount);
 router.post("/AdminReservation/ChangeState", PostChangeState);
+router.put("/AdminReservation/confirm", PutUpdateConfirm);
+router.put("/AdminReservation/Unconfirm", PutUnUpdateConfirm);
+router.post("/Question/submit", PostQuestionSubmit);
 
 module.exports = router;

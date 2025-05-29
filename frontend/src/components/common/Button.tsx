@@ -7,6 +7,7 @@ interface ButtonProps {
   TitleColor: "white" | "black" | "darkGrey";
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
+  buttonRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 const DefualtButton = styled.button<{ $color: string; $nameColor: string }>`
@@ -25,6 +26,7 @@ export default function Button({
   TitleColor,
   onClick,
   className,
+  buttonRef,
 }: ButtonProps) {
   const colorMap = {
     grey: "#eaeaea",
@@ -40,6 +42,8 @@ export default function Button({
       $nameColor={colorMap[TitleColor]}
       onClick={onClick}
       className={className}
+      type="button"
+      ref={buttonRef}
     >
       {name}
     </DefualtButton>

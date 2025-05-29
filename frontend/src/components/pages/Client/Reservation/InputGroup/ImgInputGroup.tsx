@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import DeleteButton from "@/components/common/DeleteButton";
 import { ReservationInputStore } from "@/store/userStore";
@@ -8,6 +8,7 @@ const ImgDiv = styled.div`
   display: flex;
   justify-content: space-between;
   flex-grow: 1;
+  width: 100%;
   ul {
     overflow-x: hidden;
     overflow-y: auto;
@@ -77,7 +78,6 @@ const ImgListItems = styled.li`
 `;
 export default function ImgInputGroup() {
   const { file, setFiles } = ReservationInputStore();
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files;
     if (!selectedFile) return;
@@ -91,7 +91,6 @@ export default function ImgInputGroup() {
   };
   return (
     <>
-      {" "}
       <ImgDiv>
         <ImgLabel
           htmlFor="photoUpload"

@@ -166,7 +166,7 @@ export default function FormSection() {
       <Form>
         <Fieldset>
           <FormRow htmlFor="userId" label="글쓴이" required={true}>
-            <UserIdInputGroup />
+            <UserIdInputGroup type="readOnly" />
           </FormRow>
 
           <FormRow htmlFor="name" label="이름" required={true}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import TableListItem from "./TableListItem";
 import { GetReservation } from "@/api/postApi";
 import { TableFormProps } from "@/types/forms";
@@ -30,7 +30,11 @@ const TableRow = styled.tr`
   }
 `;
 
-export default function TableForm({ form, setForm }: TableFormProps) {
+export default function TableForm<T>({
+  headers,
+  form,
+  children,
+}: TableFormProps<T>) {
   const { setCheckedList } = ReservationMyListStore();
 
   // 데이터가 들어오면 개수를 파악해서 체크상태 유동적으로 설정
@@ -42,18 +46,12 @@ export default function TableForm({ form, setForm }: TableFormProps) {
     <Table>
       <thead>
         <TableRow>
-          <th>선택</th>
-          <th>번호</th>
-          <th>신청인</th>
-          <th>등록일</th>
-          <th>확인여부</th>
+          {headers!.map((head, i) => {
+            return <th key={i}>{head}</th>;
+          })}
         </TableRow>
       </thead>
-      <tbody>
-        {form.map((form, index) => {
-          return <TableListItem form={form} key={index} orderNum={index} />;
-        })}
-      </tbody>
+      <tbody style={{ textAlign: "center" }}>{children}</tbody>
     </Table>
   );
 }

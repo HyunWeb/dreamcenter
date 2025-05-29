@@ -1,7 +1,7 @@
 import { GetPageCount } from "@/api/postApi";
 import React, { SetStateAction, useEffect } from "react";
 import styled from "styled-components";
-import { FormData } from "@/types/forms";
+import { FormData, QuestionData } from "@/types/forms";
 import { ReservationMyListStore } from "@/store/userStore";
 const Div = styled.div`
   display: flex;
@@ -58,18 +58,20 @@ const PageButton = styled.button`
   cursor: pointer;
   font-size: 16px;
 `;
+//FormData[] | QuestionData[]
+// type CommonFormSetter<T> = React.Dispatch<React.SetStateAction<T[]>>;
 
-interface MyListSectionProps {
-  form: FormData[];
-  setForm: React.Dispatch<SetStateAction<FormData[]>>;
+interface MyListSectionProps<T> {
+  form: T[];
+  setForm: React.Dispatch<React.SetStateAction<T[]>>;
   type: string;
 }
 
-export default function PageCountUI({
+export default function PageCountUI<T>({
   form,
   setForm,
   type,
-}: MyListSectionProps) {
+}: MyListSectionProps<T>) {
   const { pageCount, setPageCount, currentPage, setCurrentPage } =
     ReservationMyListStore();
 
@@ -79,6 +81,7 @@ export default function PageCountUI({
       console.error("데이터 결과 없음");
       return;
     }
+    console.log(res);
     // 결과인 숫자를 바탕으로 필요한 페이지 수만큼 배열 생성
     setPageCount(Array.from({ length: res.result }, (_, i) => i + 1));
     setForm(res.TotalItems);

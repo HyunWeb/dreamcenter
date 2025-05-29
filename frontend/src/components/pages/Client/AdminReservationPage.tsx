@@ -9,6 +9,7 @@ import { ReservationMyListStore, useUserStore } from "@/store/userStore";
 import TableForm from "./Reservation/TableForm";
 import Button from "@/components/common/Button";
 import { ChangeChackState } from "@/api/postApi";
+import TableListItem from "./Reservation/TableListItem";
 
 const Div = styled.div`
   text-align: center;
@@ -101,9 +102,18 @@ export default function AdminReservationPage() {
       <Section $viewMode={viewMode[0]}>
         {viewMode[0] === "list" ? (
           <>
-            <ButtonWrap form={form} setForm={setForm} />
-            <TableForm form={form} setForm={setForm} />
-            <PageCountUI
+            <ButtonWrap form={form} setForm={setForm} type="AdminPage" />
+            <TableForm<FormData>
+              form={form}
+              headers={["선택", "번호", "신청인", "등록일", "확인여부"]}
+            >
+              {form.map((form, index) => {
+                return (
+                  <TableListItem form={form} key={index} orderNum={index} />
+                );
+              })}
+            </TableForm>
+            <PageCountUI<FormData>
               form={form}
               setForm={setForm}
               type={"AdminSubmitList"}
