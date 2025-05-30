@@ -605,7 +605,6 @@ exports.PutUpdateConfirm = async (req, res) => {
 exports.PutUnUpdateConfirm = async (req, res) => {
   const ids = req.body.ids;
   try {
-    console.log(ids); // [ 21, 20 ]
     const response = await ReservationSubmit.update(
       { is_confirmed: false },
       { where: { id: ids } }
@@ -674,3 +673,17 @@ exports.PostQuestionSubmit = [
     }
   },
 ];
+
+exports.PostMatchPassword = async (req, res) => {
+  // 서버에서 게시글 불러와서 비밀번호가 같은지 확인
+  const password = req.body.password;
+  const postId = req.body.postId;
+  try {
+    const response = await QuestionSubmit.findOne({ where: { id: postId } });
+    const result = response.privatePWD === password ? true : false;
+    return res.status(200).json({ match: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "비밀번호 확인 실패(서버)" });
+  }
+};
