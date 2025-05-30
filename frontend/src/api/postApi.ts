@@ -264,3 +264,22 @@ export const PostQuestion = async (formData: FormData) => {
     console.error("질문 등록 실패", error);
   }
 };
+
+export const PostMatchPassword = async (password: string, postId: number) => {
+  const data = { password: password, postId: postId };
+  try {
+    const response = await API.post(`api/Question/Password`, data);
+    return response.data;
+  } catch (error) {
+    console.error("비밀번호 매치 실패", error);
+  }
+};
+
+export const GetQuestion = async (id: string) => {
+  try {
+    const response = await API.get(`api/Question/:id`);
+    return response.data;
+  } catch (error) {
+    console.error("비밀번호 매치 실패", error);
+  }
+};

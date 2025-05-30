@@ -220,9 +220,13 @@ export const QuestionWritePageStore = create<QuestionWritePageProps>((set) => ({
 
 interface ControlModalProps {
   viewModal: boolean;
+  postId: number | null;
   setViewModal: (state: boolean) => void;
+  setPostId: (state: number) => void;
 }
 export const ControlModalStore = create<ControlModalProps>((set) => ({
   viewModal: false,
+  postId: null,
   setViewModal: (state) => set({ viewModal: state }),
+  setPostId: (state) => set({ postId: state }),
 }));

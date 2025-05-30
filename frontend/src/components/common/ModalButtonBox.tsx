@@ -1,7 +1,9 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import { ControlModalStore } from "@/store/userStore";
+import { PostMatchPassword } from "@/api/postApi";
+import { useNavigate } from "react-router-dom";
 
 const ButtonBox = styled.div`
   display: flex;
@@ -16,10 +18,28 @@ const StyleButton = styled(Button)`
   font-size: 16px;
   border-radius: 8px;
 `;
-export default function ModalButtonBox() {
-  const { setViewModal } = ControlModalStore();
+type ButtonProps = {
+  password: string[];
+  setPassword: React.Dispatch<SetStateAction<string[]>>;
+};
+export default function ModalButtonBox({ password, setPassword }: ButtonProps) {
+  const { setViewModal, postId } = ControlModalStore();
   const handleHideModal = () => {
     setViewModal(false);
+  };
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    if (!postId) return;
+    const Password = password.join("");
+    const res = await PostMatchPassword(Password, postId);
+    if (res.match) {
+      setViewModal(false);
+      navigate(`/questions/${postId}`);
+    } else {
+      alert("비밀번호가 일치하지 않습니다.");
+      setPassword(["", "", "", ""]);
+    }
   };
 
   return (
@@ -34,7 +54,7 @@ export default function ModalButtonBox() {
         name="입력"
         Bgcolor="green"
         TitleColor="white"
-        // onClick={handleSubmit}
+        onClick={handleSubmit}
       />
     </ButtonBox>
   );
