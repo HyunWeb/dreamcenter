@@ -277,9 +277,18 @@ export const PostMatchPassword = async (password: string, postId: number) => {
 
 export const GetQuestion = async (id: string) => {
   try {
-    const response = await API.get(`api/Question/:id`);
+    const response = await API.get(`api/Question/${id}`);
     return response.data;
   } catch (error) {
-    console.error("비밀번호 매치 실패", error);
+    console.error("질문 가져오기 실패", error);
+  }
+};
+
+export const GetAnswer = async (id: string) => {
+  try {
+    const response = await API.get(`api/Answer/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("답변 가져오기 실패", error);
   }
 };

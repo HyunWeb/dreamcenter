@@ -28,6 +28,7 @@ const {
   PostQuestionSubmit,
   PostMatchPassword,
   GetQuestion,
+  GetAnswer,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -55,5 +56,6 @@ router.put("/AdminReservation/Unconfirm", PutUnUpdateConfirm);
 router.post("/Question/submit", PostQuestionSubmit);
 router.post("/Question/Password", PostMatchPassword);
 router.get("/Question/:id", GetQuestion);
+router.get("/Answer/:id", GetAnswer);
 
 module.exports = router;

@@ -37,6 +37,13 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
+// ✅ 여기서 각 모델의 associate 메서드를 호출해 모델 간 관계를 연결
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

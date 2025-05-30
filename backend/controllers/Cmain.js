@@ -10,6 +10,7 @@ const {
   ReservationSubmit,
   Users,
   QuestionSubmit,
+  Answer,
 } = require("../models");
 const { sequelize } = require("../models");
 
@@ -685,5 +686,29 @@ exports.PostMatchPassword = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "비밀번호 확인 실패(서버)" });
+  }
+};
+
+exports.GetQuestion = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const result = await QuestionSubmit.findOne({ where: { id: postId } });
+    return res.status(200).json({ result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "질문 불러오기 실패(서버)" });
+  }
+};
+exports.GetAnswer = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const result = await QuestionSubmit.findOne({
+      where: { id: postId },
+      include: [{ model: Answer }],
+    });
+    return res.status(200).json({ result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "질문 불러오기 실패(서버)" });
   }
 };

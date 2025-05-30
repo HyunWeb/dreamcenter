@@ -49,3 +49,11 @@ export interface FormDataTableFormProps {
   type?: string;
   children?: React.ReactNode;
 }
+
+export interface AnswerData {
+  id: number;
+  question_id: number;
+  content: string;
+  createdAt: string; // 또는 Date
+  updatedAt: string; // 또는 Date
+}

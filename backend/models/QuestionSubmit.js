@@ -50,5 +50,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  QuestionSubmit.associate = (models) => {
+    QuestionSubmit.hasOne(models.Answer, {
+      foreignKey: "question_id",
+      onDelete: "CASCADE",
+    });
+  };
+
   return QuestionSubmit;
 };
