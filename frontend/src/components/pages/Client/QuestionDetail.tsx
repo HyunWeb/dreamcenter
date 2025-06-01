@@ -11,6 +11,7 @@ import DetailAnswer from "./Question/DetailAnswer";
 import WriteAnswer from "./Question/WriteAnswer";
 
 const Div = styled.div`
+  margin-bottom: 170px;
   .Question_title {
     font-size: 24px;
     font-weight: 700;
@@ -28,12 +29,11 @@ export default function QuestionDetail() {
       if (!id) return;
       const question = await GetQuestion(id);
       setQuestion(question.result);
-      const answer = await GetAnswer(id);
-      console.log(answer);
-      setAnswer(answer.Answer);
+      const resultA = await GetAnswer(id);
+      setAnswer(resultA.result);
     };
     handleGetQuestion();
-  }, [id]);
+  }, [id, ViewWriteAnswer]);
 
   return (
     <Div>
@@ -46,10 +46,13 @@ export default function QuestionDetail() {
       <DetailButtons
         ViewWriteAnswer={ViewWriteAnswer}
         setVeiwWriteAnswer={setVeiwWriteAnswer}
+        answer={answer}
       />
       {question && <DetailQuestion question={question} />}
       {answer && <DetailAnswer answer={answer} />}
-      {ViewWriteAnswer && <WriteAnswer />}
+      {ViewWriteAnswer && (
+        <WriteAnswer setVeiwWriteAnswer={setVeiwWriteAnswer} answer={answer} />
+      )}
     </Div>
   );
 }

@@ -21,6 +21,8 @@ const ATitle = styled.div`
 `;
 
 const Amessage = styled.div`
+  white-space: pre-line;
+  line-height: 1.5;
   padding: 30px;
 `;
 type Props = {
@@ -41,7 +43,7 @@ export default function DetailAnswer({ answer }: Props) {
           <span>{`${year}.${month}.${date}`}</span>
         </div>
       </ATitle>
-      <Amessage>답변 내용입니다. 감사합니다.</Amessage>
+      <Amessage>{answer.content}</Amessage>
     </ASection>
   );
 }

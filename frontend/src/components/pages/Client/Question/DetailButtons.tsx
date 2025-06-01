@@ -1,3 +1,4 @@
+import { AnswerData } from "@/types/forms";
 import React, { SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -39,10 +40,12 @@ const ConfirmButton = styled(Button)`
 type Props = {
   ViewWriteAnswer: boolean;
   setVeiwWriteAnswer: React.Dispatch<SetStateAction<boolean>>;
+  answer?: AnswerData;
 };
 export default function DetailButtons({
   ViewWriteAnswer,
   setVeiwWriteAnswer,
+  answer,
 }: Props) {
   const naviagte = useNavigate();
 
@@ -58,7 +61,7 @@ export default function DetailButtons({
       <Button onClick={handleBack}>뒤로가기</Button>
       <Wrap>
         <ConfirmButton onClick={handleChange}>
-          {ViewWriteAnswer ? "입력취소" : "답변달기"}
+          {ViewWriteAnswer ? "입력취소" : answer ? "답변수정" : "답변달기"}
         </ConfirmButton>
         <DeleteButton>질문삭제</DeleteButton>
       </Wrap>

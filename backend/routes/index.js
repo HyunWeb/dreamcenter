@@ -29,6 +29,7 @@ const {
   PostMatchPassword,
   GetQuestion,
   GetAnswer,
+  PostAnswerSubmit,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -57,5 +58,6 @@ router.post("/Question/submit", PostQuestionSubmit);
 router.post("/Question/Password", PostMatchPassword);
 router.get("/Question/:id", GetQuestion);
 router.get("/Answer/:id", GetAnswer);
+router.post("/Answer/Submit/:id", PostAnswerSubmit);
 
 module.exports = router;

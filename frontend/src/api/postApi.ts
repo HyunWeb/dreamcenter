@@ -292,3 +292,12 @@ export const GetAnswer = async (id: string) => {
     console.error("답변 가져오기 실패", error);
   }
 };
+
+export const PostAnswerSubmit = async (id: string, message: string) => {
+  try {
+    const response = await API.post(`api/Answer/Submit/${id}`, { message });
+    return response.data;
+  } catch (error) {
+    console.error("답변 등록하기 실패", error);
+  }
+};

@@ -702,13 +702,36 @@ exports.GetQuestion = async (req, res) => {
 exports.GetAnswer = async (req, res) => {
   const postId = req.params.id;
   try {
-    const result = await QuestionSubmit.findOne({
-      where: { id: postId },
-      include: [{ model: Answer }],
+    const result = await Answer.findOne({
+      where: { question_id: postId },
     });
     return res.status(200).json({ result: result });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "질문 불러오기 실패(서버)" });
+  }
+};
+
+exports.PostAnswerSubmit = async (req, res) => {
+  const postId = req.params.id;
+  const message = req.body.message;
+  const data = {
+    question_id: Number(postId),
+    content: message,
+  };
+  try {
+    console.log(postId, message);
+    const prevData = await Answer.findOne({ where: { question_id: postId } });
+    let result;
+    if (prevData) {
+      await Answer.update(data, { where: { question_id: postId } });
+      result = await Answer.findOne({ where: { question_id: postId } });
+    } else {
+      result = await Answer.create(data);
+    }
+    return res.status(200).json({ success: true, result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 등록하기 실패(서버)" });
   }
 };
