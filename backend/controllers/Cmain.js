@@ -860,7 +860,7 @@ exports.PostGalleryImgUpload = [
     }
   },
 ];
-exports.PostGalleryImgEdit = async (req, res) => {
+exports.EditGalleryImgEdit = async (req, res) => {
   const newArray = req.body;
   const tx = await sequelize.transaction();
   try {

@@ -9,7 +9,7 @@ import {
   PostGalleryImages,
   PostOfficeImages,
 } from "../../../../../api/postApi";
-import { UseModalStore } from "@/store/userStore";
+import { ReservationMyListStore, UseModalStore } from "@/store/userStore";
 import { useLocation } from "react-router-dom";
 import { GallerySlide } from "@/types/forms";
 
@@ -76,6 +76,7 @@ export default function SwichButtons({
     }
     alert("이미지 업로드가 완료되었습니다.");
     setFiles([]);
+    setIsModalOpen(false);
   };
 
   const handleEdit = async () => {
@@ -92,7 +93,7 @@ export default function SwichButtons({
         sort_order: index,
       }));
     }
-
+    let res;
     if (location.pathname.includes("/about") && "sort_order" in newArray[0]) {
       await EditAboutImges(newArray as EditAboutImgesProps[]);
     } else if (
@@ -101,9 +102,10 @@ export default function SwichButtons({
     ) {
       await EditOfficeImges(newArray as EditAboutImgesProps[]);
     } else if (location.pathname.includes("/gallery")) {
-      await EditGalleryImges(newArray as GallerySlide[]);
+      res = await EditGalleryImges(newArray as GallerySlide[]);
     }
     alert("수정이 완료되었습니다.");
+    setIsModalOpen(false);
   };
   return (
     <ButtonWrap>

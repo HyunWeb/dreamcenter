@@ -2,7 +2,11 @@ import { GetPageCount } from "@/api/postApi";
 import React, { SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import { FormData, QuestionData } from "@/types/forms";
-import { ReservationMyListStore, SearchStore } from "@/store/userStore";
+import {
+  ReservationMyListStore,
+  SearchStore,
+  UseModalStore,
+} from "@/store/userStore";
 const Div = styled.div`
   display: flex;
   align-items: center;
@@ -74,6 +78,7 @@ export default function PageCountUI<T>({
 }: MyListSectionProps<T>) {
   const { pageCount, setPageCount, currentPage, setCurrentPage } =
     ReservationMyListStore();
+  const { isModalOpen, setIsModalOpen } = UseModalStore();
   const { searchList, searchData } = SearchStore();
 
   const PageCount = async () => {
@@ -108,7 +113,7 @@ export default function PageCountUI<T>({
     } else {
       PageCount();
     }
-  }, [currentPage, searchList, searchData]);
+  }, [currentPage, searchList, searchData, isModalOpen]);
 
   const handleChangePage = async (index: number) => {
     setCurrentPage(index);

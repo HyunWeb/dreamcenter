@@ -34,7 +34,7 @@ const {
   GetSearch,
   GetGalleryImgUpload,
   PostGalleryImgUpload,
-  PostGalleryImgEdit,
+  EditGalleryImgEdit,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -68,6 +68,6 @@ router.post("/Answer/Submit/:id", PostAnswerSubmit);
 router.delete("/Question/delete/:id", DeleteQuestion);
 router.get("/gallery/imgGet", GetGalleryImgUpload);
 router.post("/gallery/imgUpdate", PostGalleryImgUpload);
-router.post("/gallery/imgEdit", PostGalleryImgEdit);
+router.post("/gallery/imgEdit", EditGalleryImgEdit);
 
 module.exports = router;

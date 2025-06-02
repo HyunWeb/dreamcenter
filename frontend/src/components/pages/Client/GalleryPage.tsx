@@ -1,12 +1,13 @@
 import Button from "@/components/common/Button";
 import PageHeader from "@/components/common/PageHeader";
-import { UseModalStore } from "@/store/userStore";
+import { ControlModalStore, UseModalStore } from "@/store/userStore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import EditModal from "./About&Office/EditModal";
 import PageCountUI from "@/components/common/PageCountUI";
 import { GetGalleryImages } from "@/api/postApi";
 import { GallerySlide } from "@/types/forms";
+import ImageOverlay from "@/components/common/ImageOverlay";
 
 const Div = styled.div`
   margin-bottom: 170px;
@@ -42,20 +43,23 @@ const Li = styled.li`
 `;
 
 export default function GalleryPage() {
-  const { isModalOpen, setIsModalOpen } = UseModalStore();
+  const {
+    isModalOpen,
+    setIsModalOpen,
+    ImageModal,
+    setImageModal,
+    ImageSrc,
+    setImageSrc,
+  } = UseModalStore();
   const [form, setForm] = useState<GallerySlide[]>([]);
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  // useEffect(() => {
-  //   const fetchImage = async () => {
-  //     const res = await GetGalleryImages();
-  //     setForm(res.slides);
-  //     console.log(res);
-  //   };
-  //   fetchImage();
-  // }, []);
+  const handleOverlay = (ImgSrc: string) => {
+    setImageModal(true);
+    setImageSrc(ImgSrc);
+  };
   return (
     <Div>
       <PageHeader title="갤러리" root="갤러리" />
@@ -70,7 +74,7 @@ export default function GalleryPage() {
       <Ul>
         {form.map((item, index) => {
           return (
-            <Li>
+            <Li onClick={() => handleOverlay(item.image_url)} key={index}>
               <img src={item.image_url} alt="갤러리 이미지" />
             </Li>
           );
@@ -82,6 +86,7 @@ export default function GalleryPage() {
         type="GalleryImage"
       />
 
+      {ImageModal && <ImageOverlay />}
       {isModalOpen && <EditModal />}
     </Div>
   );

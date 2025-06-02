@@ -67,11 +67,19 @@ export const WriteAboutStore = create<WriteAboutStoreProps>((set) => ({
 
 interface UseModalStoreProps {
   isModalOpen: boolean;
+  ImageModal: boolean;
+  ImageSrc: string;
   setIsModalOpen: (state: boolean) => void;
+  setImageModal: (state: boolean) => void;
+  setImageSrc: (state: string) => void;
 }
 export const UseModalStore = create<UseModalStoreProps>((set) => ({
   isModalOpen: false,
+  ImageModal: false,
+  ImageSrc: "",
   setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
+  setImageModal: (state: boolean) => set({ ImageModal: state }),
+  setImageSrc: (state: string) => set({ ImageSrc: state }),
 }));
 
 type FileItem = {
