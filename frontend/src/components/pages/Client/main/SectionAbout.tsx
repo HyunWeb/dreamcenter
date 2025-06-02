@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { MainStore } from "@/store/userStore";
 
 const AboutSection = styled.section<{ $imageUrl: string }>`
   display: flex;
@@ -87,12 +88,13 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
 `;
 
 export default function SectionAbout() {
+  const { setIsModalOpen } = MainStore();
   const [imageUrl, setImageUrl] = useState<string>(
     "https://dreamcenter-image-bucket.s3.ap-northeast-2.amazonaws.com/uploads/Layer+3.png"
   );
   return (
     <AboutSection $imageUrl={imageUrl}>
-      <button>
+      <button onClick={() => setIsModalOpen(true)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"

@@ -6,9 +6,12 @@ import SectionAbout from "./SectionAbout";
 import SectionOffice from "./SectionOffice";
 import SectionNews from "./SectionNews";
 import SectionGallery from "./SectionGallery";
+import { MainStore } from "@/store/userStore";
+import AboutModal from "./AboutModal";
 
 export default function Main() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { isModalOpen } = MainStore();
 
   // 파일 업로드 되면 상태값으로 저장
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +41,7 @@ export default function Main() {
       <SectionOffice />
       <SectionNews />
       <SectionGallery />
+      {isModalOpen && <AboutModal />}
     </div>
   );
 }

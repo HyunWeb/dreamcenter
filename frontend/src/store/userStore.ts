@@ -253,3 +253,35 @@ export const SearchStore = create<SearchProps>((set) => ({
   setSearchList: (state) => set({ searchList: state }),
   setSearchData: (state) => set({ searchData: state }),
 }));
+
+interface MainProps {
+  title1: string;
+  title2: string;
+  message: string;
+  isModalOpen: boolean;
+  file: FileItem[];
+  setTitle1: (state: string) => void;
+  setTitle2: (state: string) => void;
+  setMessage: (state: string) => void;
+  setIsModalOpen: (state: boolean) => void;
+  setFiles: (value: FileItem[] | ((prev: FileItem[]) => FileItem[])) => void;
+}
+
+export const MainStore = create<MainProps>((set) => ({
+  title1: "",
+  title2: "",
+  message: "",
+  isModalOpen: false,
+  file: [],
+  setTitle1: (state: string) => set({ title1: state }),
+  setTitle2: (state: string) => set({ title2: state }),
+  setMessage: (state: string) => set({ message: state }),
+  setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
+  setFiles: (updater) =>
+    set((state) => ({
+      file:
+        typeof updater === "function"
+          ? (updater as (prev: FileItem[]) => FileItem[])(state.file)
+          : updater,
+    })),
+}));
