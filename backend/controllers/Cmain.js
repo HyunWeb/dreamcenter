@@ -24,6 +24,7 @@ require("dotenv").config();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const { parseStringPromise } = require("xml2js");
+const { Op } = require("sequelize");
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -708,7 +709,7 @@ exports.GetAnswer = async (req, res) => {
     return res.status(200).json({ result: result });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "질문 불러오기 실패(서버)" });
+    res.status(500).json({ message: "답변 불러오기 실패(서버)" });
   }
 };
 
@@ -721,17 +722,73 @@ exports.PostAnswerSubmit = async (req, res) => {
   };
   try {
     console.log(postId, message);
+    // 사전에 존재하던 데이터를 가져와본다.
     const prevData = await Answer.findOne({ where: { question_id: postId } });
     let result;
+    // 존재 여부에 따라 업데이트 or 새로 생성
     if (prevData) {
       await Answer.update(data, { where: { question_id: postId } });
       result = await Answer.findOne({ where: { question_id: postId } });
     } else {
       result = await Answer.create(data);
     }
+    // 답변 추가했으니 질문 데이터에도 답변 확인 처리 해야한다.
+    await QuestionSubmit.update(
+      { is_confirmed: true },
+      { where: { id: postId } }
+    );
     return res.status(200).json({ success: true, result });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "답변 등록하기 실패(서버)" });
+  }
+};
+
+exports.DeleteQuestion = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const result = await QuestionSubmit.destroy({ where: { id: postId } });
+    if (result === 0) {
+      // 삭제된 row 없음
+      return res
+        .status(404)
+        .json({ success: false, message: "존재하지 않는 질문입니다." });
+    }
+    return res.status(200).json({ success: true, result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "질문 삭제하기 실패 (서버)" });
+  }
+};
+
+exports.GetSearch = async (req, res) => {
+  const { keyword, searchField } = req.query;
+
+  try {
+    let where;
+    if (searchField === "title") {
+      where = keyword
+        ? {
+            isPrivate: false,
+            [searchField]: { [Op.like]: `%${keyword}%` },
+          }
+        : {};
+    } else {
+      where = keyword
+        ? {
+            [searchField]: { [Op.like]: `%${keyword}%` },
+          }
+        : {};
+    }
+
+    const result = await QuestionSubmit.findAll({
+      where,
+      order: [["createdAt", "DESC"]],
+    });
+    console.log(result);
+    res.status(200).json({ success: true, result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "질문 검색하기 실패 (서버)" });
   }
 };

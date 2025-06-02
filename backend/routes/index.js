@@ -30,6 +30,8 @@ const {
   GetQuestion,
   GetAnswer,
   PostAnswerSubmit,
+  DeleteQuestion,
+  GetSearch,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -56,8 +58,10 @@ router.put("/AdminReservation/confirm", PutUpdateConfirm);
 router.put("/AdminReservation/Unconfirm", PutUnUpdateConfirm);
 router.post("/Question/submit", PostQuestionSubmit);
 router.post("/Question/Password", PostMatchPassword);
+router.get("/Question/search", GetSearch);
 router.get("/Question/:id", GetQuestion);
 router.get("/Answer/:id", GetAnswer);
 router.post("/Answer/Submit/:id", PostAnswerSubmit);
+router.delete("/Question/delete/:id", DeleteQuestion);
 
 module.exports = router;

@@ -301,3 +301,26 @@ export const PostAnswerSubmit = async (id: string, message: string) => {
     console.error("답변 등록하기 실패", error);
   }
 };
+
+export const DeleteQuestion = async (id: string) => {
+  try {
+    const response = await API.delete(`api/Question/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("질문 삭제 실패", error);
+  }
+};
+
+export const getSearch = async (keyword: string, searchField: string) => {
+  try {
+    const response = await API.get(`api/Question/search`, {
+      params: {
+        keyword: keyword,
+        searchField: searchField,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("질문 삭제 실패", error);
+  }
+};

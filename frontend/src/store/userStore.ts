@@ -1,3 +1,4 @@
+import { QuestionData } from "@/types/forms";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -229,4 +230,18 @@ export const ControlModalStore = create<ControlModalProps>((set) => ({
   postId: null,
   setViewModal: (state) => set({ viewModal: state }),
   setPostId: (state) => set({ postId: state }),
+}));
+
+interface SearchProps {
+  searchList: boolean;
+  searchData: QuestionData[];
+  setSearchList: (state: boolean) => void;
+  setSearchData: (state: QuestionData[]) => void;
+}
+
+export const SearchStore = create<SearchProps>((set) => ({
+  searchList: false,
+  searchData: [],
+  setSearchList: (state) => set({ searchList: state }),
+  setSearchData: (state) => set({ searchData: state }),
 }));

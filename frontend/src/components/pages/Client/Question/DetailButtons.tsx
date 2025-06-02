@@ -1,6 +1,7 @@
+import { DeleteQuestion } from "@/api/postApi";
 import { AnswerData } from "@/types/forms";
 import React, { SetStateAction } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 const Div = styled.div`
@@ -47,6 +48,7 @@ export default function DetailButtons({
   setVeiwWriteAnswer,
   answer,
 }: Props) {
+  const { id } = useParams<{ id: string }>();
   const naviagte = useNavigate();
 
   const handleBack = () => {
@@ -56,6 +58,16 @@ export default function DetailButtons({
   const handleChange = () => {
     setVeiwWriteAnswer((prev) => !prev);
   };
+
+  const handleDelete = async () => {
+    if (!id) return;
+    const res = await DeleteQuestion(id);
+    console.log(res);
+    if (res.success) {
+      alert("삭제가 완료되었습니다.");
+      naviagte(-1);
+    }
+  };
   return (
     <Div>
       <Button onClick={handleBack}>뒤로가기</Button>
@@ -63,7 +75,7 @@ export default function DetailButtons({
         <ConfirmButton onClick={handleChange}>
           {ViewWriteAnswer ? "입력취소" : answer ? "답변수정" : "답변달기"}
         </ConfirmButton>
-        <DeleteButton>질문삭제</DeleteButton>
+        <DeleteButton onClick={handleDelete}>질문삭제</DeleteButton>
       </Wrap>
     </Div>
   );
