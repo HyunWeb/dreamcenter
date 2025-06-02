@@ -57,3 +57,10 @@ export interface AnswerData {
   createdAt: string; // 또는 Date
   updatedAt: string; // 또는 Date
 }
+
+export interface GallerySlide {
+  id: number;
+  name: string;
+  image_url: string;
+  created_at: string;
+}

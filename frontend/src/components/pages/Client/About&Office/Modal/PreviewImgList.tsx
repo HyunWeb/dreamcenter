@@ -8,10 +8,10 @@ interface PreviewImgListProps {
   setPrevImg: React.Dispatch<React.SetStateAction<string>>;
 }
 type Slide = {
-  created_at: string;
-  name: string;
   id: number;
+  name: string;
   image_url: string;
+  created_at: string;
   sort_order: number;
 };
 

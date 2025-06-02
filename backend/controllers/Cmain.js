@@ -11,6 +11,7 @@ const {
   Users,
   QuestionSubmit,
   Answer,
+  GalleryImage,
 } = require("../models");
 const { sequelize } = require("../models");
 
@@ -518,7 +519,7 @@ exports.GetPageCount = async (req, res) => {
   const token = req.cookies.token;
   // 10개로 바꾸기
   // 한페이지에 받아올 아이템 수
-  const limit = 10;
+  const limit = type === "GalleryImage" ? 20 : 10;
 
   // 시작 인덱스 구하기
   const startIndex = (page - 1) * limit;
@@ -557,6 +558,15 @@ exports.GetPageCount = async (req, res) => {
           limit: limit,
           offset: startIndex,
           order: [["createdAt", "DESC"]],
+        });
+        break;
+
+      case "GalleryImage":
+        result = await GalleryImage.count();
+        TotalItems = await GalleryImage.findAll({
+          limit: limit,
+          offset: startIndex,
+          // order: [["created_at", "DESC"]],
         });
         break;
 
@@ -790,5 +800,77 @@ exports.GetSearch = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "질문 검색하기 실패 (서버)" });
+  }
+};
+
+exports.GetGalleryImgUpload = async (req, res) => {
+  try {
+    const slides = await GalleryImage.findAll({});
+    res.status(200).json({ slides });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "갤러리 이미지 가져오기 실패 (서버)" });
+  }
+};
+
+exports.PostGalleryImgUpload = [
+  upload.array("images", 100),
+  async (req, res) => {
+    const files = req.files;
+    if (!files)
+      return res.status(400).json({ message: "제공된 파일이 없습니다." });
+    try {
+      const uploadedUrls = [];
+
+      for (const file of files) {
+        const ext = path.extname(file.originalname);
+        const key = `uploads/${uuidv4()}${ext}`;
+
+        // 파일 압축
+        const compressedBuffer = await sharp(file.buffer)
+          .rotate()
+          .resize({ width: 800 })
+          .webp({ quality: 80 })
+          .toBuffer();
+
+        const uploadParams = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: key,
+          Body: compressedBuffer,
+          ContentType: "image/webp",
+        };
+
+        await s3.send(new PutObjectCommand(uploadParams));
+
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        uploadedUrls.push(fileUrl);
+      }
+
+      const SlideData = uploadedUrls.map((url, index) => ({
+        name: files[index].originalname,
+        image_url: url,
+      }));
+
+      await GalleryImage.bulkCreate(SlideData); // bulkCreate > 레코드 여러 개 한 번에 생성
+
+      res.status(200).json({ urls: uploadedUrls });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "서버에서 이미지 받기 실패" });
+    }
+  },
+];
+exports.PostGalleryImgEdit = async (req, res) => {
+  const newArray = req.body;
+  const tx = await sequelize.transaction();
+  try {
+    await GalleryImage.destroy({ where: {}, transaction: tx });
+    await GalleryImage.bulkCreate(newArray, { transaction: tx });
+    await tx.commit();
+    res.status(200).json({ message: newArray });
+  } catch (err) {
+    await tx.rollback();
+    console.error(err);
+    res.status(500).json({ message: "Gallery 슬라이드 목록 수정 실패" });
   }
 };

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import {
   GetAboutImages,
+  GetGalleryImages,
   GetOfficeImages,
   PostAboutImages,
 } from "../../../../api/postApi";
@@ -53,9 +54,16 @@ export default function EditModal() {
         response = await GetAboutImages();
       } else if (location.pathname.includes("/office")) {
         response = await GetOfficeImages();
+      } else if (location.pathname.includes("/gallery")) {
+        response = await GetGalleryImages();
       }
-
+      if (!response) {
+        console.log(response);
+        alert("데이터가 없습니다.");
+        return;
+      }
       setExistingImages(response.slides);
+      console.log(response.slides);
     };
     getImageFetch();
   }, [files]);

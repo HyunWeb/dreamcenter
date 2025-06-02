@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import ImgMovBtn from "./ImgMovBtn";
 import Button from "../../../common/Button";
-import { AboutAndOfficeStore, ImgPreviewStore } from "@/store/userStore";
+import { UseModalStore, ImgPreviewStore } from "@/store/userStore";
 
 const ViewBox = styled.div`
   width: 100%;
@@ -49,7 +49,7 @@ const ImgContainer = styled.div`
 export default function ImgViewBox() {
   const { imgPreview, index, imgList, setImagePreview, setIndex } =
     ImgPreviewStore();
-  const { setIsModalOpen } = AboutAndOfficeStore();
+  const { setIsModalOpen } = UseModalStore();
   const OpenModal = () => {
     setIsModalOpen(true);
   };

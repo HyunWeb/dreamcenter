@@ -1,3 +1,4 @@
+import { GallerySlide } from "@/types/forms";
 import axios from "axios";
 
 const API = axios.create({
@@ -322,5 +323,36 @@ export const getSearch = async (keyword: string, searchField: string) => {
     return response.data;
   } catch (error) {
     console.error("질문 삭제 실패", error);
+  }
+};
+
+export const GetGalleryImages = async () => {
+  try {
+    const response = await API.get(`api/gallery/imgGet`);
+    return response.data;
+  } catch (error) {
+    console.error("gallery 페이지 이미지 불러오기 실패", error);
+  }
+};
+
+export const PostGalleryImages = async (formData: FormData) => {
+  try {
+    const response = await API.post(`api/gallery/imgUpdate`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("gallery 페이지 이미지 전송 실패", error);
+  }
+};
+
+export const EditGalleryImges = async (newArray: GallerySlide[]) => {
+  try {
+    const response = await API.post(`/api/gallery/imgEdit`, newArray);
+    return response;
+  } catch (err) {
+    console.error("Gallery 페이지 이미지 수정하기 실패", err);
   }
 };

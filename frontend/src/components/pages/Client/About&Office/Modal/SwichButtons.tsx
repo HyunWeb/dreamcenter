@@ -3,12 +3,21 @@ import styled from "styled-components";
 import Button from "../../../../common/Button";
 import {
   EditAboutImges,
+  EditGalleryImges,
   EditOfficeImges,
   PostAboutImages,
+  PostGalleryImages,
   PostOfficeImages,
 } from "../../../../../api/postApi";
-import { AboutAndOfficeStore } from "@/store/userStore";
+import { UseModalStore } from "@/store/userStore";
 import { useLocation } from "react-router-dom";
+import { GallerySlide } from "@/types/forms";
+
+interface EditAboutImgesProps {
+  image_url: string;
+  name: string;
+  sort_order: number;
+}
 
 const StyledButton = styled(Button)`
   padding: 12px 45px;
@@ -45,7 +54,7 @@ export default function SwichButtons({
   files,
   setFiles,
 }: SwitchButtonsProps) {
-  const { setIsModalOpen } = AboutAndOfficeStore();
+  const { setIsModalOpen } = UseModalStore();
   const CloseModal = () => {
     setIsModalOpen(false);
   };
@@ -62,23 +71,39 @@ export default function SwichButtons({
       await PostAboutImages(formData);
     } else if (location.pathname.includes("/office")) {
       await PostOfficeImages(formData);
+    } else if (location.pathname.includes("/gallery")) {
+      await PostGalleryImages(formData);
     }
-
+    alert("이미지 업로드가 완료되었습니다.");
     setFiles([]);
   };
 
   const handleEdit = async () => {
-    const newArray = existingImages.map((item, index) => ({
-      image_url: item.image_url,
-      name: item.name,
-      sort_order: index,
-    }));
-
-    if (location.pathname.includes("/about")) {
-      await EditAboutImges(newArray);
-    } else if (location.pathname.includes("/office")) {
-      await EditOfficeImges(newArray);
+    let newArray;
+    if (location.pathname.includes("/gallery")) {
+      newArray = existingImages.map((item, index) => ({
+        image_url: item.image_url,
+        name: item.name,
+      }));
+    } else {
+      newArray = existingImages.map((item, index) => ({
+        image_url: item.image_url,
+        name: item.name,
+        sort_order: index,
+      }));
     }
+
+    if (location.pathname.includes("/about") && "sort_order" in newArray[0]) {
+      await EditAboutImges(newArray as EditAboutImgesProps[]);
+    } else if (
+      location.pathname.includes("/office") &&
+      "sort_order" in newArray[0]
+    ) {
+      await EditOfficeImges(newArray as EditAboutImgesProps[]);
+    } else if (location.pathname.includes("/gallery")) {
+      await EditGalleryImges(newArray as GallerySlide[]);
+    }
+    alert("수정이 완료되었습니다.");
   };
   return (
     <ButtonWrap>

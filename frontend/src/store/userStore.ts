@@ -65,11 +65,11 @@ export const WriteAboutStore = create<WriteAboutStoreProps>((set) => ({
   setEditSection: (state: boolean) => set({ editSection: state }),
 }));
 
-interface AboutAndOfficeStoreProps {
+interface UseModalStoreProps {
   isModalOpen: boolean;
   setIsModalOpen: (state: boolean) => void;
 }
-export const AboutAndOfficeStore = create<AboutAndOfficeStoreProps>((set) => ({
+export const UseModalStore = create<UseModalStoreProps>((set) => ({
   isModalOpen: false,
   setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
 }));
