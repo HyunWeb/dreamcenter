@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { MainStore } from "@/store/userStore";
+import { GetMainAbout } from "@/api/postApi";
 
 const AboutSection = styled.section<{ $imageUrl: string }>`
   display: flex;
@@ -87,13 +88,27 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
   }
 `;
 
+const Paragraph = styled.p`
+  white-space: pre-line;
+`;
 export default function SectionAbout() {
-  const { setIsModalOpen } = MainStore();
+  const { setIsModalOpen, MainAbout, setMainAbout } = MainStore();
   const [imageUrl, setImageUrl] = useState<string>(
     "https://dreamcenter-image-bucket.s3.ap-northeast-2.amazonaws.com/uploads/Layer+3.png"
   );
+
+  useEffect(() => {
+    const fetchMain = async () => {
+      const res = await GetMainAbout();
+      if (res.result) {
+        setMainAbout(res.result);
+        setImageUrl(res.result.image_url);
+      }
+    };
+    fetchMain();
+  }, []);
   return (
-    <AboutSection $imageUrl={imageUrl}>
+    <AboutSection $imageUrl={imageUrl || "defaultBanner.png"}>
       <button onClick={() => setIsModalOpen(true)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -111,13 +126,15 @@ export default function SectionAbout() {
         </svg>
       </button>
       <div>
-        <h1>해외 의대 전문 유학원</h1>
-        <h2>드림유학원, 당신의 글로벌 미래를 응원합니다.</h2>
-        <p>
-          2020 ~ 2025 우즈베키스탄 의대 전체 수속 학생수 1위
-          <br />
-          2020 ~ 2025 우즈베키스탄 의대 편입 성공 학생수 1위
-        </p>
+        <h1>{MainAbout?.title_main || "해외 의대 전문 유학원"}</h1>
+        <h2>
+          {MainAbout?.title_sub ||
+            "드림유학원, 당신의 글로벌 미래를 응원합니다."}
+        </h2>
+        <Paragraph>
+          {MainAbout?.content ||
+            "2020 ~ 2025 우즈베키스탄 의대 전체 수속 학생수 1위"}
+        </Paragraph>
         <Link to="/about">자세히 보기</Link>
       </div>
     </AboutSection>

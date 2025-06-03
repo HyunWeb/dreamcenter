@@ -64,3 +64,11 @@ export interface GallerySlide {
   image_url: string;
   created_at: string;
 }
+
+export type MainDataProps = {
+  id: number;
+  title_main: string;
+  title_sub: string;
+  content: string;
+  image_url: string;
+};

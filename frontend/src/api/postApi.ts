@@ -356,3 +356,25 @@ export const EditGalleryImges = async (newArray: GallerySlide[]) => {
     console.error("Gallery 페이지 이미지 수정하기 실패", err);
   }
 };
+
+export const PostMainPage = async (formData: FormData) => {
+  try {
+    const response = await API.post(`api/Main/AboutData`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("메인페이지 데이터 전송 실패", error);
+  }
+};
+
+export const GetMainAbout = async () => {
+  try {
+    const response = await API.get(`api/Main/GetAboutData`);
+    return response.data;
+  } catch (error) {
+    console.error("메인페이지 데이터 불러오기 실패", error);
+  }
+};

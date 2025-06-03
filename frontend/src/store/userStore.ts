@@ -1,4 +1,4 @@
-import { QuestionData } from "@/types/forms";
+import { MainDataProps, QuestionData } from "@/types/forms";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -260,11 +260,13 @@ interface MainProps {
   message: string;
   isModalOpen: boolean;
   file: FileItem[];
+  MainAbout: MainDataProps;
   setTitle1: (state: string) => void;
   setTitle2: (state: string) => void;
   setMessage: (state: string) => void;
   setIsModalOpen: (state: boolean) => void;
   setFiles: (value: FileItem[] | ((prev: FileItem[]) => FileItem[])) => void;
+  setMainAbout: (state: MainDataProps) => void;
 }
 
 export const MainStore = create<MainProps>((set) => ({
@@ -273,6 +275,13 @@ export const MainStore = create<MainProps>((set) => ({
   message: "",
   isModalOpen: false,
   file: [],
+  MainAbout: {
+    id: 1,
+    title_main: "",
+    title_sub: "",
+    content: "",
+    image_url: "",
+  },
   setTitle1: (state: string) => set({ title1: state }),
   setTitle2: (state: string) => set({ title2: state }),
   setMessage: (state: string) => set({ message: state }),
@@ -284,4 +293,5 @@ export const MainStore = create<MainProps>((set) => ({
           ? (updater as (prev: FileItem[]) => FileItem[])(state.file)
           : updater,
     })),
+  setMainAbout: (state: MainDataProps) => set({ MainAbout: state }),
 }));

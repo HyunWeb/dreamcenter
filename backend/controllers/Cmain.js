@@ -12,6 +12,7 @@ const {
   QuestionSubmit,
   Answer,
   GalleryImage,
+  MainPage,
 } = require("../models");
 const { sequelize } = require("../models");
 
@@ -872,5 +873,91 @@ exports.EditGalleryImgEdit = async (req, res) => {
     await tx.rollback();
     console.error(err);
     res.status(500).json({ message: "Gallery 슬라이드 목록 수정 실패" });
+  }
+};
+
+exports.PostMainPage = [
+  upload.array("images", 100),
+  async (req, res) => {
+    const files = req.files;
+    const form = req.body;
+
+    try {
+      let Image_url;
+      const uploadedUrls = [];
+      if (files) {
+        // 사진 파일 저장
+        for (const file of files) {
+          const ext = path.extname(file.originalname);
+
+          const crypto = require("crypto");
+          const hash = crypto
+            .createHash("sha256")
+            .update(file.buffer)
+            .digest("hex");
+          const key = `uploads/${hash}${ext}`;
+
+          const compressedBuffer = await sharp(file.buffer)
+            .rotate()
+            .resize({ width: 800 })
+            .webp({ quality: 80 })
+            .toBuffer();
+
+          const uploadParams = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: key,
+            Body: compressedBuffer,
+            ContentType: "image/webp",
+          };
+
+          await s3.send(new PutObjectCommand(uploadParams));
+
+          const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+          uploadedUrls.push(fileUrl);
+        }
+      }
+      let image_url = uploadedUrls[0];
+
+      // 이미지 미 첨부시 기존 이미지 사용
+      if (!image_url) {
+        const existing = await MainPage.findOne({
+          where: { id: 1 },
+          attributes: ["image_url"],
+        });
+        image_url = existing?.image_url || "defaultBanner.png"; // fallback 가능
+      }
+
+      const submitData = {
+        title_main: form.title1,
+        title_sub: form.title2,
+        content: form.message,
+        image_url,
+      };
+      const existing = await MainPage.findOne({ where: { id: 1 } });
+
+      if (existing) {
+        await MainPage.update(submitData, { where: { id: 1 } });
+      } else {
+        await MainPage.create({ id: 1, ...submitData });
+      }
+      const updatedData = await MainPage.findOne({ where: { id: 1 } });
+      res
+        .status(200)
+        .json({ message: "메인페이지 저장 성공", updatedData: updatedData });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "메인화면 정보 수정 실패" });
+    }
+  },
+];
+exports.GetMainAbout = async (req, res) => {
+  try {
+    const result = await MainPage.findOne({
+      where: { id: 1 },
+    });
+    return res.status(200).json({ result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 불러오기 실패(서버)" });
   }
 };

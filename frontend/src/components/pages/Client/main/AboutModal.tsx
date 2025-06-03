@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import FormRow from "../Reservation/InputGroup/FormRow";
 import TitleInputGroup from "./TitleInputGroup";
@@ -8,6 +8,8 @@ import ImgInputGroup from "../Reservation/InputGroup/ImgInputGroup";
 
 import MainModalButtonBox from "./MainModalButtonBox";
 import MainImgInput from "./MainImgInput";
+import { GetMainAbout } from "@/api/postApi";
+import { MainDataProps } from "@/types/forms";
 
 const Div = styled.div`
   position: fixed;
@@ -42,9 +44,25 @@ const Textarea = styled.textarea`
   font-size: 16px;
   min-height: 150px;
 `;
-
+const Span = styled.span`
+  color: #888888;
+`;
 export default function AboutModal() {
-  const { message, setMessage } = MainStore();
+  const { message, setMessage, setMainAbout, MainAbout, setTitle1, setTitle2 } =
+    MainStore();
+  useEffect(() => {
+    const fetchMain = async () => {
+      const res = await GetMainAbout();
+      if (res.result) {
+        setMainAbout(res.result); // 전체 데이터 저장
+        setTitle1(res.result.title_main);
+        setTitle2(res.result.title_sub);
+        setMessage(res.result.content);
+      }
+    };
+    fetchMain();
+  }, []);
+
   return (
     <Div>
       <h2 className="Section-title">타이틀 수정</h2>
@@ -88,6 +106,7 @@ export default function AboutModal() {
         >
           <MainImgInput />
         </FormRow>
+        <Span>※ 이미지 미첨부 시 이전 이미지가 적용됩니다.</Span>
         <MainModalButtonBox />
       </Section>
     </Div>

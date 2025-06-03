@@ -1,5 +1,5 @@
 import { MainStore } from "@/store/userStore";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const SingleInput = styled.input`
