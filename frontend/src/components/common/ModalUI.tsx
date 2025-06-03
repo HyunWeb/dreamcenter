@@ -1,6 +1,9 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import ModalButtonBox from "./ModalButtonBox";
+import { ControlModalStore } from "@/store/userStore";
+import { PostMatchPassword } from "@/api/postApi";
+import { useNavigate } from "react-router-dom";
 
 const Div = styled.div`
   width: 370px;
@@ -77,6 +80,8 @@ const InputWrap = styled.div`
 export default function ModalUI() {
   const [password, setPassword] = useState(["", "", "", ""]);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+  const { setViewModal, postId } = ControlModalStore();
+  const navigate = useNavigate();
 
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
@@ -89,12 +94,28 @@ export default function ModalUI() {
     }
   };
 
+  const handleSubmit = async () => {
+    if (!postId) return;
+    const Password = password.join("");
+    const res = await PostMatchPassword(Password, postId);
+    if (res.match) {
+      setViewModal(false);
+      navigate(`/questions/${postId}`);
+    } else {
+      alert("비밀번호가 일치하지 않습니다.");
+      setPassword(["", "", "", ""]);
+    }
+  };
+
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
     if (e.key === "Backspace" && password[index] === "" && index > 0) {
       inputsRef.current[index - 1]?.focus();
+    }
+    if (e.key === "Enter" && index === 3) {
+      handleSubmit();
     }
   };
 
@@ -136,7 +157,7 @@ export default function ModalUI() {
           );
         })}
       </InputWrap>
-      <ModalButtonBox />
+      <ModalButtonBox password={password} setPassword={setPassword} />
     </Div>
   );
 }

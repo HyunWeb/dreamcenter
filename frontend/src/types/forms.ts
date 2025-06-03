@@ -49,3 +49,42 @@ export interface FormDataTableFormProps {
   type?: string;
   children?: React.ReactNode;
 }
+
+export interface AnswerData {
+  id: number;
+  question_id: number;
+  content: string;
+  createdAt: string; // 또는 Date
+  updatedAt: string; // 또는 Date
+}
+
+export interface GallerySlide {
+  id: number;
+  name: string;
+  image_url: string;
+  created_at: string;
+}
+
+export type MainDataProps = {
+  id: number;
+  title_main: string;
+  title_sub: string;
+  content: string;
+  image_url: string;
+};
+
+export type ImageItem = {
+  id: number;
+  name: string;
+  image_url: string;
+  sort_order: number;
+  created_at: string; // ISO 날짜 문자열 (예: "2025-05-17T16:01:50.000Z")
+};
+
+export type NewsItem = {
+  title: string;
+  description: string;
+  date: string; // 예: "2025.05.01.23:25"
+  img: string; // 썸네일 이미지 URL
+  link: string; // 원문 링크 (네이버 블로그 등)
+};

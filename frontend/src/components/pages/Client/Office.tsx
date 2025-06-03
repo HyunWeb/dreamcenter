@@ -3,8 +3,8 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import ImgSlice from "./About&Office/ImgSlice";
 import {
-  AboutAndOfficeStore,
   ImgPreviewStore,
+  UseModalStore,
   WriteAboutStore,
 } from "@/store/userStore";
 import EditModal from "./About&Office/EditModal";
@@ -17,7 +17,7 @@ const Div = styled.div`
 `;
 
 export default function Office() {
-  const { isModalOpen, setIsModalOpen } = AboutAndOfficeStore();
+  const { isModalOpen, setIsModalOpen } = UseModalStore();
   const { setImagePreview, imgList, setIndex, setImgList, setImgLength } =
     ImgPreviewStore();
   const { editSection, setEditSection } = WriteAboutStore();

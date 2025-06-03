@@ -10,6 +10,9 @@ const {
   ReservationSubmit,
   Users,
   QuestionSubmit,
+  Answer,
+  GalleryImage,
+  MainPage,
 } = require("../models");
 const { sequelize } = require("../models");
 
@@ -23,6 +26,7 @@ require("dotenv").config();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const { parseStringPromise } = require("xml2js");
+const { Op } = require("sequelize");
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -558,6 +562,14 @@ exports.GetPageCount = async (req, res) => {
         });
         break;
 
+      // case "GalleryImage":
+      //   result = await GalleryImage.count();
+      //   TotalItems = await GalleryImage.findAll({
+      //     limit: limit,
+      //     offset: startIndex,
+      //   });
+      //   break;
+
       default:
         return res.status(400).json({ message: "유효하지 않은 type" });
     }
@@ -589,7 +601,6 @@ exports.PostChangeState = async (req, res) => {
 exports.PutUpdateConfirm = async (req, res) => {
   const ids = req.body.ids;
   try {
-    console.log(ids); // [ 21, 20 ]
     const response = await ReservationSubmit.update(
       { is_confirmed: true },
       { where: { id: ids } }
@@ -605,7 +616,6 @@ exports.PutUpdateConfirm = async (req, res) => {
 exports.PutUnUpdateConfirm = async (req, res) => {
   const ids = req.body.ids;
   try {
-    console.log(ids); // [ 21, 20 ]
     const response = await ReservationSubmit.update(
       { is_confirmed: false },
       { where: { id: ids } }
@@ -674,3 +684,311 @@ exports.PostQuestionSubmit = [
     }
   },
 ];
+
+exports.PostMatchPassword = async (req, res) => {
+  // 서버에서 게시글 불러와서 비밀번호가 같은지 확인
+  const password = req.body.password;
+  const postId = req.body.postId;
+  try {
+    const response = await QuestionSubmit.findOne({ where: { id: postId } });
+    const result = response.privatePWD === password ? true : false;
+    return res.status(200).json({ match: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "비밀번호 확인 실패(서버)" });
+  }
+};
+
+exports.GetQuestion = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const result = await QuestionSubmit.findOne({ where: { id: postId } });
+    return res.status(200).json({ result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "질문 불러오기 실패(서버)" });
+  }
+};
+exports.GetAnswer = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const result = await Answer.findOne({
+      where: { question_id: postId },
+    });
+    return res.status(200).json({ result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 불러오기 실패(서버)" });
+  }
+};
+
+exports.PostAnswerSubmit = async (req, res) => {
+  const postId = req.params.id;
+  const message = req.body.message;
+  const data = {
+    question_id: Number(postId),
+    content: message,
+  };
+  try {
+    console.log(postId, message);
+    // 사전에 존재하던 데이터를 가져와본다.
+    const prevData = await Answer.findOne({ where: { question_id: postId } });
+    let result;
+    // 존재 여부에 따라 업데이트 or 새로 생성
+    if (prevData) {
+      await Answer.update(data, { where: { question_id: postId } });
+      result = await Answer.findOne({ where: { question_id: postId } });
+    } else {
+      result = await Answer.create(data);
+    }
+    // 답변 추가했으니 질문 데이터에도 답변 확인 처리 해야한다.
+    await QuestionSubmit.update(
+      { is_confirmed: true },
+      { where: { id: postId } }
+    );
+    return res.status(200).json({ success: true, result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 등록하기 실패(서버)" });
+  }
+};
+
+exports.DeleteQuestion = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const result = await QuestionSubmit.destroy({ where: { id: postId } });
+    if (result === 0) {
+      // 삭제된 row 없음
+      return res
+        .status(404)
+        .json({ success: false, message: "존재하지 않는 질문입니다." });
+    }
+    return res.status(200).json({ success: true, result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "질문 삭제하기 실패 (서버)" });
+  }
+};
+
+exports.GetSearch = async (req, res) => {
+  const { keyword, searchField } = req.query;
+
+  try {
+    let where;
+    if (searchField === "title") {
+      where = keyword
+        ? {
+            isPrivate: false,
+            [searchField]: { [Op.like]: `%${keyword}%` },
+          }
+        : {};
+    } else {
+      where = keyword
+        ? {
+            [searchField]: { [Op.like]: `%${keyword}%` },
+          }
+        : {};
+    }
+
+    const result = await QuestionSubmit.findAll({
+      where,
+      order: [["createdAt", "DESC"]],
+    });
+    console.log(result);
+    res.status(200).json({ success: true, result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "질문 검색하기 실패 (서버)" });
+  }
+};
+
+exports.GetGalleryImgUpload = async (req, res) => {
+  try {
+    const slides = await GalleryImage.findAll({});
+    res.status(200).json({ slides });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "갤러리 이미지 가져오기 실패 (서버)" });
+  }
+};
+
+exports.PostGalleryImgUpload = [
+  upload.array("images", 100),
+  async (req, res) => {
+    const files = req.files;
+    if (!files)
+      return res.status(400).json({ message: "제공된 파일이 없습니다." });
+    try {
+      const uploadedUrls = [];
+
+      for (const file of files) {
+        const ext = path.extname(file.originalname);
+        const key = `uploads/${uuidv4()}${ext}`;
+
+        // 파일 압축
+        const compressedBuffer = await sharp(file.buffer)
+          .rotate()
+          .resize({ width: 800 })
+          .webp({ quality: 80 })
+          .toBuffer();
+
+        const uploadParams = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: key,
+          Body: compressedBuffer,
+          ContentType: "image/webp",
+        };
+
+        await s3.send(new PutObjectCommand(uploadParams));
+
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        uploadedUrls.push(fileUrl);
+      }
+
+      const SlideData = uploadedUrls.map((url, index) => ({
+        name: files[index].originalname,
+        image_url: url,
+      }));
+
+      await GalleryImage.bulkCreate(SlideData); // bulkCreate > 레코드 여러 개 한 번에 생성
+
+      res.status(200).json({ urls: uploadedUrls });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "서버에서 이미지 받기 실패" });
+    }
+  },
+];
+exports.EditGalleryImgEdit = async (req, res) => {
+  const newArray = req.body;
+  const tx = await sequelize.transaction();
+  try {
+    await GalleryImage.destroy({ where: {}, transaction: tx });
+    await GalleryImage.bulkCreate(newArray, { transaction: tx });
+    await tx.commit();
+    res.status(200).json({ message: newArray });
+  } catch (err) {
+    await tx.rollback();
+    console.error(err);
+    res.status(500).json({ message: "Gallery 슬라이드 목록 수정 실패" });
+  }
+};
+
+exports.PostMainPage = [
+  upload.array("images", 100),
+  async (req, res) => {
+    const files = req.files;
+    const form = req.body;
+
+    try {
+      let Image_url;
+      const uploadedUrls = [];
+      if (files) {
+        // 사진 파일 저장
+        for (const file of files) {
+          const ext = path.extname(file.originalname);
+
+          const crypto = require("crypto");
+          const hash = crypto
+            .createHash("sha256")
+            .update(file.buffer)
+            .digest("hex");
+          const key = `uploads/${hash}${ext}`;
+
+          const compressedBuffer = await sharp(file.buffer)
+            .rotate()
+            .resize({ width: 800 })
+            .webp({ quality: 80 })
+            .toBuffer();
+
+          const uploadParams = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: key,
+            Body: compressedBuffer,
+            ContentType: "image/webp",
+          };
+
+          await s3.send(new PutObjectCommand(uploadParams));
+
+          const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+          uploadedUrls.push(fileUrl);
+        }
+      }
+      let image_url = uploadedUrls[0];
+
+      // 이미지 미 첨부시 기존 이미지 사용
+      if (!image_url) {
+        const existing = await MainPage.findOne({
+          where: { id: 1 },
+          attributes: ["image_url"],
+        });
+        image_url = existing?.image_url || "defaultBanner.png"; // fallback 가능
+      }
+
+      const submitData = {
+        title_main: form.title1,
+        title_sub: form.title2,
+        content: form.message,
+        image_url,
+      };
+      const existing = await MainPage.findOne({ where: { id: 1 } });
+
+      if (existing) {
+        await MainPage.update(submitData, { where: { id: 1 } });
+      } else {
+        await MainPage.create({ id: 1, ...submitData });
+      }
+      const updatedData = await MainPage.findOne({ where: { id: 1 } });
+      res
+        .status(200)
+        .json({ message: "메인페이지 저장 성공", updatedData: updatedData });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "메인화면 정보 수정 실패" });
+    }
+  },
+];
+exports.GetMainAbout = async (req, res) => {
+  try {
+    const result = await MainPage.findOne({
+      where: { id: 1 },
+    });
+    return res.status(200).json({ result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 불러오기 실패(서버)" });
+  }
+};
+
+exports.GetMainGallery = async (req, res) => {
+  try {
+    const count = await GalleryImage.count();
+    if (count === 0) {
+      return res.status(200).json({ success: false }); // 불러올 사진이 없습니다.
+    }
+    const result = await GalleryImage.findAll({
+      limit: 8,
+      offset: 0,
+      order: sequelize.literal("RAND()"),
+      // order: [["created_at", "DESC"]],
+    });
+    return res.status(200).json({ success: true, result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 불러오기 실패(서버)" });
+  }
+};
+
+exports.GetGalleryPage = async (req, res) => {
+  try {
+    const count = await GalleryImage.count();
+    if (count === 0) {
+      return res.status(200).json({ success: false }); // 불러올 사진이 없습니다.
+    }
+    const result = await GalleryImage.findAll({});
+    return res.status(200).json({ success: true, result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 불러오기 실패(서버)" });
+  }
+};

@@ -1,3 +1,4 @@
+import { GallerySlide } from "@/types/forms";
 import axios from "axios";
 
 const API = axios.create({
@@ -262,5 +263,136 @@ export const PostQuestion = async (formData: FormData) => {
     return response.data;
   } catch (error) {
     console.error("질문 등록 실패", error);
+  }
+};
+
+export const PostMatchPassword = async (password: string, postId: number) => {
+  const data = { password: password, postId: postId };
+  try {
+    const response = await API.post(`api/Question/Password`, data);
+    return response.data;
+  } catch (error) {
+    console.error("비밀번호 매치 실패", error);
+  }
+};
+
+export const GetQuestion = async (id: string) => {
+  try {
+    const response = await API.get(`api/Question/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("질문 가져오기 실패", error);
+  }
+};
+
+export const GetAnswer = async (id: string) => {
+  try {
+    const response = await API.get(`api/Answer/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("답변 가져오기 실패", error);
+  }
+};
+
+export const PostAnswerSubmit = async (id: string, message: string) => {
+  try {
+    const response = await API.post(`api/Answer/Submit/${id}`, { message });
+    return response.data;
+  } catch (error) {
+    console.error("답변 등록하기 실패", error);
+  }
+};
+
+export const DeleteQuestion = async (id: string) => {
+  try {
+    const response = await API.delete(`api/Question/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("질문 삭제 실패", error);
+  }
+};
+
+export const getSearch = async (keyword: string, searchField: string) => {
+  try {
+    const response = await API.get(`api/Question/search`, {
+      params: {
+        keyword: keyword,
+        searchField: searchField,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("질문 삭제 실패", error);
+  }
+};
+
+export const GetGalleryImages = async () => {
+  try {
+    const response = await API.get(`api/gallery/imgGet`);
+    return response.data;
+  } catch (error) {
+    console.error("gallery 페이지 이미지 불러오기 실패", error);
+  }
+};
+
+export const PostGalleryImages = async (formData: FormData) => {
+  try {
+    const response = await API.post(`api/gallery/imgUpdate`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("gallery 페이지 이미지 전송 실패", error);
+  }
+};
+
+export const EditGalleryImges = async (newArray: GallerySlide[]) => {
+  try {
+    const response = await API.post(`/api/gallery/imgEdit`, newArray);
+    return response;
+  } catch (err) {
+    console.error("Gallery 페이지 이미지 수정하기 실패", err);
+  }
+};
+
+export const PostMainPage = async (formData: FormData) => {
+  try {
+    const response = await API.post(`api/Main/AboutData`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("메인페이지 데이터 전송 실패", error);
+  }
+};
+
+export const GetMainAbout = async () => {
+  try {
+    const response = await API.get(`api/Main/GetAboutData`);
+    return response.data;
+  } catch (error) {
+    console.error("메인페이지 데이터 불러오기 실패", error);
+  }
+};
+
+export const GetGalleryImg = async () => {
+  try {
+    const response = await API.get(`api/Main/GetGalleryImg`);
+    return response.data;
+  } catch (error) {
+    console.error("메인페이지 데이터 불러오기 실패", error);
+  }
+};
+
+export const GetGalleryPage = async () => {
+  try {
+    const response = await API.get(`api/gallery/GetGalleryPage`);
+    return response.data;
+  } catch (error) {
+    console.error("갤러리 이미지 불러오기 실패", error);
   }
 };

@@ -88,6 +88,7 @@ export default function SaveImgSection({
           >
             {files.map((file, index) => (
               <ImgListItem
+                key={index}
                 file={file}
                 index={index}
                 files={files}

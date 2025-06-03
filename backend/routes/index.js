@@ -26,6 +26,19 @@ const {
   PutUpdateConfirm,
   PutUnUpdateConfirm,
   PostQuestionSubmit,
+  PostMatchPassword,
+  GetQuestion,
+  GetAnswer,
+  PostAnswerSubmit,
+  DeleteQuestion,
+  GetSearch,
+  GetGalleryImgUpload,
+  PostGalleryImgUpload,
+  EditGalleryImgEdit,
+  PostMainPage,
+  GetMainAbout,
+  GetMainGallery,
+  GetGalleryPage,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -51,5 +64,18 @@ router.post("/AdminReservation/ChangeState", PostChangeState);
 router.put("/AdminReservation/confirm", PutUpdateConfirm);
 router.put("/AdminReservation/Unconfirm", PutUnUpdateConfirm);
 router.post("/Question/submit", PostQuestionSubmit);
+router.post("/Question/Password", PostMatchPassword);
+router.get("/Question/search", GetSearch);
+router.get("/Question/:id", GetQuestion);
+router.get("/Answer/:id", GetAnswer);
+router.post("/Answer/Submit/:id", PostAnswerSubmit);
+router.delete("/Question/delete/:id", DeleteQuestion);
+router.get("/gallery/imgGet", GetGalleryImgUpload);
+router.post("/gallery/imgUpdate", PostGalleryImgUpload);
+router.post("/gallery/imgEdit", EditGalleryImgEdit);
+router.get("/gallery/GetGalleryPage", GetGalleryPage);
+router.post("/Main/AboutData", PostMainPage);
+router.get("/Main/GetAboutData", GetMainAbout);
+router.get("/Main/GetGalleryImg", GetMainGallery);
 
 module.exports = router;

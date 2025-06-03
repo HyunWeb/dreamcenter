@@ -2,7 +2,11 @@ import { GetPageCount } from "@/api/postApi";
 import React, { SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import { FormData, QuestionData } from "@/types/forms";
-import { ReservationMyListStore } from "@/store/userStore";
+import {
+  ReservationMyListStore,
+  SearchStore,
+  UseModalStore,
+} from "@/store/userStore";
 const Div = styled.div`
   display: flex;
   align-items: center;
@@ -58,9 +62,6 @@ const PageButton = styled.button`
   cursor: pointer;
   font-size: 16px;
 `;
-//FormData[] | QuestionData[]
-// type CommonFormSetter<T> = React.Dispatch<React.SetStateAction<T[]>>;
-
 interface MyListSectionProps<T> {
   form: T[];
   setForm: React.Dispatch<React.SetStateAction<T[]>>;
@@ -74,6 +75,8 @@ export default function PageCountUI<T>({
 }: MyListSectionProps<T>) {
   const { pageCount, setPageCount, currentPage, setCurrentPage } =
     ReservationMyListStore();
+  const { isModalOpen, setIsModalOpen } = UseModalStore();
+  const { searchList, searchData } = SearchStore();
 
   const PageCount = async () => {
     const res = await GetPageCount(type, currentPage);
@@ -81,20 +84,33 @@ export default function PageCountUI<T>({
       console.error("데이터 결과 없음");
       return;
     }
-    console.log(res);
+
     // 결과인 숫자를 바탕으로 필요한 페이지 수만큼 배열 생성
     setPageCount(Array.from({ length: res.result }, (_, i) => i + 1));
     setForm(res.TotalItems);
   };
 
+  const SearchPageCount = async () => {
+    const limit = 10;
+    const NeedPage = Math.ceil(searchData.length / limit);
+    const offset = (currentPage - 1) * limit;
+    const sliced = searchData.slice(offset, offset + limit) as T[];
+    setPageCount(Array.from({ length: NeedPage }, (_, i) => i + 1));
+    setForm(sliced);
+  };
+
   useEffect(() => {
     setCurrentPage(1);
-  }, []);
+  }, [searchList]);
 
   useEffect(() => {
     // 현재 페이지 값이 바뀐게 확인되어야만 데이터를 새로 요청한다.
-    PageCount();
-  }, [currentPage]);
+    if (type === "SearchList") {
+      SearchPageCount();
+    } else {
+      PageCount();
+    }
+  }, [currentPage, searchList, searchData, isModalOpen]);
 
   const handleChangePage = async (index: number) => {
     setCurrentPage(index);

@@ -1,5 +1,5 @@
 import PageHeader from "@/components/common/PageHeader";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TableForm from "./Reservation/TableForm";
 import Button from "@/components/common/Button";
@@ -8,16 +8,8 @@ import PageCountUI from "@/components/common/PageCountUI";
 import { QuestionData } from "@/types/forms";
 import QTableLIstItems from "./Question/QTableLIstItems";
 import ModalUI from "@/components/common/ModalUI";
-import { ControlModalStore } from "@/store/userStore";
-
-const Section = styled.section`
-  background-color: #f8f8f8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 0;
-  margin: 50px 0 30px;
-`;
+import { ControlModalStore, SearchStore } from "@/store/userStore";
+import Search from "./Question/Search";
 
 const Div = styled.div`
   display: flex;
@@ -34,17 +26,17 @@ const ButtonWrap = styled.div`
 export default function QuestionsPage() {
   const { viewModal } = ControlModalStore();
   const [form, setForm] = useState<QuestionData[]>([]);
+  const { searchList, setSearchList } = SearchStore();
+
+  useEffect(() => {
+    setSearchList(false);
+    return () => setSearchList(false); // cleanup
+  }, []);
+
   return (
     <Div>
       <PageHeader title="질문게시판" root="질문게시판" />
-      <Section>
-        <select name="" id="">
-          <option value="제목">제목</option>
-          <option value="글쓴이">글쓴이</option>
-        </select>
-        <input type="text" placeholder="검색어를 입력하세요" />
-        <button>확인</button>
-      </Section>
+      <Search setForm={setForm} />
       <TableForm<QuestionData>
         form={form}
         headers={["번호", "제목", "글쓴이", "등록일", "답변여부"]}
@@ -58,11 +50,20 @@ export default function QuestionsPage() {
           <Button name="글쓰기" Bgcolor="green" TitleColor="white" />
         </Link>
       </ButtonWrap>
-      <PageCountUI<QuestionData>
-        type="QuestionSubmitList"
-        form={form}
-        setForm={setForm}
-      />
+
+      {searchList ? (
+        <PageCountUI<QuestionData>
+          type="SearchList"
+          form={form}
+          setForm={setForm}
+        />
+      ) : (
+        <PageCountUI<QuestionData>
+          type="QuestionSubmitList"
+          form={form}
+          setForm={setForm}
+        />
+      )}
       {viewModal && <ModalUI />}
     </Div>
   );

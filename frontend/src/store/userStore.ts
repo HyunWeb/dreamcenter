@@ -1,3 +1,4 @@
+import { MainDataProps, QuestionData } from "@/types/forms";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -64,13 +65,21 @@ export const WriteAboutStore = create<WriteAboutStoreProps>((set) => ({
   setEditSection: (state: boolean) => set({ editSection: state }),
 }));
 
-interface AboutAndOfficeStoreProps {
+interface UseModalStoreProps {
   isModalOpen: boolean;
+  ImageModal: boolean;
+  ImageSrc: string;
   setIsModalOpen: (state: boolean) => void;
+  setImageModal: (state: boolean) => void;
+  setImageSrc: (state: string) => void;
 }
-export const AboutAndOfficeStore = create<AboutAndOfficeStoreProps>((set) => ({
+export const UseModalStore = create<UseModalStoreProps>((set) => ({
   isModalOpen: false,
+  ImageModal: false,
+  ImageSrc: "",
   setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
+  setImageModal: (state: boolean) => set({ ImageModal: state }),
+  setImageSrc: (state: string) => set({ ImageSrc: state }),
 }));
 
 type FileItem = {
@@ -220,9 +229,69 @@ export const QuestionWritePageStore = create<QuestionWritePageProps>((set) => ({
 
 interface ControlModalProps {
   viewModal: boolean;
+  postId: number | null;
   setViewModal: (state: boolean) => void;
+  setPostId: (state: number) => void;
 }
 export const ControlModalStore = create<ControlModalProps>((set) => ({
   viewModal: false,
+  postId: null,
   setViewModal: (state) => set({ viewModal: state }),
+  setPostId: (state) => set({ postId: state }),
+}));
+
+interface SearchProps {
+  searchList: boolean;
+  searchData: QuestionData[];
+  setSearchList: (state: boolean) => void;
+  setSearchData: (state: QuestionData[]) => void;
+}
+
+export const SearchStore = create<SearchProps>((set) => ({
+  searchList: false,
+  searchData: [],
+  setSearchList: (state) => set({ searchList: state }),
+  setSearchData: (state) => set({ searchData: state }),
+}));
+
+interface MainProps {
+  title1: string;
+  title2: string;
+  message: string;
+  isModalOpen: boolean;
+  file: FileItem[];
+  MainAbout: MainDataProps;
+  setTitle1: (state: string) => void;
+  setTitle2: (state: string) => void;
+  setMessage: (state: string) => void;
+  setIsModalOpen: (state: boolean) => void;
+  setFiles: (value: FileItem[] | ((prev: FileItem[]) => FileItem[])) => void;
+  setMainAbout: (state: MainDataProps) => void;
+}
+
+export const MainStore = create<MainProps>((set) => ({
+  title1: "",
+  title2: "",
+  message: "",
+  isModalOpen: false,
+  file: [],
+  MainAbout: {
+    id: 1,
+    title_main: "",
+    title_sub: "",
+    content: "",
+    image_url: "",
+  },
+  setTitle1: (state: string) => set({ title1: state }),
+  setTitle2: (state: string) => set({ title2: state }),
+  setMessage: (state: string) => set({ message: state }),
+  setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
+  setFiles: (updater) =>
+    set((state) => ({
+      file:
+        typeof updater === "function"
+          ? (updater as (prev: FileItem[]) => FileItem[])(state.file)
+          : updater,
+    })),
+  setMainAbout: (state: MainDataProps) => set({ MainAbout: state }),
 }));

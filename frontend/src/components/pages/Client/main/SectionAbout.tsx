@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { MainStore } from "@/store/userStore";
+import { GetMainAbout } from "@/api/postApi";
 
 const AboutSection = styled.section<{ $imageUrl: string }>`
   display: flex;
@@ -12,7 +14,7 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
   margin-bottom: 120px;
 
   height: 633px;
-  overflow: hidden;
+  /* overflow: hidden; */
 
   button {
     width: 86px;
@@ -22,8 +24,6 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
     right: 10px;
     top: 10px;
     background-color: transparent;
-    /*background-image: url("./edit.svg");
-    background-repeat: no-repeat; */
 
     color: white;
     border: none;
@@ -37,17 +37,17 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
 
   &::before {
     content: "";
-    width: 100%;
+    width: 100vw;
     height: 100%;
     position: absolute;
     z-index: 0;
 
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
       url(${(props) => props.$imageUrl});
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    filter: blur(2px);
+    /* filter: blur(1.8px); */
   }
 
   div {
@@ -86,13 +86,28 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
   }
 `;
 
+const Paragraph = styled.p`
+  white-space: pre-line;
+`;
 export default function SectionAbout() {
+  const { setIsModalOpen, MainAbout, setMainAbout } = MainStore();
   const [imageUrl, setImageUrl] = useState<string>(
     "https://dreamcenter-image-bucket.s3.ap-northeast-2.amazonaws.com/uploads/Layer+3.png"
   );
+
+  useEffect(() => {
+    const fetchMain = async () => {
+      const res = await GetMainAbout();
+      if (res.result) {
+        setMainAbout(res.result);
+        setImageUrl(res.result.image_url);
+      }
+    };
+    fetchMain();
+  }, []);
   return (
-    <AboutSection $imageUrl={imageUrl}>
-      <button>
+    <AboutSection $imageUrl={imageUrl || "defaultBanner.png"}>
+      <button onClick={() => setIsModalOpen(true)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -109,13 +124,15 @@ export default function SectionAbout() {
         </svg>
       </button>
       <div>
-        <h1>해외 의대 전문 유학원</h1>
-        <h2>드림유학원, 당신의 글로벌 미래를 응원합니다.</h2>
-        <p>
-          2020 ~ 2025 우즈베키스탄 의대 전체 수속 학생수 1위
-          <br />
-          2020 ~ 2025 우즈베키스탄 의대 편입 성공 학생수 1위
-        </p>
+        <h1>{MainAbout?.title_main || "해외 의대 전문 유학원"}</h1>
+        <h2>
+          {MainAbout?.title_sub ||
+            "드림유학원, 당신의 글로벌 미래를 응원합니다."}
+        </h2>
+        <Paragraph>
+          {MainAbout?.content ||
+            "2020 ~ 2025 우즈베키스탄 의대 전체 수속 학생수 1위"}
+        </Paragraph>
         <Link to="/about">자세히 보기</Link>
       </div>
     </AboutSection>

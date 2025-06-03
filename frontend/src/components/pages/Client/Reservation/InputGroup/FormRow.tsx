@@ -15,6 +15,7 @@ const Label = styled.label`
   font-size: 18px;
   font-weight: 500;
   width: 20%;
+  min-width: 180px;
   display: block;
   text-align: left;
 `;
