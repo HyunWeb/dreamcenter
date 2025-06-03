@@ -62,9 +62,6 @@ const PageButton = styled.button`
   cursor: pointer;
   font-size: 16px;
 `;
-//FormData[] | QuestionData[]
-// type CommonFormSetter<T> = React.Dispatch<React.SetStateAction<T[]>>;
-
 interface MyListSectionProps<T> {
   form: T[];
   setForm: React.Dispatch<React.SetStateAction<T[]>>;

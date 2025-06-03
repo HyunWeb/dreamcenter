@@ -72,3 +72,19 @@ export type MainDataProps = {
   content: string;
   image_url: string;
 };
+
+export type ImageItem = {
+  id: number;
+  name: string;
+  image_url: string;
+  sort_order: number;
+  created_at: string; // ISO 날짜 문자열 (예: "2025-05-17T16:01:50.000Z")
+};
+
+export type NewsItem = {
+  title: string;
+  description: string;
+  date: string; // 예: "2025.05.01.23:25"
+  img: string; // 썸네일 이미지 URL
+  link: string; // 원문 링크 (네이버 블로그 등)
+};

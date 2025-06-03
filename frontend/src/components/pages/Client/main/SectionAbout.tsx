@@ -14,7 +14,7 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
   margin-bottom: 120px;
 
   height: 633px;
-  overflow: hidden;
+  /* overflow: hidden; */
 
   button {
     width: 86px;
@@ -24,8 +24,6 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
     right: 10px;
     top: 10px;
     background-color: transparent;
-    /*background-image: url("./edit.svg");
-    background-repeat: no-repeat; */
 
     color: white;
     border: none;
@@ -39,17 +37,17 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
 
   &::before {
     content: "";
-    width: 100%;
+    width: 100vw;
     height: 100%;
     position: absolute;
     z-index: 0;
 
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
       url(${(props) => props.$imageUrl});
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    filter: blur(2px);
+    /* filter: blur(1.8px); */
   }
 
   div {

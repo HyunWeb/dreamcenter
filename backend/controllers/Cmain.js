@@ -520,7 +520,7 @@ exports.GetPageCount = async (req, res) => {
   const token = req.cookies.token;
   // 10개로 바꾸기
   // 한페이지에 받아올 아이템 수
-  const limit = type === "GalleryImage" ? 20 : 10;
+  const limit = 10;
 
   // 시작 인덱스 구하기
   const startIndex = (page - 1) * limit;
@@ -562,14 +562,13 @@ exports.GetPageCount = async (req, res) => {
         });
         break;
 
-      case "GalleryImage":
-        result = await GalleryImage.count();
-        TotalItems = await GalleryImage.findAll({
-          limit: limit,
-          offset: startIndex,
-          // order: [["created_at", "DESC"]],
-        });
-        break;
+      // case "GalleryImage":
+      //   result = await GalleryImage.count();
+      //   TotalItems = await GalleryImage.findAll({
+      //     limit: limit,
+      //     offset: startIndex,
+      //   });
+      //   break;
 
       default:
         return res.status(400).json({ message: "유효하지 않은 type" });
@@ -602,7 +601,6 @@ exports.PostChangeState = async (req, res) => {
 exports.PutUpdateConfirm = async (req, res) => {
   const ids = req.body.ids;
   try {
-    console.log(ids); // [ 21, 20 ]
     const response = await ReservationSubmit.update(
       { is_confirmed: true },
       { where: { id: ids } }
@@ -956,6 +954,39 @@ exports.GetMainAbout = async (req, res) => {
       where: { id: 1 },
     });
     return res.status(200).json({ result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 불러오기 실패(서버)" });
+  }
+};
+
+exports.GetMainGallery = async (req, res) => {
+  try {
+    const count = await GalleryImage.count();
+    if (count === 0) {
+      return res.status(200).json({ success: false }); // 불러올 사진이 없습니다.
+    }
+    const result = await GalleryImage.findAll({
+      limit: 8,
+      offset: 0,
+      order: sequelize.literal("RAND()"),
+      // order: [["created_at", "DESC"]],
+    });
+    return res.status(200).json({ success: true, result: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "답변 불러오기 실패(서버)" });
+  }
+};
+
+exports.GetGalleryPage = async (req, res) => {
+  try {
+    const count = await GalleryImage.count();
+    if (count === 0) {
+      return res.status(200).json({ success: false }); // 불러올 사진이 없습니다.
+    }
+    const result = await GalleryImage.findAll({});
+    return res.status(200).json({ success: true, result: result });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "답변 불러오기 실패(서버)" });

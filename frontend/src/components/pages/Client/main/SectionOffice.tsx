@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CustomLink from "../../../common/CustomLink";
+import { ImgPreviewStore } from "@/store/userStore";
+import { GetOfficeImages } from "@/api/postApi";
+import { ImageItem } from "@/types/forms";
 
 const Section = styled.section`
   margin-bottom: 120px;
@@ -35,6 +38,19 @@ const Ul = styled.ul`
 `;
 
 export default function SectionOffice() {
+  const { imgList } = ImgPreviewStore();
+  const [OfficeImg, setOfficeImg] = useState<ImageItem[]>();
+  useEffect(() => {
+    const fetchImage = async () => {
+      const response = await GetOfficeImages();
+      setOfficeImg(response.slides);
+    };
+    fetchImage();
+  }, [imgList]);
+
+  useEffect(() => {
+    console.log(OfficeImg);
+  }, [OfficeImg]);
   return (
     <Section>
       <div>
@@ -46,27 +62,17 @@ export default function SectionOffice() {
         <CustomLink to={"office"} />
       </div>
       <Ul>
-        <li>
-          <img
-            src="https://dreamcenter-image-bucket.s3.ap-northeast-2.amazonaws.com/uploads/%E1%84%92%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%B5+%E1%84%89%E1%85%A1%E1%84%86%E1%85%AE%E1%84%89%E1%85%B5%E1%86%AF+0.jpg"
-            alt="타슈켄트 사무소 사진1"
-            loading="lazy"
-          />
-        </li>
-        <li>
-          <img
-            src="https://dreamcenter-image-bucket.s3.ap-northeast-2.amazonaws.com/uploads/%E1%84%92%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%B5+%E1%84%89%E1%85%A1%E1%84%86%E1%85%AE%E1%84%89%E1%85%B5%E1%86%AF+1.JPG"
-            alt="타슈켄트 사무소 사진2"
-            loading="lazy"
-          />
-        </li>
-        <li>
-          <img
-            src="https://dreamcenter-image-bucket.s3.ap-northeast-2.amazonaws.com/uploads/%E1%84%92%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%B5+%E1%84%89%E1%85%A1%E1%84%86%E1%85%AE%E1%84%89%E1%85%B5%E1%86%AF+2.JPG"
-            alt="타슈켄트 사무소 사진3"
-            loading="lazy"
-          />
-        </li>
+        {OfficeImg?.map((item, index) => {
+          return (
+            <li key={index}>
+              <img
+                src={item.image_url}
+                alt="타슈켄트 사무소 사진"
+                loading="lazy"
+              />
+            </li>
+          );
+        })}
       </Ul>
     </Section>
   );

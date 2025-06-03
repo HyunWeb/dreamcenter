@@ -1,45 +1,34 @@
 import Button from "@/components/common/Button";
 import PageHeader from "@/components/common/PageHeader";
+import Masonry from "react-masonry-css";
 import { ControlModalStore, UseModalStore } from "@/store/userStore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import EditModal from "./About&Office/EditModal";
 import PageCountUI from "@/components/common/PageCountUI";
-import { GetGalleryImages } from "@/api/postApi";
+import { GetGalleryImages, GetGalleryPage } from "@/api/postApi";
 import { GallerySlide } from "@/types/forms";
 import ImageOverlay from "@/components/common/ImageOverlay";
 
+const breakpointColumnsObj = {
+  default: 3,
+  1100: 2,
+  700: 1,
+};
+
 const Div = styled.div`
   margin-bottom: 170px;
+  img {
+    width: 100%;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
 `;
 
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
-`;
-
-const Ul = styled.ul`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-`;
-const Li = styled.li`
-  padding: 12px;
-  box-sizing: border-box;
-  width: 25%;
-  min-width: 276px;
-  overflow: hidden;
-  aspect-ratio: 1 / 1; // 1:1 정사각형
-  cursor: pointer;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
 `;
 
 export default function GalleryPage() {
@@ -56,6 +45,16 @@ export default function GalleryPage() {
     setIsModalOpen(!isModalOpen);
   };
 
+  useEffect(() => {
+    const fatchGalleryImg = async () => {
+      const res = await GetGalleryPage();
+      if (res.success) {
+        setForm(res.result);
+      }
+    };
+    fatchGalleryImg();
+  }, []);
+
   const handleOverlay = (ImgSrc: string) => {
     setImageModal(true);
     setImageSrc(ImgSrc);
@@ -71,20 +70,22 @@ export default function GalleryPage() {
           onClick={handleModalOpen}
         />
       </ButtonWrap>
-      <Ul>
-        {form.map((item, index) => {
-          return (
-            <Li onClick={() => handleOverlay(item.image_url)} key={index}>
-              <img src={item.image_url} alt="갤러리 이미지" />
-            </Li>
-          );
-        })}
-      </Ul>
-      <PageCountUI<GallerySlide>
-        form={form}
-        setForm={setForm}
-        type="GalleryImage"
-      />
+
+      <Masonry
+        breakpointCols={breakpointColumnsObj}
+        className="my-masonry-grid"
+        columnClassName="my-masonry-grid_column"
+      >
+        {form?.map((img, index) => (
+          <img
+            key={index}
+            src={img.image_url}
+            alt="드림 유학원 관련 이미지"
+            loading="lazy"
+            onClick={() => handleOverlay(img.image_url)}
+          />
+        ))}
+      </Masonry>
 
       {ImageModal && <ImageOverlay />}
       {isModalOpen && <EditModal />}

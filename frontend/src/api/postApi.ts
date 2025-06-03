@@ -378,3 +378,21 @@ export const GetMainAbout = async () => {
     console.error("메인페이지 데이터 불러오기 실패", error);
   }
 };
+
+export const GetGalleryImg = async () => {
+  try {
+    const response = await API.get(`api/Main/GetGalleryImg`);
+    return response.data;
+  } catch (error) {
+    console.error("메인페이지 데이터 불러오기 실패", error);
+  }
+};
+
+export const GetGalleryPage = async () => {
+  try {
+    const response = await API.get(`api/gallery/GetGalleryPage`);
+    return response.data;
+  } catch (error) {
+    console.error("갤러리 이미지 불러오기 실패", error);
+  }
+};
