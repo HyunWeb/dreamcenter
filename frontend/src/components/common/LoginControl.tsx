@@ -55,6 +55,7 @@ export default function LoginControl() {
     }&redirect_uri=${encodeURIComponent(
       process.env.REACT_APP_REDIRECT_URI!
     )}&state=${STATE}`;
+    console.log("NAVER ID:", process.env.REACT_APP_NAVER_CLIENT_ID);
 
     localStorage.setItem("naver_oauth_state", STATE);
     window.location.href = url;
