@@ -5,15 +5,23 @@ import { createJSONStorage, persist } from "zustand/middleware";
 type UserState = {
   isLogin: boolean;
   userName: string;
+  role: string;
+  user_id: string;
   setIsLogin: (state: boolean) => void;
   setUserName: (name: string) => void;
+  setRole: (name: string) => void;
+  setUser_id: (user_id: string) => void;
 };
 
 export const useUserStore = create<UserState>((set) => ({
   isLogin: false,
   userName: "",
+  role: "",
+  user_id: "",
   setIsLogin: (state) => set({ isLogin: state }),
   setUserName: (name) => set({ userName: name }),
+  setRole: (role) => set({ role: role }),
+  setUser_id: (id) => set({ user_id: id }),
 }));
 
 type Slide = {

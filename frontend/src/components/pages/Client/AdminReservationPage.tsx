@@ -61,7 +61,6 @@ const ButtonBox = styled.div`
 `;
 export default function AdminReservationPage() {
   const [form, setForm] = useState<FormData[]>([]);
-  // const [detail, setDetail] = useState<FormData[]>([]);
   const { isLogin } = useUserStore();
   const navigate = useNavigate();
   const { viewMode, setViewMode } = ReservationMyListStore();
@@ -83,7 +82,6 @@ export default function AdminReservationPage() {
       navigate("/", { replace: true });
     }
     setViewMode(["list", 0]);
-    console.log(form);
   }, []);
 
   const handleViewMode = () => {
@@ -93,7 +91,6 @@ export default function AdminReservationPage() {
   const handleCheck = async () => {
     if (!currentDetail) return;
     const res = await ChangeChackState(currentDetail?.id);
-    console.log(res.message);
     setViewMode(["list", 0]);
   };
   return (

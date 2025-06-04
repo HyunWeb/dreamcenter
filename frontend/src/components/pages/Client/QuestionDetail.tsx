@@ -9,6 +9,7 @@ import DetailQuestion from "./Question/DetailQuestion";
 import DetailButtons from "./Question/DetailButtons";
 import DetailAnswer from "./Question/DetailAnswer";
 import WriteAnswer from "./Question/WriteAnswer";
+import { useUserStore } from "@/store/userStore";
 
 const Div = styled.div`
   margin-bottom: 170px;
@@ -47,6 +48,7 @@ export default function QuestionDetail() {
         ViewWriteAnswer={ViewWriteAnswer}
         setVeiwWriteAnswer={setVeiwWriteAnswer}
         answer={answer}
+        sns_id={question?.sns_id}
       />
       {question && <DetailQuestion question={question} />}
       {answer && <DetailAnswer answer={answer} />}

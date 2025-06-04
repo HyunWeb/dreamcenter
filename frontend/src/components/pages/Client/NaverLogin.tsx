@@ -8,15 +8,19 @@ export default function NaverLogin() {
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
   const state = searchParams.get("state");
-  const { setIsLogin, setUserName } = useUserStore();
+  const { setIsLogin, setUserName, setRole, setUser_id } = useUserStore();
   const navigate = useNavigate();
 
   useEffect(() => {
+    const storedState = localStorage.getItem("naver_oauth_state"); // 위조 방지를 위한 확인
+    localStorage.removeItem("naver_oauth_state");
     if (code) {
-      postLogin({ code, state })
+      postLogin({ code, state, originalState: storedState })
         .then((userData) => {
           setIsLogin(true);
           setUserName(userData.user.name);
+          setRole(userData.user.role);
+          setUser_id(userData.user.sns_id);
           // 로그인 완료 시 다시 페이지 이동
           const redirectTo =
             localStorage.getItem("naver_redirect_after_login") || "/";

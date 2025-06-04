@@ -58,12 +58,10 @@ export default function EditModal() {
         response = await GetGalleryImages();
       }
       if (!response) {
-        console.log(response);
         alert("데이터가 없습니다.");
         return;
       }
       setExistingImages(response.slides);
-      console.log(response.slides);
     };
     getImageFetch();
   }, [files]);

@@ -4,6 +4,7 @@ import { getNews } from "../../../api/postApi";
 import styled from "styled-components";
 import NewsCard from "./News/NewsCard";
 import PageHeader from "../../common/PageHeader";
+import { useUserStore } from "@/store/userStore";
 
 interface NewsDataProps {
   date: string;
@@ -37,10 +38,12 @@ const Section = styled.section`
   flex-wrap: wrap;
   justify-content: space-evenly;
 
+  margin-top: 70px;
   margin-bottom: 120px;
 `;
 export default function NewsPage() {
   const [newsList, setNewsList] = useState<NewsDataProps[]>([]);
+  const { role } = useUserStore();
 
   const fetchNews = async () => {
     const res = await getNews();
@@ -59,7 +62,9 @@ export default function NewsPage() {
     <Div>
       <PageHeader title={"소식"} root={"소식"} />
 
-      <button onClick={handleSyncClick}>블로그 동기화</button>
+      {role === "admin" && (
+        <button onClick={handleSyncClick}>블로그 동기화</button>
+      )}
       <Section>
         {newsList &&
           newsList?.map((item, index) => {

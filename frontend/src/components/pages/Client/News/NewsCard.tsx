@@ -52,7 +52,7 @@ export default function NewsCard({
   link,
 }: NewsDataProps) {
   return (
-    <LinkBlock href={link} $imageUrl={img}>
+    <LinkBlock href={link} $imageUrl={img} target="_blank">
       <article>
         <Source>네이버 블로그</Source>
         <h3 className="middle-title">{title}</h3>

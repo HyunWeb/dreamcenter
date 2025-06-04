@@ -1,4 +1,4 @@
-import { WriteAboutStore } from "@/store/userStore";
+import { useUserStore, WriteAboutStore } from "@/store/userStore";
 import Button from "../../../common/Button";
 import React, { useEffect } from "react";
 import styled from "styled-components";
@@ -30,6 +30,7 @@ const DefaultText = styled.p`
 export default function ViewBox() {
   const { setEditSection, setContent, aboutTextData, setAboutTextData } =
     WriteAboutStore();
+  const { role } = useUserStore();
   const location = useLocation();
 
   useEffect(() => {
@@ -51,12 +52,14 @@ export default function ViewBox() {
   };
   return (
     <ViewSection>
-      <EditButton
-        name="내용 수정"
-        Bgcolor="green"
-        TitleColor="white"
-        onClick={OpenHandler}
-      />
+      {role === "admin" && (
+        <EditButton
+          name="내용 수정"
+          Bgcolor="green"
+          TitleColor="white"
+          onClick={OpenHandler}
+        />
+      )}
       {aboutTextData === "" ? (
         <DefaultText>내용을 입력해주세요</DefaultText>
       ) : (

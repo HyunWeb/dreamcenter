@@ -86,7 +86,7 @@ export default function WriteAnswer({ setVeiwWriteAnswer, answer }: Props) {
   const handleAnserSubmit = async () => {
     if (!id) return;
     const res = await PostAnswerSubmit(id, message);
-    console.log(res);
+
     if (res.success) {
       setVeiwWriteAnswer(false);
     }

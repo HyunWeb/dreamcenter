@@ -4,6 +4,7 @@ const {
   getPosts,
   postLogin,
   getLogin,
+  getLoginState,
   postLogout,
   postUpload,
   getNews,
@@ -42,6 +43,7 @@ const {
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
+router.get("/user/me", getLoginState);
 router.post("/naver/callback", postLogin);
 router.post("/auth/logout", postLogout);
 router.post("/upload", postUpload);
