@@ -66,8 +66,40 @@ exports.postUpload = [
   },
 ];
 
+exports.getLoginState = async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.json({ code: "NO_TOKEN", message: "로그인이 필요합니다." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({ where: { sns_id: decoded.userID } });
+    res.status(200).json({
+      code: "SUCCESS",
+      name: user.name,
+      role: user.role,
+      sns_id: user.sns_id,
+    }); // 필요한 정보만 응답
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ code: "TOKEN_EXPIRED", message: "세션이 만료되었습니다." });
+    }
+    return res
+      .status(401)
+      .json({ code: "INVALID_TOKEN", message: "잘못된 인증 정보입니다." });
+  }
+};
+
 exports.postLogin = async (req, res) => {
-  const { code, state } = req.body;
+  const { code, state, originalState } = req.body;
+
+  if (state !== originalState) {
+    alert("위조된 요청일 가능성이 있습니다. 로그인 취소");
+    return;
+  }
 
   try {
     // 네이버로부터 엑세스 토큰 요청
@@ -113,6 +145,7 @@ exports.postLogin = async (req, res) => {
         mobile: userData.mobile,
         birthyear: userData.birthyear,
         birthday: userData.birthday,
+        role: userData.email === "jonghyun1803@naver.com" ? "admin" : "user",
       });
     } else {
       user = existingUser;
@@ -605,7 +638,7 @@ exports.PutUpdateConfirm = async (req, res) => {
       { is_confirmed: true },
       { where: { id: ids } }
     );
-    console.log("업데이트 완료", response);
+
     res.status(200).json({ success: true, updatedCount: response[0] });
   } catch (err) {
     console.error(err);
@@ -620,7 +653,6 @@ exports.PutUnUpdateConfirm = async (req, res) => {
       { is_confirmed: false },
       { where: { id: ids } }
     );
-    console.log("업데이트 완료", response);
     return res.status(200).json({ success: true, updatedCount: response[0] });
   } catch (err) {
     console.error(err);
@@ -674,7 +706,7 @@ exports.PostQuestionSubmit = [
         privatePWD: form.privatePWD,
         is_confirmed: false,
       };
-      console.log(submitData);
+
       await QuestionSubmit.create(submitData);
 
       res.status(201).json({ message: true });
@@ -730,7 +762,6 @@ exports.PostAnswerSubmit = async (req, res) => {
     content: message,
   };
   try {
-    console.log(postId, message);
     // 사전에 존재하던 데이터를 가져와본다.
     const prevData = await Answer.findOne({ where: { question_id: postId } });
     let result;
@@ -794,7 +825,6 @@ exports.GetSearch = async (req, res) => {
       where,
       order: [["createdAt", "DESC"]],
     });
-    console.log(result);
     res.status(200).json({ success: true, result });
   } catch (err) {
     console.error(err);

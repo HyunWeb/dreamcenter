@@ -18,16 +18,24 @@ export const getUserInfo = async () => {
   }
 };
 
-// 로그인 요청
-export const postLogin = async ({ code, state }: any) => {
+export const checkLoginStatus = async () => {
+  let response;
   try {
-    const response = await API.post(`/api/naver/callback`, { code, state });
-    const storedState = localStorage.getItem("naver_oauth_state");
+    response = await API.get("/api/user/me"); // 쿠키 포함 요청
+    return response.data;
+  } catch (error: any) {
+    console.error("로그인 상태 확인 실패", error);
+  }
+};
 
-    if (state !== storedState) {
-      alert("위조된 요청일 가능성이 있습니다. 로그인 취소");
-      return;
-    }
+// 로그인 요청
+export const postLogin = async ({ code, state, originalState }: any) => {
+  try {
+    const response = await API.post(`/api/naver/callback`, {
+      code,
+      state,
+      originalState,
+    });
 
     return response.data;
   } catch (error) {

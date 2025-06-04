@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import LoginControl from "./LoginControl";
+import { useUserStore } from "@/store/userStore";
 
 const Nav = styled.nav`
   display: flex;
@@ -17,39 +18,45 @@ const Ul = styled.ul`
     display: block;
     padding: 20px 20px;
   }
+
+  .active {
+    font-weight: 600;
+    color: #49b736;
+    border-bottom: 2px solid #49b736;
+  }
 `;
 
 export default function Gnb() {
+  const { role } = useUserStore();
+  const navItems = [
+    { to: "/", label: "Home" },
+    { to: "about", label: "About" },
+    { to: "office", label: "사무소" },
+    { to: "news", label: "소식" },
+    { to: "questions", label: "질문게시판" },
+    { to: "reservation", label: "예약상담" },
+    { to: "gallery", label: "갤러리" },
+    { to: "location", label: "오시는길" },
+    // { to: "adminReservation", label: "예약관리" },
+  ];
   return (
     <Nav>
       <Ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="about">About</Link>
-        </li>
-        <li>
-          <Link to="office">사무소</Link>
-        </li>
-        <li>
-          <Link to="news">소식</Link>
-        </li>
-        <li>
-          <Link to="questions">질문게시판</Link>
-        </li>
-        <li>
-          <Link to="reservation">예약상담</Link>
-        </li>
-        <li>
-          <Link to="gallery">갤러리</Link>
-        </li>
-        <li>
-          <Link to="location">오시는길</Link>
-        </li>
-        <li>
-          <Link to="adminReservation">예약관리</Link>
-        </li>
+        {navItems.map((item) => (
+          <li key={item.to}>
+            <NavLink
+              to={item.to}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              {item.label}
+            </NavLink>
+          </li>
+        ))}
+        {role === "admin" && (
+          <li>
+            <NavLink to="adminReservation">예약관리</NavLink>
+          </li>
+        )}
       </Ul>
       <LoginControl />
     </Nav>

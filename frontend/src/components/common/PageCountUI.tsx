@@ -86,13 +86,15 @@ export default function PageCountUI<T>({
     }
 
     // 결과인 숫자를 바탕으로 필요한 페이지 수만큼 배열 생성
-    setPageCount(Array.from({ length: res.result }, (_, i) => i + 1));
+    setPageCount(
+      Array.from({ length: res.result ? res.result : 1 }, (_, i) => i + 1)
+    );
     setForm(res.TotalItems);
   };
 
   const SearchPageCount = async () => {
     const limit = 10;
-    const NeedPage = Math.ceil(searchData.length / limit);
+    const NeedPage = Math.ceil(searchData.length / limit) || 1;
     const offset = (currentPage - 1) * limit;
     const sliced = searchData.slice(offset, offset + limit) as T[];
     setPageCount(Array.from({ length: NeedPage }, (_, i) => i + 1));

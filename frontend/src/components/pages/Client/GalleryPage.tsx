@@ -1,7 +1,11 @@
 import Button from "@/components/common/Button";
 import PageHeader from "@/components/common/PageHeader";
 import Masonry from "react-masonry-css";
-import { ControlModalStore, UseModalStore } from "@/store/userStore";
+import {
+  ControlModalStore,
+  UseModalStore,
+  useUserStore,
+} from "@/store/userStore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import EditModal from "./About&Office/EditModal";
@@ -22,6 +26,9 @@ const Div = styled.div`
     width: 100%;
     margin-bottom: 16px;
     cursor: pointer;
+  }
+  .my-masonry-grid {
+    margin-top: 70px;
   }
 `;
 
@@ -44,6 +51,7 @@ export default function GalleryPage() {
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
   };
+  const { role } = useUserStore();
 
   useEffect(() => {
     const fatchGalleryImg = async () => {
@@ -62,14 +70,16 @@ export default function GalleryPage() {
   return (
     <Div>
       <PageHeader title="갤러리" root="갤러리" />
-      <ButtonWrap>
-        <Button
-          name="이미지 수정"
-          Bgcolor="green"
-          TitleColor="white"
-          onClick={handleModalOpen}
-        />
-      </ButtonWrap>
+      {role === "admin" && (
+        <ButtonWrap>
+          <Button
+            name="이미지 수정"
+            Bgcolor="green"
+            TitleColor="white"
+            onClick={handleModalOpen}
+          />
+        </ButtonWrap>
+      )}
 
       <Masonry
         breakpointCols={breakpointColumnsObj}

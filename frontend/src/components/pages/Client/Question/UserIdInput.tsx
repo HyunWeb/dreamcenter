@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import UserIdInputGroup from "../Reservation/InputGroup/UserIdInputGroup";
 import Button from "@/components/common/Button";
 import styled from "styled-components";
-import { QuestionWritePageStore } from "@/store/userStore";
+import { QuestionWritePageStore, useUserStore } from "@/store/userStore";
 
 const StyledButton = styled(Button)`
   padding: 4px 12px;
@@ -17,22 +17,27 @@ const Div = styled.div`
 `;
 export default function UserIdInput() {
   const { changeName, setChangeName } = QuestionWritePageStore();
+  const { role } = useUserStore();
+
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const hancleChange = () => {
     setChangeName(!changeName);
   };
+
   return (
     <Div>
       {changeName ? (
         <>
           <UserIdInputGroup type="readOnly" />
-          <StyledButton
-            name="변경"
-            Bgcolor="green"
-            TitleColor="white"
-            onClick={hancleChange}
-          />
+          {role === "admin" && (
+            <StyledButton
+              name="변경"
+              Bgcolor="green"
+              TitleColor="white"
+              onClick={hancleChange}
+            />
+          )}
         </>
       ) : (
         <>

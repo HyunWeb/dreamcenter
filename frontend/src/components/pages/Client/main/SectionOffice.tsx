@@ -48,9 +48,6 @@ export default function SectionOffice() {
     fetchImage();
   }, [imgList]);
 
-  useEffect(() => {
-    console.log(OfficeImg);
-  }, [OfficeImg]);
   return (
     <Section>
       <div>

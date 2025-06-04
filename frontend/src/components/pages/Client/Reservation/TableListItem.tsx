@@ -56,7 +56,6 @@ export default function TableListItem({ form, orderNum }: TableListItemProps) {
 
   const hancleClick = () => {
     setViewMode(["detail", form.id]);
-    console.log(form.id);
   };
   return (
     <TableRow $form={form.is_confirmed}>

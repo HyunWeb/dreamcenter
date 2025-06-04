@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import ImgMovBtn from "./ImgMovBtn";
 import Button from "../../../common/Button";
-import { UseModalStore, ImgPreviewStore } from "@/store/userStore";
+import {
+  UseModalStore,
+  ImgPreviewStore,
+  useUserStore,
+} from "@/store/userStore";
 
 const ViewBox = styled.div`
   width: 100%;
@@ -49,6 +53,7 @@ const ImgContainer = styled.div`
 export default function ImgViewBox() {
   const { imgPreview, index, imgList, setImagePreview, setIndex } =
     ImgPreviewStore();
+  const { role } = useUserStore();
   const { setIsModalOpen } = UseModalStore();
   const OpenModal = () => {
     setIsModalOpen(true);
@@ -81,12 +86,14 @@ export default function ImgViewBox() {
   };
   return (
     <ViewBox>
-      <EditButton
-        name="이미지 수정"
-        Bgcolor="green"
-        TitleColor="white"
-        onClick={OpenModal}
-      />
+      {role === "admin" && (
+        <EditButton
+          name="이미지 수정"
+          Bgcolor="green"
+          TitleColor="white"
+          onClick={OpenModal}
+        />
+      )}
       <ImgMovBtn direction={"leftBig"} onClick={handleLeftMove} />
       <ImgContainer>
         {imgPreview ? (

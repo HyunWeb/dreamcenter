@@ -80,6 +80,7 @@ export default function ButtonWrap({
   };
 
   const handleDelete = async () => {
+    if (checkedList.length === 0) return;
     // 삭제할 데이터의 id 값을 배열로 모은다.
     const deleteArray: number[] = [];
     checkedList.forEach((item, index) => {
@@ -94,6 +95,7 @@ export default function ButtonWrap({
 
     if (res.message === "삭제 성공") {
       alert("삭제 성공");
+      PageCount();
     }
   };
 
@@ -111,7 +113,6 @@ export default function ButtonWrap({
 
     if (confirmedIds.length > 0) {
       const response = await UpdateConfirm(confirmedIds);
-      console.log(response);
     }
   };
 
@@ -129,7 +130,6 @@ export default function ButtonWrap({
 
     if (confirmedIds.length > 0) {
       const response = await UpdateUnConfirm(confirmedIds);
-      console.log(response);
     }
   };
 

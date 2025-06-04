@@ -28,9 +28,7 @@ app.use("/api", postRoutes);
 
 // const PORT = process.env.PORT || 3001;
 const PORT = 3001;
-// app.listen(PORT, () => {
-//   console.log(`현재 환경변수 서버 포트 :  ${PORT}`);
-// });
+
 console.log("실제 PORT 값:", PORT);
 
 const server = app.listen(PORT, "0.0.0.0", () => {

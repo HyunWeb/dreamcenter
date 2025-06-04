@@ -16,10 +16,12 @@ import Office from "./components/pages/Client/Office";
 import AboutPage from "./components/pages/Client/AboutPage";
 import AdminReservationPage from "./components/pages/Client/AdminReservationPage";
 import QuestionDetail from "./components/pages/Client/QuestionDetail";
+import LoginInitializer from "./components/common/LoginInitializer";
 
 function App() {
   return (
     <BrowserRouter>
+      <LoginInitializer />
       <Routes>
         <Route path="/naver/callback" element={<NaverLogin />} />
         <Route path="/" element={<LayoutPage />}>

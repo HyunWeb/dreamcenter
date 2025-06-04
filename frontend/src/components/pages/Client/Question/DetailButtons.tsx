@@ -1,4 +1,5 @@
 import { DeleteQuestion } from "@/api/postApi";
+import { useUserStore } from "@/store/userStore";
 import { AnswerData } from "@/types/forms";
 import React, { SetStateAction } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -42,15 +43,17 @@ type Props = {
   ViewWriteAnswer: boolean;
   setVeiwWriteAnswer: React.Dispatch<SetStateAction<boolean>>;
   answer?: AnswerData;
+  sns_id: string | undefined;
 };
 export default function DetailButtons({
   ViewWriteAnswer,
   setVeiwWriteAnswer,
   answer,
+  sns_id,
 }: Props) {
   const { id } = useParams<{ id: string }>();
   const naviagte = useNavigate();
-
+  const { role, user_id } = useUserStore();
   const handleBack = () => {
     naviagte(-1);
   };
@@ -62,7 +65,7 @@ export default function DetailButtons({
   const handleDelete = async () => {
     if (!id) return;
     const res = await DeleteQuestion(id);
-    console.log(res);
+
     if (res.success) {
       alert("삭제가 완료되었습니다.");
       naviagte(-1);
@@ -72,10 +75,14 @@ export default function DetailButtons({
     <Div>
       <Button onClick={handleBack}>뒤로가기</Button>
       <Wrap>
-        <ConfirmButton onClick={handleChange}>
-          {ViewWriteAnswer ? "입력취소" : answer ? "답변수정" : "답변달기"}
-        </ConfirmButton>
-        <DeleteButton onClick={handleDelete}>질문삭제</DeleteButton>
+        {role === "admin" && (
+          <ConfirmButton onClick={handleChange}>
+            {ViewWriteAnswer ? "입력취소" : answer ? "답변수정" : "답변달기"}
+          </ConfirmButton>
+        )}
+        {sns_id === user_id && (
+          <DeleteButton onClick={handleDelete}>질문삭제</DeleteButton>
+        )}
       </Wrap>
     </Div>
   );

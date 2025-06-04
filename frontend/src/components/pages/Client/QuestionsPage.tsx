@@ -3,12 +3,16 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TableForm from "./Reservation/TableForm";
 import Button from "@/components/common/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PageCountUI from "@/components/common/PageCountUI";
 import { QuestionData } from "@/types/forms";
 import QTableLIstItems from "./Question/QTableLIstItems";
 import ModalUI from "@/components/common/ModalUI";
-import { ControlModalStore, SearchStore } from "@/store/userStore";
+import {
+  ControlModalStore,
+  SearchStore,
+  useUserStore,
+} from "@/store/userStore";
 import Search from "./Question/Search";
 
 const Div = styled.div`
@@ -24,11 +28,16 @@ const ButtonWrap = styled.div`
 `;
 
 export default function QuestionsPage() {
+  const { isLogin } = useUserStore();
   const { viewModal } = ControlModalStore();
   const [form, setForm] = useState<QuestionData[]>([]);
   const { searchList, setSearchList } = SearchStore();
-
+  const navigate = useNavigate();
   useEffect(() => {
+    if (!isLogin) {
+      alert("로그인 후 이용해주세요");
+      navigate("/", { replace: true });
+    }
     setSearchList(false);
     return () => setSearchList(false); // cleanup
   }, []);
