@@ -1,6 +1,5 @@
 node_modules
 .git
-.env
 *.log
 build
 public/defaultBanner.png
