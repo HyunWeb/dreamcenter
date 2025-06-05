@@ -13,6 +13,8 @@ import SaveImgSection from "./Modal/SaveImgSection";
 import LoadImgSection from "./Modal/LoadImgSection";
 import SwichButtons from "./Modal/SwichButtons";
 import { useLocation } from "react-router-dom";
+import { useAlertStore, UseModalStore } from "@/store/userStore";
+import Loading from "@/components/common/Loading";
 
 type FileItem = {
   id: string;
@@ -42,6 +44,8 @@ const Div = styled.div`
 `;
 
 export default function EditModal() {
+  const { loadingUI } = UseModalStore();
+  const { showAlert } = useAlertStore();
   const [files, setFiles] = useState<FileItem[]>([]);
   const [existingImages, setExistingImages] = useState<Slide[]>([]);
   const [selectTab, setSelectTab] = useState(true);
@@ -58,7 +62,7 @@ export default function EditModal() {
         response = await GetGalleryImages();
       }
       if (!response) {
-        alert("데이터가 없습니다.");
+        showAlert("데이터가 없습니다.");
         return;
       }
       setExistingImages(response.slides);
@@ -88,6 +92,7 @@ export default function EditModal() {
         files={files}
         setFiles={setFiles}
       />
+      {loadingUI && <Loading />}
     </Div>
   );
 }

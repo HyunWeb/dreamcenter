@@ -43,7 +43,7 @@ export default function QTableLIstItems({
 }: TableListItemProps) {
   const navigate = useNavigate();
   const { currentPage } = ReservationMyListStore();
-  const { setViewModal, setPostId } = ControlModalStore();
+  const { setViewModal, setPostId, setType } = ControlModalStore();
   const [startIndex, setStartIndex] = useState<number>(0);
   const listNumber = startIndex + orderNum;
   // 날짜 조정
@@ -63,6 +63,7 @@ export default function QTableLIstItems({
     if (form.isPrivate) {
       setViewModal(true);
       setPostId(form.id);
+      setType("privateLock");
     } else {
       navigate(`/questions/${form.id}`);
     }

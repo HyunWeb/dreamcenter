@@ -17,27 +17,31 @@ import AboutPage from "./components/pages/Client/AboutPage";
 import AdminReservationPage from "./components/pages/Client/AdminReservationPage";
 import QuestionDetail from "./components/pages/Client/QuestionDetail";
 import LoginInitializer from "./components/common/LoginInitializer";
+import { useUserStore } from "./store/userStore";
 
 function App() {
+  const { isLoginChecked } = useUserStore();
   return (
     <BrowserRouter>
       <LoginInitializer />
-      <Routes>
-        <Route path="/naver/callback" element={<NaverLogin />} />
-        <Route path="/" element={<LayoutPage />}>
-          <Route index element={<Main />} />
-          <Route path="about" element={<AboutPage />} />
-          <Route path="office" element={<Office />} />
-          <Route path="news" element={<NewsPage />} />
-          <Route path="questions" element={<QuestionsPage />} />
-          <Route path="reservation" element={<ReservationPage />} />
-          <Route path="gallery" element={<GalleryPage />} />
-          <Route path="location" element={<LocationPage />} />
-          <Route path="adminReservation" element={<AdminReservationPage />} />
-          <Route path="questions/write" element={<QuestionWritePage />} />
-          <Route path="questions/:id" element={<QuestionDetail />} />
-        </Route>
-      </Routes>
+      {isLoginChecked && (
+        <Routes>
+          <Route path="/naver/callback" element={<NaverLogin />} />
+          <Route path="/" element={<LayoutPage />}>
+            <Route index element={<Main />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="office" element={<Office />} />
+            <Route path="news" element={<NewsPage />} />
+            <Route path="questions" element={<QuestionsPage />} />
+            <Route path="reservation" element={<ReservationPage />} />
+            <Route path="gallery" element={<GalleryPage />} />
+            <Route path="location" element={<LocationPage />} />
+            <Route path="adminReservation" element={<AdminReservationPage />} />
+            <Route path="questions/write" element={<QuestionWritePage />} />
+            <Route path="questions/:id" element={<QuestionDetail />} />
+          </Route>
+        </Routes>
+      )}
     </BrowserRouter>
   );
 }

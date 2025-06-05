@@ -1,5 +1,6 @@
 import { PostAnswerSubmit } from "@/api/postApi";
 import Button from "@/components/common/Button";
+import { useAlertStore } from "@/store/userStore";
 import { AnswerData } from "@/types/forms";
 import React, { SetStateAction, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -70,6 +71,7 @@ interface Props {
   answer?: AnswerData;
 }
 export default function WriteAnswer({ setVeiwWriteAnswer, answer }: Props) {
+  const { showAlert } = useAlertStore();
   const { id } = useParams<{ id: string }>();
   const [message, setMessage] = useState("");
 
@@ -79,7 +81,7 @@ export default function WriteAnswer({ setVeiwWriteAnswer, answer }: Props) {
   }, [answer]);
 
   const hancleCancle = () => {
-    alert("입력창이 닫힙니다.");
+    showAlert("입력창이 닫힙니다.");
     setVeiwWriteAnswer(false);
   };
 

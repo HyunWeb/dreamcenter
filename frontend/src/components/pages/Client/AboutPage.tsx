@@ -29,21 +29,26 @@ export default function AboutPage() {
   const { setImagePreview, imgList, setIndex, setImgList, setImgLength } =
     ImgPreviewStore();
   const { editSection, setEditSection } = WriteAboutStore();
-  const { isModalOpen, setIsModalOpen } = UseModalStore();
+  const { isModalOpen, setIsModalOpen, loadingUI } = UseModalStore();
   // const [imgLength, setImgLength] = useState<number>(0);
 
+  const getImg = async () => {
+    const response: any = await GetAboutImages();
+    setImgList(response.slides);
+    setImgLength(response.slides.length);
+    setIndex(0);
+    console.log("재로딩");
+  };
   // 저장되어있던 이미지 데이터 불러오기
   useEffect(() => {
     setEditSection(true);
     setIsModalOpen(false);
-    const getImg = async () => {
-      const response: any = await GetAboutImages();
-      setImgList(response.slides);
-      setImgLength(response.slides.length);
-      setIndex(0);
-    };
     getImg();
   }, []);
+
+  useEffect(() => {
+    getImg();
+  }, [loadingUI]);
 
   useEffect(() => {
     if (!imgList) return;

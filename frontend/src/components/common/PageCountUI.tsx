@@ -80,8 +80,7 @@ export default function PageCountUI<T>({
 
   const PageCount = async () => {
     const res = await GetPageCount(type, currentPage);
-    if (res === undefined) {
-      console.error("데이터 결과 없음");
+    if (!res || !res.result) {
       return;
     }
 

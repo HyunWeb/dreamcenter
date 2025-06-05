@@ -42,6 +42,7 @@ export default function UserIdInputGroup({ type, buttonRef }: Props) {
     if (!isLogin) return;
     const getUserID = async () => {
       const res = await getUserInfo();
+      if (!res) return;
       setUserId(res.result.nickname);
     };
     getUserID();

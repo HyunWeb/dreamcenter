@@ -5,7 +5,7 @@ import {
   UpdateConfirm,
   UpdateUnConfirm,
 } from "@/api/postApi";
-import { ReservationMyListStore } from "@/store/userStore";
+import { ReservationMyListStore, useAlertStore } from "@/store/userStore";
 import { FormDataTableFormProps, TableFormProps } from "@/types/forms";
 import React, { useEffect } from "react";
 import styled from "styled-components";
@@ -52,6 +52,7 @@ export default function ButtonWrap({
   setForm,
   type,
 }: FormDataTableFormProps) {
+  const { showAlert } = useAlertStore();
   const { checkedList, setCheckedList } = ReservationMyListStore();
   const { pageCount, setPageCount, currentPage, setCurrentPage } =
     ReservationMyListStore();
@@ -65,6 +66,7 @@ export default function ButtonWrap({
   const PageCount = async () => {
     if (!setForm) return;
     const res = await GetPageCount("mySubmitList", currentPage);
+    if (!res || !res.result) return;
     setPageCount(Array.from({ length: res.result }, (_, i) => i + 1));
     setForm(res.TotalItems);
   };
@@ -94,7 +96,7 @@ export default function ButtonWrap({
     setCurrentPage(1); // 지웠으면 페이지 1로 돌아가기
 
     if (res.message === "삭제 성공") {
-      alert("삭제 성공");
+      showAlert("삭제 성공");
       PageCount();
     }
   };
@@ -113,6 +115,7 @@ export default function ButtonWrap({
 
     if (confirmedIds.length > 0) {
       const response = await UpdateConfirm(confirmedIds);
+      showAlert("확인 처리 되었습니다.");
     }
   };
 
@@ -130,6 +133,7 @@ export default function ButtonWrap({
 
     if (confirmedIds.length > 0) {
       const response = await UpdateUnConfirm(confirmedIds);
+      showAlert("확인 해제 되었습니다.");
     }
   };
 

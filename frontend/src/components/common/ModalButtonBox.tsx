@@ -1,7 +1,7 @@
 import React, { SetStateAction } from "react";
 import styled from "styled-components";
 import Button from "./Button";
-import { ControlModalStore } from "@/store/userStore";
+import { ControlModalStore, useAlertStore } from "@/store/userStore";
 import { PostMatchPassword } from "@/api/postApi";
 import { useNavigate } from "react-router-dom";
 
@@ -23,6 +23,7 @@ type ButtonProps = {
   setPassword: React.Dispatch<SetStateAction<string[]>>;
 };
 export default function ModalButtonBox({ password, setPassword }: ButtonProps) {
+  const { showAlert } = useAlertStore();
   const { setViewModal, postId } = ControlModalStore();
   const handleHideModal = () => {
     setViewModal(false);
@@ -37,7 +38,7 @@ export default function ModalButtonBox({ password, setPassword }: ButtonProps) {
       setViewModal(false);
       navigate(`/questions/${postId}`);
     } else {
-      alert("비밀번호가 일치하지 않습니다.");
+      showAlert("비밀번호가 일치하지 않습니다.");
       setPassword(["", "", "", ""]);
     }
   };

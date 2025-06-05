@@ -13,7 +13,7 @@ import SchoolInputGroup from "./InputGroup/SchoolInputGroup";
 import AdmissionInputGroup from "./InputGroup/AdmissionInputGroup";
 import RecommenderInputGroup from "./InputGroup/RecommenderInputGroup";
 import ImgInputGroup from "./InputGroup/ImgInputGroup";
-import { ReservationInputStore } from "@/store/userStore";
+import { ReservationInputStore, useAlertStore } from "@/store/userStore";
 import { PostReservation } from "@/api/postApi";
 
 const Description = styled.p`
@@ -99,6 +99,7 @@ const SubmitButton = styled.button`
 `;
 
 export default function FormSection() {
+  const { showAlert } = useAlertStore();
   const {
     setMessage,
     setAgreePrivacy,
@@ -132,7 +133,7 @@ export default function FormSection() {
       admission === "" ||
       agreePrivacy === false
     ) {
-      alert("필수 항목을 모두 입력해주세요");
+      showAlert("필수 항목을 모두 입력해주세요");
       return;
     }
     const formData = new FormData();

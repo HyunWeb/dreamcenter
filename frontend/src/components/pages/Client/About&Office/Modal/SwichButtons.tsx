@@ -9,7 +9,11 @@ import {
   PostGalleryImages,
   PostOfficeImages,
 } from "../../../../../api/postApi";
-import { ReservationMyListStore, UseModalStore } from "@/store/userStore";
+import {
+  ReservationMyListStore,
+  useAlertStore,
+  UseModalStore,
+} from "@/store/userStore";
 import { useLocation } from "react-router-dom";
 import { GallerySlide } from "@/types/forms";
 
@@ -54,13 +58,15 @@ export default function SwichButtons({
   files,
   setFiles,
 }: SwitchButtonsProps) {
-  const { setIsModalOpen } = UseModalStore();
+  const { showAlert } = useAlertStore();
+  const { setIsModalOpen, setLoadingUI } = UseModalStore();
   const CloseModal = () => {
     setIsModalOpen(false);
   };
   const location = useLocation();
 
   const handleSubmit = async () => {
+    setLoadingUI(true);
     const formData = new FormData();
 
     files.forEach((item) => {
@@ -74,12 +80,14 @@ export default function SwichButtons({
     } else if (location.pathname.includes("/gallery")) {
       await PostGalleryImages(formData);
     }
-    alert("이미지 업로드가 완료되었습니다.");
+    setLoadingUI(false);
+    showAlert("이미지 업로드가 완료되었습니다.");
     setFiles([]);
     setIsModalOpen(false);
   };
 
   const handleEdit = async () => {
+    setLoadingUI(true);
     let newArray;
     if (location.pathname.includes("/gallery")) {
       newArray = existingImages.map((item, index) => ({
@@ -94,17 +102,15 @@ export default function SwichButtons({
       }));
     }
     let res;
-    if (location.pathname.includes("/about") && "sort_order" in newArray[0]) {
+    if (location.pathname.includes("/about")) {
       await EditAboutImges(newArray as EditAboutImgesProps[]);
-    } else if (
-      location.pathname.includes("/office") &&
-      "sort_order" in newArray[0]
-    ) {
+    } else if (location.pathname.includes("/office")) {
       await EditOfficeImges(newArray as EditAboutImgesProps[]);
     } else if (location.pathname.includes("/gallery")) {
       res = await EditGalleryImges(newArray as GallerySlide[]);
     }
-    alert("수정이 완료되었습니다.");
+    setLoadingUI(false);
+    showAlert("수정이 완료되었습니다.");
     setIsModalOpen(false);
   };
   return (
