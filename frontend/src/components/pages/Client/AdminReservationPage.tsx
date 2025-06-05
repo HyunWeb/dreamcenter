@@ -5,7 +5,11 @@ import ButtonWrap from "./Reservation/ButtonWrap";
 import PageCountUI from "@/components/common/PageCountUI";
 import { FormData } from "@/types/forms";
 import { Navigate, useNavigate } from "react-router-dom";
-import { ReservationMyListStore, useUserStore } from "@/store/userStore";
+import {
+  ReservationMyListStore,
+  useAlertStore,
+  useUserStore,
+} from "@/store/userStore";
 import TableForm from "./Reservation/TableForm";
 import Button from "@/components/common/Button";
 import { ChangeChackState } from "@/api/postApi";
@@ -60,6 +64,7 @@ const ButtonBox = styled.div`
   margin-top: 70px;
 `;
 export default function AdminReservationPage() {
+  const { showAlert } = useAlertStore();
   const [form, setForm] = useState<FormData[]>([]);
   const { isLogin } = useUserStore();
   const navigate = useNavigate();
@@ -78,7 +83,7 @@ export default function AdminReservationPage() {
   ];
   useEffect(() => {
     if (!isLogin) {
-      alert("로그인 후 이용해주세요");
+      showAlert("로그인 후 이용해주세요");
       navigate("/", { replace: true });
     }
     setViewMode(["list", 0]);
@@ -92,6 +97,7 @@ export default function AdminReservationPage() {
     if (!currentDetail) return;
     const res = await ChangeChackState(currentDetail?.id);
     setViewMode(["list", 0]);
+    showAlert("확인 전환 처리되었습니다.");
   };
   return (
     <Div>

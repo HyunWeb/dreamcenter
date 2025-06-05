@@ -43,7 +43,7 @@ export default function SectionOffice() {
   useEffect(() => {
     const fetchImage = async () => {
       const response = await GetOfficeImages();
-      setOfficeImg(response.slides);
+      setOfficeImg(response.slides.slice(0, 3));
     };
     fetchImage();
   }, [imgList]);

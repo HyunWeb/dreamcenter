@@ -1,5 +1,9 @@
 import { getSearch } from "@/api/postApi";
-import { ReservationMyListStore, SearchStore } from "@/store/userStore";
+import {
+  ReservationMyListStore,
+  SearchStore,
+  useAlertStore,
+} from "@/store/userStore";
 import { QuestionData } from "@/types/forms";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
@@ -36,6 +40,7 @@ interface MyListSectionProps {
 }
 
 export default function Search({ setForm }: MyListSectionProps) {
+  const { showAlert } = useAlertStore();
   const [keyword, setKeyword] = useState("");
   const [searchField, setSearchField] = useState("title");
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -77,7 +82,7 @@ export default function Search({ setForm }: MyListSectionProps) {
         setSearchData(res.result); // 검색 결과 담아두기
         setForm(sliced); // 실질적인 리스트 렌더링
       } else if (res.result.length === 0) {
-        alert("검색 결과가 존재하지 않습니다.");
+        showAlert("검색 결과가 존재하지 않습니다.");
         return;
       }
     }

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import TabSwitch from "./TabSwitch";
 import Wysiwyg from "./Wysiwyg";
 import Button from "../../../common/Button";
-import { WriteAboutStore } from "@/store/userStore";
+import { useAlertStore, WriteAboutStore } from "@/store/userStore";
 import {
   GetAboutWrite,
   GetOfficeWrite,
@@ -24,6 +24,7 @@ const ButtonWrap = styled.div`
 `;
 
 export default function WriteBox() {
+  const { showAlert } = useAlertStore();
   const [selectTab, setSelectTab] = useState(true);
   const {
     content,
@@ -56,6 +57,7 @@ export default function WriteBox() {
     }
 
     setAboutTextData(res.result.content);
+    showAlert("수정이 완료되었습니다.");
   };
   return (
     <WriteSection>

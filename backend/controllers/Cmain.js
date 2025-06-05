@@ -75,7 +75,7 @@ exports.getLoginState = async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ where: { sns_id: decoded.userID } });
-    res.status(200).json({
+    return res.status(200).json({
       code: "SUCCESS",
       name: user.name,
       role: user.role,
@@ -97,7 +97,6 @@ exports.postLogin = async (req, res) => {
   const { code, state, originalState } = req.body;
 
   if (state !== originalState) {
-    alert("위조된 요청일 가능성이 있습니다. 로그인 취소");
     return;
   }
 

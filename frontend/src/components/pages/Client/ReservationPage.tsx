@@ -18,16 +18,8 @@ const Div = styled.div`
 
 export default function ReservationPage() {
   const [selectTab, setSelectTab] = useState(true);
-  const { isLogin } = useUserStore();
-  const navigate = useNavigate();
   const [form, setForm] = useState<FormData[]>([]);
 
-  useEffect(() => {
-    if (!isLogin) {
-      alert("로그인 후 이용해주세요");
-      navigate("/", { replace: true });
-    }
-  }, []);
   return (
     <Div>
       <PageHeader

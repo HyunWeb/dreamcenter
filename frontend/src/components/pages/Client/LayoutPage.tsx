@@ -1,8 +1,12 @@
-import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import Gnb from "../../common/Gnb";
 import styled from "styled-components";
 import FooterLayout from "../../common/FooterLayout";
+import CustomAlert from "@/components/common/CustomAlert";
+import { ControlModalStore, useUserStore } from "@/store/userStore";
+import FloatingButton from "@/components/common/FloatingButton";
+import ModalUI from "@/components/common/Modal/ModalUI";
 
 const Layout = styled.div`
   display: flex;
@@ -34,8 +38,15 @@ const Logo = styled.img`
   max-width: 224px;
 `;
 export default function LayoutPage() {
+  const { viewModal, type, setViewModal } = ControlModalStore();
+  const location = useLocation();
+  useEffect(() => {
+    setViewModal(false);
+  }, [location.pathname]);
   return (
     <Layout>
+      <CustomAlert />
+      {viewModal && <ModalUI type={type} />}
       <Header>
         <LogoDiv>
           <Link to="/">
@@ -48,6 +59,7 @@ export default function LayoutPage() {
         <Outlet />
       </Main>
       <FooterLayout />
+      <FloatingButton />
     </Layout>
   );
 }

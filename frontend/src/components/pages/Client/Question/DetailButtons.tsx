@@ -1,5 +1,5 @@
 import { DeleteQuestion } from "@/api/postApi";
-import { useUserStore } from "@/store/userStore";
+import { useAlertStore, useUserStore } from "@/store/userStore";
 import { AnswerData } from "@/types/forms";
 import React, { SetStateAction } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -51,6 +51,7 @@ export default function DetailButtons({
   answer,
   sns_id,
 }: Props) {
+  const { showAlert } = useAlertStore();
   const { id } = useParams<{ id: string }>();
   const naviagte = useNavigate();
   const { role, user_id } = useUserStore();
@@ -67,7 +68,7 @@ export default function DetailButtons({
     const res = await DeleteQuestion(id);
 
     if (res.success) {
-      alert("삭제가 완료되었습니다.");
+      showAlert("삭제가 완료되었습니다.");
       naviagte(-1);
     }
   };

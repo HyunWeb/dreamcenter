@@ -3,6 +3,7 @@ import Button from "@/components/common/Button";
 import {
   QuestionWritePageStore,
   ReservationInputStore,
+  useAlertStore,
 } from "@/store/userStore";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,7 @@ const StyleButton = styled(Button)`
 `;
 
 export default function QuestionButtonBox() {
+  const { showAlert } = useAlertStore();
   const {
     // QustionUserId,
     title,
@@ -35,7 +37,7 @@ export default function QuestionButtonBox() {
   const { file, userId, setFiles } = ReservationInputStore();
   const navigate = useNavigate();
   const handleBack = () => {
-    alert("목록으로 돌아갑니다.");
+    showAlert("목록으로 돌아갑니다.");
     resetForm();
     setFiles([]);
     navigate(-1);
@@ -43,10 +45,10 @@ export default function QuestionButtonBox() {
 
   const handleSubmit = async () => {
     if (title === "" || message === "") {
-      alert("제목과 질문사항을 모두 입력해주세요");
+      showAlert("제목과 질문사항을 모두 입력해주세요");
     }
     if (privateChecked === true && privatePassword?.length !== 4) {
-      alert("비공개 비밀번호 4자리를 모두 입력해주세요");
+      showAlert("비공개 비밀번호 4자리를 모두 입력해주세요");
     }
     if (privateChecked === false) {
       setPrivatePassword(null);
@@ -74,7 +76,7 @@ export default function QuestionButtonBox() {
 
     const res = await PostQuestion(formData);
     if (res.message) {
-      alert("등록이 완료되었습니다.");
+      showAlert("등록이 완료되었습니다.");
       resetForm();
       setFiles([]);
       navigate(-1);

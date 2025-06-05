@@ -2,9 +2,10 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { postLogin } from "../../../api/postApi";
-import { useUserStore } from "../../../store/userStore";
+import { useAlertStore, useUserStore } from "../../../store/userStore";
 
 export default function NaverLogin() {
+  const { showAlert } = useAlertStore();
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
   const state = searchParams.get("state");
@@ -29,10 +30,10 @@ export default function NaverLogin() {
         })
         .catch((error) => {
           console.error("로그인 실패", error);
-          alert("로그인에 실패하였습니다.");
+          showAlert("로그인에 실패하였습니다.");
         });
     } else {
-      alert("로그인에 필요한 url 코드가 없습니다.");
+      showAlert("로그인에 필요한 url 코드가 없습니다.");
     }
   }, [code]);
   return null;

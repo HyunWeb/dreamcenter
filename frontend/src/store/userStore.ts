@@ -7,6 +7,8 @@ type UserState = {
   userName: string;
   role: string;
   user_id: string;
+  isLoginChecked: boolean;
+  setIsLoginChecked: (state: boolean) => void;
   setIsLogin: (state: boolean) => void;
   setUserName: (name: string) => void;
   setRole: (name: string) => void;
@@ -18,6 +20,8 @@ export const useUserStore = create<UserState>((set) => ({
   userName: "",
   role: "",
   user_id: "",
+  isLoginChecked: false,
+  setIsLoginChecked: (val: boolean) => set({ isLoginChecked: val }),
   setIsLogin: (state) => set({ isLogin: state }),
   setUserName: (name) => set({ userName: name }),
   setRole: (role) => set({ role: role }),
@@ -77,17 +81,21 @@ interface UseModalStoreProps {
   isModalOpen: boolean;
   ImageModal: boolean;
   ImageSrc: string;
+  loadingUI: boolean;
   setIsModalOpen: (state: boolean) => void;
   setImageModal: (state: boolean) => void;
   setImageSrc: (state: string) => void;
+  setLoadingUI: (state: boolean) => void;
 }
 export const UseModalStore = create<UseModalStoreProps>((set) => ({
   isModalOpen: false,
   ImageModal: false,
   ImageSrc: "",
+  loadingUI: false,
   setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
   setImageModal: (state: boolean) => set({ ImageModal: state }),
   setImageSrc: (state: string) => set({ ImageSrc: state }),
+  setLoadingUI: (state: boolean) => set({ loadingUI: state }),
 }));
 
 type FileItem = {
@@ -238,14 +246,18 @@ export const QuestionWritePageStore = create<QuestionWritePageProps>((set) => ({
 interface ControlModalProps {
   viewModal: boolean;
   postId: number | null;
+  type: string;
   setViewModal: (state: boolean) => void;
   setPostId: (state: number) => void;
+  setType: (state: string) => void;
 }
 export const ControlModalStore = create<ControlModalProps>((set) => ({
   viewModal: false,
   postId: null,
+  type: "",
   setViewModal: (state) => set({ viewModal: state }),
   setPostId: (state) => set({ postId: state }),
+  setType: (state) => set({ type: state }),
 }));
 
 interface SearchProps {
@@ -302,4 +314,39 @@ export const MainStore = create<MainProps>((set) => ({
           : updater,
     })),
   setMainAbout: (state: MainDataProps) => set({ MainAbout: state }),
+}));
+
+interface useAlertProps {
+  message: string;
+  isVisible: boolean;
+  timeId: ReturnType<typeof setTimeout> | null;
+  setIsVisible: (state: boolean) => void;
+  showAlert: (msg: string) => void;
+  hideAlert: () => void;
+}
+
+export const useAlertStore = create<useAlertProps>((set, get) => ({
+  message: "",
+  isVisible: false,
+  timeId: null,
+  setIsVisible: (state) => set({ isVisible: state }),
+
+  hideAlert: () => {
+    const currentId = get().timeId;
+    if (currentId) clearTimeout(currentId);
+    set({ isVisible: false, timeId: null });
+  },
+
+  showAlert: (msg: string) => {
+    const currentId = get().timeId;
+    if (currentId) clearTimeout(currentId); // 이전 타이머 제거
+
+    set({ message: msg, isVisible: true });
+
+    const timeout = setTimeout(() => {
+      set({ isVisible: false, timeId: null });
+    }, 3000);
+
+    set({ timeId: timeout });
+  },
 }));

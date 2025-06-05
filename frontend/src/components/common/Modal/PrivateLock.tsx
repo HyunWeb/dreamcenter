@@ -1,27 +1,16 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import ModalButtonBox from "./ModalButtonBox";
-import { ControlModalStore } from "@/store/userStore";
+import { ControlModalStore, useAlertStore } from "@/store/userStore";
 import { PostMatchPassword } from "@/api/postApi";
 import { useNavigate } from "react-router-dom";
+import ModalButtonBox from "../ModalButtonBox";
 
 const Div = styled.div`
-  width: 370px;
-  height: 330px;
-  position: fixed;
-  z-index: 10;
-  border-radius: 20px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  padding: 40px 60px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   .Lockicon {
     position: relative;
     width: 56px;
@@ -77,12 +66,12 @@ const InputWrap = styled.div`
   }
 `;
 
-export default function ModalUI() {
+export default function PrivateLock() {
+  const { showAlert } = useAlertStore();
   const [password, setPassword] = useState(["", "", "", ""]);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const { setViewModal, postId } = ControlModalStore();
   const navigate = useNavigate();
-
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
     const newPassword = [...password];
@@ -102,11 +91,10 @@ export default function ModalUI() {
       setViewModal(false);
       navigate(`/questions/${postId}`);
     } else {
-      alert("비밀번호가 일치하지 않습니다.");
+      showAlert("비밀번호가 일치하지 않습니다.");
       setPassword(["", "", "", ""]);
     }
   };
-
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
@@ -118,7 +106,6 @@ export default function ModalUI() {
       handleSubmit();
     }
   };
-
   return (
     <Div>
       <div className="Lockicon">

@@ -4,7 +4,7 @@ import { getNews } from "../../../api/postApi";
 import styled from "styled-components";
 import NewsCard from "./News/NewsCard";
 import PageHeader from "../../common/PageHeader";
-import { useUserStore } from "@/store/userStore";
+import { useAlertStore, useUserStore } from "@/store/userStore";
 
 interface NewsDataProps {
   date: string;
@@ -42,6 +42,7 @@ const Section = styled.section`
   margin-bottom: 120px;
 `;
 export default function NewsPage() {
+  const { showAlert } = useAlertStore();
   const [newsList, setNewsList] = useState<NewsDataProps[]>([]);
   const { role } = useUserStore();
 
@@ -56,6 +57,7 @@ export default function NewsPage() {
 
   const handleSyncClick = () => {
     fetchNews(); // 동일 함수 재사용
+    showAlert("블로그 동기화가 완료되었습니다.");
   };
 
   return (

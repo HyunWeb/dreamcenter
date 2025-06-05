@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PageCountUI from "@/components/common/PageCountUI";
 import { QuestionData } from "@/types/forms";
 import QTableLIstItems from "./Question/QTableLIstItems";
-import ModalUI from "@/components/common/ModalUI";
+import ModalUI from "@/components/common/Modal/ModalUI";
 import {
   ControlModalStore,
   SearchStore,
@@ -34,10 +34,6 @@ export default function QuestionsPage() {
   const { searchList, setSearchList } = SearchStore();
   const navigate = useNavigate();
   useEffect(() => {
-    if (!isLogin) {
-      alert("로그인 후 이용해주세요");
-      navigate("/", { replace: true });
-    }
     setSearchList(false);
     return () => setSearchList(false); // cleanup
   }, []);
@@ -73,7 +69,6 @@ export default function QuestionsPage() {
           setForm={setForm}
         />
       )}
-      {viewModal && <ModalUI />}
     </Div>
   );
 }
