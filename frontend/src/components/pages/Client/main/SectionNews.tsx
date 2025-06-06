@@ -13,12 +13,33 @@ interface NewsDataProps {
 }
 
 const PrevDiv = styled.div`
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  p {
+    margin-top: 20px;
+    line-height: 2;
+  }
+
   h3 {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     width: 100%;
     font-weight: 700;
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    width: 100%;
+    background: #f4f4f4;
+    padding: 20px;
+    box-sizing: border-box;
+    p {
+      font-size: 14px;
+    }
   }
 `;
 
@@ -37,19 +58,34 @@ const LinkBlog = styled.a`
     right: 0px;
     transform: translateY(-50%);
   }
+
+  @media (max-width: 1024px) {
+    font-size: 15px;
+    line-height: 15px;
+    padding: 10px;
+  }
 `;
 
 const Section = styled.section`
   margin-bottom: 70px;
+  @media (max-width: 1024px) {
+    margin-bottom: 30px;
+  }
   article {
     display: flex;
     justify-content: space-between;
+    @media (max-width: 1024px) {
+      flex-direction: column;
+    }
 
     ul {
       width: 45%;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      @media (max-width: 1024px) {
+        gap: 5px;
+      }
       .newsActive {
         background-color: #f8f8f8;
         svg {
@@ -62,11 +98,19 @@ const Section = styled.section`
         cursor: pointer;
         border-bottom: 1px solid #dddddd;
         position: relative;
+        @media (max-width: 1024px) {
+          padding: 10px;
+          box-sizing: border-box;
+        }
         h3 {
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
           width: 80%;
+          @media (max-width: 1024px) {
+            font-size: 16px;
+            width: 90%;
+          }
         }
 
         svg {
@@ -79,16 +123,8 @@ const Section = styled.section`
           color: #888888;
         }
       }
-    }
-    div {
-      width: 45%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-end;
-      p {
-        margin-top: 20px;
-        line-height: 2;
+      @media (max-width: 1024px) {
+        width: 100%;
       }
     }
 
@@ -109,6 +145,9 @@ const Header = styled.div`
   padding: 24px 16px;
   margin-bottom: 30px;
   position: relative;
+  @media (max-width: 1024px) {
+    margin-bottom: 10px;
+  }
 `;
 
 export default function SectionNews() {

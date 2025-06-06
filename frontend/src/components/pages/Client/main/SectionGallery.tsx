@@ -27,6 +27,9 @@ const Section = styled.section`
     background-color: #f9f9f9;
     z-index: -1;
   }
+  @media (max-width: 1024px) {
+    padding-bottom: 70px;
+  }
 `;
 
 const Header = styled.div`
@@ -37,6 +40,18 @@ const Header = styled.div`
   div {
     position: relative;
   }
+  @media (max-width: 1024px) {
+    padding-top: 30px;
+    margin-bottom: 30px;
+  }
+`;
+
+const ViewImg = styled.div`
+  @media (max-width: 1024px) {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
 `;
 
 const Ul = styled.ul`
@@ -44,6 +59,10 @@ const Ul = styled.ul`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  @media (max-width: 1024px) {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
 `;
 const Li = styled.li`
   padding: 12px;
@@ -59,6 +78,12 @@ const Li = styled.li`
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+  @media (max-width: 1024px) {
+    flex-shrink: 0;
+    width: 50vw;
+    min-width: 100px;
+    padding: 5px;
   }
 `;
 export default function SectionGallery() {
@@ -95,29 +120,17 @@ export default function SectionGallery() {
           <CustomLink to={"gallery"} />
         </div>
       </Header>
-      <Ul>
-        {images?.map((item, index) => {
-          return (
-            <Li onClick={() => handleOverlay(item.image_url)} key={index}>
-              <img src={item.image_url} alt="갤러리 이미지" />
-            </Li>
-          );
-        })}
-      </Ul>
-      {/* <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="my-masonry-grid"
-        columnClassName="my-masonry-grid_column"
-      >
-        {images?.map((img, index) => (
-          <img
-            key={index}
-            src={img.image_url}
-            alt="드림 유학원 관련 이미지"
-            loading="lazy"
-          />
-        ))}
-      </Masonry> */}
+      <ViewImg>
+        <Ul>
+          {images?.map((item, index) => {
+            return (
+              <Li onClick={() => handleOverlay(item.image_url)} key={index}>
+                <img src={item.image_url} alt="갤러리 이미지" />
+              </Li>
+            );
+          })}
+        </Ul>
+      </ViewImg>
       {ImageModal && <ImageOverlay />}
     </Section>
   );

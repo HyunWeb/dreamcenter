@@ -132,6 +132,8 @@ exports.postLogin = async (req, res) => {
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
     if (!existingUser) {
+      const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+      const isAdmin = adminEmails.includes(userData.email);
       user = await User.create({
         sns_id: userData.id,
         provider: "naver",
@@ -144,7 +146,7 @@ exports.postLogin = async (req, res) => {
         mobile: userData.mobile,
         birthyear: userData.birthyear,
         birthday: userData.birthday,
-        role: userData.email === "jonghyun1803@naver.com" ? "admin" : "user",
+        role: isAdmin ? "admin" : "user",
       });
     } else {
       user = existingUser;
