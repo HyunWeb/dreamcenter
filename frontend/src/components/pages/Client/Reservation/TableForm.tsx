@@ -29,7 +29,7 @@ const TableRow = styled.tr`
     padding: 20px 0;
   }
   @media (max-width: 1024px) {
-    font-size: 15px;
+    font-size: 14px;
     white-space: nowrap;
   }
 `;

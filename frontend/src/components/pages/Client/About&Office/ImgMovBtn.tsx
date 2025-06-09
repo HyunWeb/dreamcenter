@@ -26,16 +26,42 @@ const Button = styled.button`
       color: #49b736;
     }
   }
+  @media (max-width: 1024px) {
+    width: 50px;
+  }
 `;
 
 const LeftButton = styled(Button)`
   height: 50vh;
   justify-content: flex-start;
+  @media (max-width: 1024px) {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.3);
+    svg {
+      color: white;
+    }
+  }
 `;
 
 const RightButton = styled(Button)`
   height: 50vh;
   justify-content: flex-end;
+  @media (max-width: 1024px) {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+
+    background-color: rgba(0, 0, 0, 0.3);
+    svg {
+      color: white;
+    }
+  }
 `;
 const SmallLeftButton = styled(Button)`
   height: 20vh;

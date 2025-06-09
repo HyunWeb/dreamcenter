@@ -30,6 +30,9 @@ const TableRow = styled.tr<{ $form: boolean }>`
     padding-bottom: 4px;
     display: inline-block;
   }
+  @media (max-width: 1024px) {
+    font-size: 14px;
+  }
 `;
 
 export default function TableListItem({ form, orderNum }: TableListItemProps) {
