@@ -27,6 +27,13 @@ const ButtonWrap = styled.div`
   text-align: right;
 `;
 
+const TableDiv = styled.div`
+  @media (max-width: 1024px) {
+    width: 100%;
+    overflow-x: auto;
+  }
+`;
+
 export default function QuestionsPage() {
   const { isLogin } = useUserStore();
   const { viewModal } = ControlModalStore();
@@ -42,14 +49,16 @@ export default function QuestionsPage() {
     <Div>
       <PageHeader title="질문게시판" root="질문게시판" />
       <Search setForm={setForm} />
-      <TableForm<QuestionData>
-        form={form}
-        headers={["번호", "제목", "글쓴이", "등록일", "답변여부"]}
-      >
-        {form.map((form, index) => {
-          return <QTableLIstItems form={form} key={index} orderNum={index} />;
-        })}
-      </TableForm>
+      <TableDiv>
+        <TableForm<QuestionData>
+          form={form}
+          headers={["번호", "제목", "글쓴이", "등록일", "답변여부"]}
+        >
+          {form.map((form, index) => {
+            return <QTableLIstItems form={form} key={index} orderNum={index} />;
+          })}
+        </TableForm>
+      </TableDiv>
       <ButtonWrap>
         <Link to={`/questions/write`}>
           <Button name="글쓰기" Bgcolor="green" TitleColor="white" />

@@ -18,12 +18,24 @@ const ATitle = styled.div`
     display: flex;
     gap: 12px;
   }
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 12px;
+
+    .meta-Info {
+      font-size: 14px;
+    }
+  }
 `;
 
 const Amessage = styled.div`
   white-space: pre-line;
   line-height: 1.5;
   padding: 30px;
+  @media (max-width: 1024px) {
+    font-size: 15px;
+    padding: 15px;
+  }
 `;
 type Props = {
   answer: AnswerData;

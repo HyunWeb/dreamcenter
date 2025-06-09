@@ -21,6 +21,10 @@ const LinkBlock = styled.a<{ $imageUrl: string }>`
   background-color: #f8f8f8;
   text-align: left;
   margin-bottom: 30px;
+  @media (max-width: 1024px) {
+    width: 100%;
+    padding: 20px;
+  }
 
   h3 {
     margin-bottom: 8px;
@@ -32,12 +36,19 @@ const LinkBlock = styled.a<{ $imageUrl: string }>`
     -webkit-line-clamp: 5; /* 최대 4줄까지만 보이게 */
     -webkit-box-orient: vertical;
     overflow: hidden;
+    @media (max-width: 1024px) {
+      -webkit-line-clamp: 3; /* 최대 4줄까지만 보이게 */
+    }
   }
 `;
 const Source = styled.span`
   color: #49b736;
   display: block;
   margin-bottom: 16px;
+  @media (max-width: 1024px) {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
 `;
 const Date = styled.span`
   display: block;

@@ -16,8 +16,9 @@ import ImageOverlay from "@/components/common/ImageOverlay";
 
 const breakpointColumnsObj = {
   default: 3,
-  1100: 2,
-  700: 1,
+  1024: 3,
+  768: 2,
+  375: 2,
 };
 
 const Div = styled.div`
@@ -29,6 +30,9 @@ const Div = styled.div`
   }
   .my-masonry-grid {
     margin-top: 70px;
+    @media (max-width: 1024px) {
+      margin-top: 10px;
+    }
   }
 `;
 
@@ -36,6 +40,9 @@ const ButtonWrap = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
+  @media (max-width: 1024px) {
+    margin-top: 10px;
+  }
 `;
 
 export default function GalleryPage() {

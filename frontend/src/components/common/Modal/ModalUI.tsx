@@ -5,8 +5,9 @@ import Button from "../Button";
 import FloatTelePhone from "./FloatTelePhone";
 
 const Div = styled.div`
-  width: 370px;
-  height: 330px;
+  box-sizing: border-box;
+  width: 490px;
+  height: 410px;
   position: fixed;
   z-index: 10;
   border-radius: 20px;
@@ -16,6 +17,13 @@ const Div = styled.div`
   background-color: white;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   padding: 40px 60px;
+
+  @media (max-width: 1024px) {
+    width: 80%;
+    height: 44%;
+    max-width: 370px;
+    padding: 20px 30px;
+  }
 `;
 
 type Props = {

@@ -5,11 +5,15 @@ import styled from "styled-components";
 const Div = styled.div`
   cursor: pointer;
   position: fixed;
+
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: #000000bf;
+  @media (max-width: 1024px) {
+    box-sizing: border-box;
+  }
   img {
     position: fixed;
     top: 50%;
@@ -17,6 +21,9 @@ const Div = styled.div`
     transform: translate(-50%, -50%);
     width: 100%;
     max-width: 800px;
+    @media (max-width: 1024px) {
+      width: 90%;
+    }
   }
 `;
 
@@ -34,6 +41,16 @@ const CancleButton = styled.button`
   svg {
     width: 30px;
     height: 30px;
+  }
+
+  @media (max-width: 1024px) {
+    top: 100px;
+    right: 20px;
+
+    svg {
+      width: 25px;
+      height: 25px;
+    }
   }
 `;
 

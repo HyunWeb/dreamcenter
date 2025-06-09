@@ -13,9 +13,18 @@ import { useUserStore } from "@/store/userStore";
 
 const Div = styled.div`
   margin-bottom: 170px;
+
+  // 질문과 답변 모두 사용
   .Question_title {
     font-size: 24px;
     font-weight: 700;
+  }
+
+  @media (max-width: 1024px) {
+    margin-bottom: 100px;
+    .Question_title {
+      font-size: 20px;
+    }
   }
 `;
 

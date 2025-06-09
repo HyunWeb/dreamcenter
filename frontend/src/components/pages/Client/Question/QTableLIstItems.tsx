@@ -34,6 +34,20 @@ const TableRow = styled.tr<{ $form: boolean; $private: boolean }>`
     padding-bottom: 4px;
     display: inline-block;
   }
+  @media (max-width: 1024px) {
+    td {
+      font-size: 14px;
+      white-space: nowrap;
+      padding: 12px 10px;
+      line-height: 1.6;
+    }
+    /* .QuestionNickname {
+      display: none;
+    }
+    .QuestionDate {
+      display: none;
+    } */
+  }
 `;
 
 //타 페이지 에서 쓰는 TableListItem이 이미 있지만 세부 내용이 다르므로 따로 만든다.
@@ -74,8 +88,8 @@ export default function QTableLIstItems({
       <td className="QuestionTitle" onClick={handleClick}>
         {form.isPrivate ? "[비공개 질문입니다]" : form.title}
       </td>
-      <td>{form.nickname}</td>
-      <td>{`${year}.${month}.${date}`}</td>
+      <td className="QuestionNickname">{form.nickname}</td>
+      <td className="QuestionDate">{`${year}.${month}.${date}`}</td>
       <td className="td_confirmed">
         {form.is_confirmed ? "답변완료" : "답변대기"}
       </td>

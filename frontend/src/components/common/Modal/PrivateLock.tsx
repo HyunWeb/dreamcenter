@@ -51,6 +51,17 @@ const Div = styled.div`
       font-weight: 700;
     }
   }
+  @media (max-width: 1024px) {
+    h1 {
+      font-size: 20px;
+    }
+    p {
+      gap: 5px;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
 `;
 
 const InputWrap = styled.div`
@@ -63,6 +74,13 @@ const InputWrap = styled.div`
     text-align: center;
     border-radius: 11px;
     border: 2px solid #cecece;
+  }
+  @media (max-width: 1024px) {
+    gap: 12px;
+    input {
+      width: 45px;
+      height: 55px;
+    }
   }
 `;
 
@@ -125,7 +143,7 @@ export default function PrivateLock() {
       </div>
       <h1>비공개 질문입니다.</h1>
       <p>
-        질문 내용을 확인하려면 <span>비밀번호를 입력</span> 해주세요.
+        질문 내용을 확인하려면 <span>비밀번호를 입력 해주세요.</span>
       </p>
       <InputWrap>
         {password.map((num, i) => {

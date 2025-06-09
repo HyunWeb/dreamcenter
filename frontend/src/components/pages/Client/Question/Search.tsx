@@ -16,15 +16,26 @@ const Section = styled.section`
   padding: 20px 0;
   margin: 50px 0 30px;
   gap: 12px;
+  @media (max-width: 1024px) {
+    margin: 30px 0;
+    padding: 20px 10px;
+    gap: 5px;
+  }
 `;
 const Select = styled.select`
   padding: 7px 8px;
   border: 1px solid #dddddd;
+  @media (max-width: 1024px) {
+    padding: 10px 8px;
+  }
 `;
 const Input = styled.input`
   padding: 7px 16px;
   border: 1px solid #dddddd;
   width: 300px;
+  @media (max-width: 1024px) {
+    padding: 10px 16px;
+  }
 `;
 const SearchButtton = styled.button`
   color: white;
@@ -33,6 +44,7 @@ const SearchButtton = styled.button`
   width: 36px;
   height: 36px;
   cursor: pointer;
+  flex-shrink: 0;
 `;
 
 interface MyListSectionProps {

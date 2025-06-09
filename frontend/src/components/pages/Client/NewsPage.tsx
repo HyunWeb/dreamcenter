@@ -31,6 +31,11 @@ const Div = styled.div`
     border: none;
     cursor: pointer;
     margin-bottom: 60px;
+    @media (max-width: 1024px) {
+      padding: 10px 15px;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
   }
 `;
 const Section = styled.section`
@@ -40,6 +45,11 @@ const Section = styled.section`
 
   margin-top: 70px;
   margin-bottom: 120px;
+  @media (max-width: 1024px) {
+    flex-wrap: nowrap;
+    flex-direction: column;
+    margin-top: 0;
+  }
 `;
 export default function NewsPage() {
   const { showAlert } = useAlertStore();

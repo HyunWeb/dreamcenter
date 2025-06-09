@@ -8,6 +8,11 @@ const SingleInput = styled.input`
   border: 1px solid #dddddd;
   padding-left: 10px;
   font-size: 16px;
+
+  @media (max-width: 1024px) {
+    box-sizing: border-box;
+    font-size: 15px;
+  }
 `;
 
 export default function TitleInputGroup() {
