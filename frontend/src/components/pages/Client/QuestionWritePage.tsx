@@ -18,6 +18,9 @@ const Section = styled.section`
   border-bottom: 1px solid #dddddd;
   margin: 50px 0 70px;
   padding: 50px 200px;
+  @media (max-width: 1024px) {
+    padding: 30px 0;
+  }
 `;
 
 const Form = styled.form`

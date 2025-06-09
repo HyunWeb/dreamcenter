@@ -19,8 +19,8 @@ const Div = styled.div`
   padding: 40px 60px;
 
   @media (max-width: 1024px) {
-    width: 80%;
-    height: 44%;
+    width: 90%;
+    height: 350px;
     max-width: 370px;
     padding: 20px 30px;
   }

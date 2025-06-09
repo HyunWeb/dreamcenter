@@ -14,6 +14,9 @@ const Div = styled.div`
   margin-bottom: 170px;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1024px) {
+    margin-bottom: 50px;
+  }
 `;
 
 export default function ReservationPage() {

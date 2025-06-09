@@ -13,6 +13,9 @@ const Ul = styled.ul`
   justify-content: center;
   border-bottom: 2px solid #dddddd;
   margin-bottom: 30px;
+  @media (max-width: 1024px) {
+    margin-top: 15px;
+  }
 `;
 
 const Selected = styled.button`
@@ -24,6 +27,10 @@ const Selected = styled.button`
   border-bottom: 3px solid #49b736;
   padding: 20px;
   transform: translateY(2px);
+  @media (max-width: 1024px) {
+    font-size: 17px;
+    padding: 10px;
+  }
 `;
 
 const DeSelected = styled(Selected)`
