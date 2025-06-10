@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ControlModalStore, useAlertStore } from "@/store/userStore";
-import { PostMatchPassword } from "@/api/postApi";
+import { GetMatchPassword, PostMatchPassword } from "@/api/postApi";
 import { useNavigate } from "react-router-dom";
 import ModalButtonBox from "../ModalButtonBox";
 
@@ -51,6 +51,17 @@ const Div = styled.div`
       font-weight: 700;
     }
   }
+  @media (max-width: 1024px) {
+    h1 {
+      font-size: 20px;
+    }
+    p {
+      gap: 5px;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
 `;
 
 const InputWrap = styled.div`
@@ -64,6 +75,13 @@ const InputWrap = styled.div`
     border-radius: 11px;
     border: 2px solid #cecece;
   }
+  @media (max-width: 1024px) {
+    gap: 12px;
+    input {
+      width: 45px;
+      height: 55px;
+    }
+  }
 `;
 
 export default function PrivateLock() {
@@ -72,6 +90,18 @@ export default function PrivateLock() {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const { setViewModal, postId } = ControlModalStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!postId) return;
+    const fetchPassword = async () => {
+      const res = await GetMatchPassword(postId);
+      if (res.role === "admin" && res.password) {
+        showAlert(`관리자 권한 비밀번호 : ${res.password}`);
+      }
+    };
+    fetchPassword();
+  }, []);
+
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
     const newPassword = [...password];
@@ -95,6 +125,7 @@ export default function PrivateLock() {
       setPassword(["", "", "", ""]);
     }
   };
+
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
@@ -125,7 +156,7 @@ export default function PrivateLock() {
       </div>
       <h1>비공개 질문입니다.</h1>
       <p>
-        질문 내용을 확인하려면 <span>비밀번호를 입력</span> 해주세요.
+        질문 내용을 확인하려면 <span>비밀번호를 입력 해주세요.</span>
       </p>
       <InputWrap>
         {password.map((num, i) => {

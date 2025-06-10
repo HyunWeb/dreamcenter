@@ -284,6 +284,26 @@ export const PostMatchPassword = async (password: string, postId: number) => {
   }
 };
 
+export const GetMatchPassword = async (postId: number) => {
+  const data = { postId: postId };
+  try {
+    const response = await API.post(`api/Question/GetPassword`, data);
+    return response.data;
+  } catch (error) {
+    console.error("비밀번호 불러오기 실패", error);
+  }
+};
+
+export const GetMyReservation = async (postId: number) => {
+  const data = { postId: postId };
+  try {
+    const response = await API.post(`api/reservation/GetMyReservation`, data);
+    return response.data;
+  } catch (error) {
+    console.error("예약내역 불러오기 실패", error);
+  }
+};
+
 export const GetQuestion = async (id: string) => {
   try {
     const response = await API.get(`api/Question/${id}`);

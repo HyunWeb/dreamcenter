@@ -3,10 +3,12 @@ import styled from "styled-components";
 import PrivateLock from "./PrivateLock";
 import Button from "../Button";
 import FloatTelePhone from "./FloatTelePhone";
+import MyReservation from "./MyReservation";
 
 const Div = styled.div`
-  width: 370px;
-  height: 330px;
+  box-sizing: border-box;
+  width: 490px;
+  height: 410px;
   position: fixed;
   z-index: 10;
   border-radius: 20px;
@@ -16,6 +18,13 @@ const Div = styled.div`
   background-color: white;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   padding: 40px 60px;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+    height: 350px;
+    max-width: 370px;
+    padding: 20px 30px;
+  }
 `;
 
 type Props = {
@@ -26,6 +35,7 @@ export default function ModalUI({ type }: Props) {
     <Div>
       {type === "privateLock" && <PrivateLock />}
       {type === "FloatTelePhone" && <FloatTelePhone />}
+      {type === "MyReservation" && <MyReservation />}
     </Div>
   );
 }

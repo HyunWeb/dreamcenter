@@ -32,6 +32,10 @@ const Label = styled.label`
     margin-top: 16px;
     font-size: 16px;
   }
+  @media (max-width: 1024px) {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 `;
 
 export default function UploadFile({ files, setFiles }: UploadFilesProps) {

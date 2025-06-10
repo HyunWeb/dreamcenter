@@ -17,6 +17,9 @@ const StyleButton = styled(Button)`
   padding: 15px 45px;
   font-size: 16px;
   border-radius: 8px;
+  @media (max-width: 1024px) {
+    white-space: nowrap;
+  }
 `;
 type ButtonProps = {
   password: string[];

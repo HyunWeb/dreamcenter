@@ -3,6 +3,7 @@ import styled from "styled-components";
 import DeleteButton from "@/components/common/DeleteButton";
 import { ReservationInputStore } from "@/store/userStore";
 import { v4 as uuidv4 } from "uuid";
+import { spawn } from "child_process";
 
 const ImgDiv = styled.div`
   display: flex;
@@ -20,6 +21,19 @@ const ImgDiv = styled.div`
       text-overflow: ellipsis;
       padding: 10px;
       margin-left: 10px;
+    }
+  }
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 20px;
+    ul {
+      width: 100%;
+      .emptyFileText {
+        text-align: center;
+        display: block;
+        color: #888888;
+        font-size: 15px;
+      }
     }
   }
 `;
@@ -46,6 +60,9 @@ const ImgLabel = styled.label`
     margin-top: 16px;
     font-size: 16px;
   }
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 `;
 
 const ImgListItems = styled.li`
@@ -59,6 +76,7 @@ const ImgListItems = styled.li`
     height: 24px;
     color: #888888;
   }
+
   span {
     display: block;
     width: 70%;
@@ -69,6 +87,7 @@ const ImgListItems = styled.li`
     line-height: 1.5;
     margin-left: 10px;
   }
+
   button {
     background-color: transparent;
     border: none;
@@ -122,25 +141,29 @@ export default function ImgInputGroup() {
           <p>파일을 선택해주세요</p>
         </ImgLabel>
         <ul>
-          {file.map((item, index) => {
-            return (
-              <ImgListItems key={index}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-file-earmark-text"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
-                  <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
-                </svg>
-                <span>{item.file.name}</span>
-                <DeleteButton file={item} setFiles={setFiles} />
-              </ImgListItems>
-            );
-          })}
+          {file.length ? (
+            file.map((item, index) => {
+              return (
+                <ImgListItems key={index}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-file-earmark-text"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+                    <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+                  </svg>
+                  <span>{item.file.name}</span>
+                  <DeleteButton file={item} setFiles={setFiles} />
+                </ImgListItems>
+              );
+            })
+          ) : (
+            <li className="emptyFileText">선택된 파일이 존재하지 않습니다.</li>
+          )}
         </ul>
       </ImgDiv>
       <input

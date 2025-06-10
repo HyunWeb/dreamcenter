@@ -23,6 +23,10 @@ const Section = styled.section`
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `;
 
 const ImgList = styled.div`
@@ -68,6 +72,10 @@ const ImgList = styled.div`
       padding: 5px;
       cursor: pointer;
     }
+  }
+
+  @media (max-width: 1024px) {
+    width: 100%;
   }
 `;
 

@@ -4,9 +4,14 @@ import Gnb from "../../common/Gnb";
 import styled from "styled-components";
 import FooterLayout from "../../common/FooterLayout";
 import CustomAlert from "@/components/common/CustomAlert";
-import { ControlModalStore, useUserStore } from "@/store/userStore";
+import {
+  ControlModalStore,
+  UseModalStore,
+  useUserStore,
+} from "@/store/userStore";
 import FloatingButton from "@/components/common/FloatingButton";
 import ModalUI from "@/components/common/Modal/ModalUI";
+import ImageOverlay from "@/components/common/ImageOverlay";
 
 const Layout = styled.div`
   display: flex;
@@ -20,6 +25,18 @@ const Header = styled.header`
   width: 100%;
   max-width: 1200px;
   margin-bottom: 30px;
+  @media (max-width: 1024px) {
+    z-index: 90;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const LogoDiv = styled.div`
@@ -32,13 +49,21 @@ const Main = styled.main`
   width: 100%;
   max-width: 1200px;
   flex-grow: 1;
+  @media (max-width: 1024px) {
+    padding: 70px 20px 0;
+    box-sizing: border-box;
+  }
 `;
 
 const Logo = styled.img`
   max-width: 224px;
+  @media (max-width: 1024px) {
+    max-width: 120px;
+  }
 `;
 export default function LayoutPage() {
   const { viewModal, type, setViewModal } = ControlModalStore();
+  const { ImageModal, setImageModal, setImageSrc } = UseModalStore();
   const location = useLocation();
   useEffect(() => {
     setViewModal(false);
@@ -60,6 +85,7 @@ export default function LayoutPage() {
       </Main>
       <FooterLayout />
       <FloatingButton />
+      {ImageModal && <ImageOverlay />}
     </Layout>
   );
 }

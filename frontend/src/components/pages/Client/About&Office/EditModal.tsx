@@ -36,11 +36,19 @@ const Div = styled.div`
   width: 55vw;
   max-width: 880px;
   height: 500px;
+  max-height: 520px;
   border-radius: 20px;
   background-color: white;
   padding: 40px 60px;
   box-sizing: border-box;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  @media (max-width: 1024px) {
+    width: 90%;
+    padding: 20px;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export default function EditModal() {

@@ -35,7 +35,13 @@ const Button = styled.button`
   font-size: 16px;
   box-sizing: border-box;
   line-height: 1.5;
+  font-weight: 500;
   cursor: pointer;
+  @media (max-width: 1024px) {
+    font-size: 13px;
+    padding: 5px 8px;
+    border-radius: 4px;
+  }
 `;
 const DeleteButton = styled(Button)`
   background-color: #c93e3e;
@@ -96,7 +102,7 @@ export default function ButtonWrap({
     setCurrentPage(1); // 지웠으면 페이지 1로 돌아가기
 
     if (res.message === "삭제 성공") {
-      showAlert("삭제 성공");
+      showAlert("예약 내역이 삭제되었습니다.");
       PageCount();
     }
   };

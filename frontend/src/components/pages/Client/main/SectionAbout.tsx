@@ -11,10 +11,12 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
   text-align: center;
   position: relative;
   color: white;
-  margin-bottom: 120px;
-
   height: 633px;
-  /* overflow: hidden; */
+  margin-bottom: 120px;
+  @media (max-width: 1024px) {
+    margin-bottom: 50px;
+    height: 500px;
+  }
 
   button {
     width: 86px;
@@ -32,6 +34,16 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
     svg {
       width: 30px;
       height: 30px;
+    }
+
+    @media (max-width: 1024px) {
+      width: 30px;
+      height: 30px;
+
+      svg {
+        width: 25px;
+        height: 25px;
+      }
     }
   }
 
@@ -58,16 +70,27 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
       font-size: 24px;
       font-weight: 500;
       margin-bottom: 10px;
+      @media (max-width: 1024px) {
+        font-size: 20px;
+      }
     }
     h2 {
       font-size: 36px;
       font-weight: 600;
       margin-bottom: 20px;
+      @media (max-width: 1024px) {
+        font-size: 23px;
+        line-height: 1.2;
+        text-align: center;
+      }
     }
 
     p {
       margin-bottom: 50px;
       line-height: 1.3;
+      @media (max-width: 1024px) {
+        font-size: 14px;
+      }
     }
 
     a {
@@ -81,6 +104,10 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
 
       &:hover {
         border: 1px solid white;
+      }
+
+      @media (max-width: 1024px) {
+        font-size: 14px;
       }
     }
   }

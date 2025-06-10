@@ -13,7 +13,7 @@ import { MainDataProps } from "@/types/forms";
 
 const Div = styled.div`
   position: fixed;
-  z-index: 20;
+  z-index: 100;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -32,10 +32,26 @@ const Div = styled.div`
     padding-bottom: 44px;
     border-bottom: 1px solid #dddddd;
   }
+
+  @media (max-width: 1024px) {
+    width: 90%;
+    background-color: white;
+    height: 90%;
+    padding: 20px 20px;
+
+    h2 {
+      padding-bottom: 20px;
+    }
+  }
 `;
 
 const Section = styled.section`
   padding: 40px;
+
+  @media (max-width: 1024px) {
+    padding: 0;
+    padding-top: 20px;
+  }
 `;
 const Textarea = styled.textarea`
   flex-grow: 1;
@@ -43,9 +59,17 @@ const Textarea = styled.textarea`
   border: 1px solid #dddddd;
   font-size: 16px;
   min-height: 150px;
+  @media (max-width: 1024px) {
+    box-sizing: border-box;
+    font-size: 15px;
+    padding: 10px;
+  }
 `;
 const Span = styled.span`
   color: #888888;
+  @media (max-width: 1024px) {
+    font-size: 14px;
+  }
 `;
 export default function AboutModal() {
   const { message, setMessage, setMainAbout, MainAbout, setTitle1, setTitle2 } =

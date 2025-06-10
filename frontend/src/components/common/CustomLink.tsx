@@ -48,7 +48,10 @@ const StyledLink = styled(Link)`
   background-color: #49b736; //로고 색
   color: white;
   border-radius: 20px;
-  /* padding: 5px 10px; */
+  @media (max-width: 1024px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 export default function CustomLink({ to }: CustomLinkProps) {

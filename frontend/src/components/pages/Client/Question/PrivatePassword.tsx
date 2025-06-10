@@ -1,6 +1,7 @@
 import { QuestionWritePageStore } from "@/store/userStore";
 import React from "react";
 import styled from "styled-components";
+
 const Input = styled.input`
   width: 50%;
   border: 1px solid #dddddd;
@@ -9,6 +10,10 @@ const Input = styled.input`
   font-size: 16px;
   margin-left: -20px;
   font-size: 16px;
+  @media (max-width: 1024px) {
+    margin-left: 0;
+    width: 70%;
+  }
 `;
 
 export default function PrivatePassword() {

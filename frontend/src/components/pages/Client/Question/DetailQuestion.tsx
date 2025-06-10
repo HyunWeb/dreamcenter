@@ -15,6 +15,16 @@ const QTitle = styled.div`
     display: flex;
     gap: 12px;
   }
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 12px;
+    .Question_title {
+      font-size: 20px;
+    }
+    .meta-Info {
+      font-size: 14px;
+    }
+  }
 `;
 
 const QMessage = styled.div`
@@ -22,9 +32,18 @@ const QMessage = styled.div`
   border-bottom: 1px solid #dddddd;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1024px) {
+    padding: 15px;
+  }
 `;
 const QImage = styled.div`
   margin: 70px 0;
+  @media (max-width: 1024px) {
+    margin: 30px 0;
+    img {
+      width: 100%;
+    }
+  }
 `;
 
 type Props = {

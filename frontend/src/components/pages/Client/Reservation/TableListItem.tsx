@@ -1,7 +1,7 @@
-import { ReservationMyListStore } from "@/store/userStore";
+import { ControlModalStore, ReservationMyListStore } from "@/store/userStore";
 import { FormData } from "@/types/forms";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 interface TableListItemProps {
@@ -30,6 +30,9 @@ const TableRow = styled.tr<{ $form: boolean }>`
     padding-bottom: 4px;
     display: inline-block;
   }
+  @media (max-width: 1024px) {
+    font-size: 14px;
+  }
 `;
 
 export default function TableListItem({ form, orderNum }: TableListItemProps) {
@@ -41,7 +44,8 @@ export default function TableListItem({ form, orderNum }: TableListItemProps) {
   const month = String(dateObj.getMonth() + 1).padStart(2, "0");
   const date = String(dateObj.getDate()).padStart(2, "0");
   const listNumber = startIndex + orderNum;
-
+  const location = useLocation();
+  const { setViewModal, setPostId, setType } = ControlModalStore();
   // 목차 시작 인덱스를 현재 페이지 기반으로 재 계산
   const limit = 10;
   useEffect(() => {
@@ -55,7 +59,13 @@ export default function TableListItem({ form, orderNum }: TableListItemProps) {
   };
 
   const hancleClick = () => {
-    setViewMode(["detail", form.id]);
+    if (location.pathname === "/reservation") {
+      setViewModal(true);
+      setPostId(form.id);
+      setType("MyReservation");
+    } else if (location.pathname === "/adminReservation") {
+      setViewMode(["detail", form.id]);
+    }
   };
   return (
     <TableRow $form={form.is_confirmed}>

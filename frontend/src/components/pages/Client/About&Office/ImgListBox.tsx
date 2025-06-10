@@ -11,15 +11,20 @@ const Div = styled.div`
 const ImgListView = styled.div`
   width: 100%;
   overflow: hidden;
+
+  @media (max-width: 1024px) {
+    overflow-x: auto;
+  }
 `;
 
 const ImageList = styled.ul<{ $imgLeng: number }>`
   display: flex;
   margin-left: 0;
+
   width: ${(props) =>
     `calc(100% / 4 * ${props.$imgLeng ? props.$imgLeng : 4})`};
-
-  div {
+  @media (max-width: 1024px) {
+    width: auto;
   }
 `;
 
@@ -48,6 +53,17 @@ const ImgListItem = styled.li<{ $imgLeng: number }>`
       color: #888888;
       width: 30px;
       height: 30px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    aspect-ratio: 4 / 3;
+    flex-shrink: 0;
+    width: 40%;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 `;

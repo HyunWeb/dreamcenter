@@ -26,6 +26,10 @@ const Button = styled.button`
   box-sizing: border-box;
   line-height: 1.5;
   cursor: pointer;
+  @media (max-width: 600px) {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
 `;
 
 const DeleteButton = styled(Button)`

@@ -21,6 +21,9 @@ const Description = styled.p`
   font-weight: 500;
   font-size: 15px;
   margin-bottom: 30px;
+  @media (max-width: 1024px) {
+    font-size: 14px;
+  }
 `;
 
 const Form = styled.form`
@@ -29,6 +32,10 @@ const Form = styled.form`
   justify-content: center;
 
   width: 100%;
+  @media (max-width: 1024px) {
+    /* justify-content: flex-start; */
+    display: block;
+  }
 `;
 const Fieldset = styled.fieldset`
   display: flex;
@@ -36,12 +43,19 @@ const Fieldset = styled.fieldset`
   align-items: flex-start;
   width: 100%;
   padding: 0px 150px;
+  @media (max-width: 1024px) {
+    padding: 0;
+  }
 `;
 
 const Span = styled.span`
   display: block;
   margin-bottom: 34px;
   text-align: left;
+  @media (max-width: 1024px) {
+    line-height: 1.6;
+    width: 100%;
+  }
 `;
 
 const Textarea = styled.textarea`
@@ -50,6 +64,9 @@ const Textarea = styled.textarea`
   padding: 17px 0 0 19px;
   border: 1px solid #dddddd;
   font-size: 16px;
+  @media (max-width: 1024px) {
+    height: 200px;
+  }
 `;
 
 const AgreeLabel = styled.label`
@@ -85,6 +102,10 @@ const AgreeLabel = styled.label`
     height: 1px;
     background-color: #dddddd;
   }
+
+  @media (max-width: 1024px) {
+    padding: 20px;
+  }
 `;
 
 const SubmitButton = styled.button`
@@ -96,6 +117,9 @@ const SubmitButton = styled.button`
   cursor: pointer;
   margin-bottom: 178px;
   font-size: 16px;
+  @media (max-width: 1024px) {
+    margin-bottom: 0;
+  }
 `;
 
 export default function FormSection() {

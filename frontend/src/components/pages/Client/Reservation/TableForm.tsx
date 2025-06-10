@@ -28,6 +28,10 @@ const TableRow = styled.tr`
   th {
     padding: 20px 0;
   }
+  @media (max-width: 1024px) {
+    font-size: 14px;
+    white-space: nowrap;
+  }
 `;
 
 export default function TableForm<T>({

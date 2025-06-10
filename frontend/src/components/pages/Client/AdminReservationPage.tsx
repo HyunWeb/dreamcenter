@@ -33,6 +33,10 @@ const Ul = styled.ul`
   padding: 50px 150px;
   box-sizing: border-box;
 
+  li {
+    border-bottom: 1px solid #dddddd;
+  }
+
   strong {
     font-size: 20px;
     font-weight: 600;
@@ -48,12 +52,27 @@ const Ul = styled.ul`
   img {
     width: 100%;
   }
+  @media (max-width: 1024px) {
+    padding: 20px 0;
+
+    strong {
+      font-size: 15px;
+      min-width: 145px;
+    }
+    span {
+      font-size: 14px;
+    }
+  }
 `;
 
 const StyleButton = styled(Button)`
   padding: 15px 45px;
   font-size: 16px;
   border-radius: 8px;
+  @media (max-width: 1024px) {
+    font-size: 14px;
+    padding: 12px 30px;
+  }
 `;
 
 const ButtonBox = styled.div`

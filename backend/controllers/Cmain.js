@@ -132,6 +132,8 @@ exports.postLogin = async (req, res) => {
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
     if (!existingUser) {
+      const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+      const isAdmin = adminEmails.includes(userData.email);
       user = await User.create({
         sns_id: userData.id,
         provider: "naver",
@@ -144,7 +146,7 @@ exports.postLogin = async (req, res) => {
         mobile: userData.mobile,
         birthyear: userData.birthyear,
         birthday: userData.birthday,
-        role: userData.email === "jonghyun1803@naver.com" ? "admin" : "user",
+        role: isAdmin ? "admin" : "user",
       });
     } else {
       user = existingUser;
@@ -727,6 +729,60 @@ exports.PostMatchPassword = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "비밀번호 확인 실패(서버)" });
+  }
+};
+
+exports.GetMatchPassword = async (req, res) => {
+  // 관리자일경우 비밀번호를 불러와서 알려주기
+  const postId = req.body.postId;
+  const token = req.cookies.token;
+  if (!token) {
+    return res.json({ code: "NO_TOKEN", message: "로그인이 필요합니다." });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({ where: { sns_id: decoded.userID } });
+    if (user.role !== "admin") {
+      return res.status(200).json({
+        role: "user",
+        message: "관리자 권한이 존재하지않습니다.",
+      });
+    }
+    const response = await QuestionSubmit.findOne({ where: { id: postId } });
+    if (!Number(response.isPrivate)) {
+      return res.status(200).json({
+        role: "admin",
+        message: "이미 공개된 게시글입니다.",
+      });
+    }
+    return res.status(200).json({
+      role: "admin",
+      message: "관리자 권한으로 비밀번호가 제공됩니다.",
+      password: response.privatePWD,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "비밀번호 불러오기 실패(서버)" });
+  }
+};
+
+exports.GetMyReservation = async (req, res) => {
+  const postId = req.body.postId;
+  const token = req.cookies.token;
+  if (!token) {
+    return res.json({ code: "NO_TOKEN", message: "로그인이 필요합니다." });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const response = await ReservationSubmit.findOne({
+      where: { id: postId, sns_id: decoded.userID },
+    });
+    return res.status(200).json({
+      result: response,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "비밀번호 불러오기 실패(서버)" });
   }
 };
 

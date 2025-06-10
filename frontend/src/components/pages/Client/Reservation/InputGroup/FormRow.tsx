@@ -8,6 +8,11 @@ const Inputdiv = styled.div`
   .custom1 {
     gap: 10px;
   }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
 `;
 
 const Label = styled.label`
@@ -18,6 +23,11 @@ const Label = styled.label`
   min-width: 180px;
   display: block;
   text-align: left;
+
+  @media (max-width: 1024px) {
+    font-size: 15px;
+    min-width: 100px;
+  }
 `;
 
 const Wrapper = styled.div`

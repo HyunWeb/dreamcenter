@@ -17,12 +17,17 @@ const ImgDiv = styled.div`
     width: 40%;
     height: 300px;
     text-align: left;
+
     li {
       white-space: nowrap;
       text-overflow: ellipsis;
       padding: 10px;
       margin-left: 10px;
     }
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
   }
 `;
 
@@ -48,6 +53,9 @@ const ImgLabel = styled.label`
     margin-top: 16px;
     font-size: 16px;
   }
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 `;
 
 const ImgListdiv = styled.div`
@@ -55,6 +63,9 @@ const ImgListdiv = styled.div`
   align-items: center;
   border-bottom: 2px solid #dddddd;
   width: 50%;
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 
   svg {
     width: 24px;
@@ -70,6 +81,9 @@ const ImgListdiv = styled.div`
     text-overflow: ellipsis;
     line-height: 1.5;
     margin-left: 10px;
+    @media (max-width: 1024px) {
+      text-align: left;
+    }
   }
   button {
     background-color: transparent;

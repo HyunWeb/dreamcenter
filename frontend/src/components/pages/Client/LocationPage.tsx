@@ -14,6 +14,9 @@ const Div = styled.div`
     font-size: 20px;
     font-weight: 500;
     color: #c93e3e;
+    @media (max-width: 600px) {
+      font-size: 15px;
+    }
   }
 
   ul {
@@ -22,15 +25,22 @@ const Div = styled.div`
     gap: 30px;
 
     margin-bottom: 120px;
+    @media (max-width: 600px) {
+      margin-top: 20px;
+      margin-bottom: 30px;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   li {
     background-color: white;
     padding: 35px;
-    width: 150px;
-    height: 150px;
+    width: 220px;
+    height: 220px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transform: translateY(-20%);
+    box-sizing: border-box;
     svg {
       width: 40px;
       height: 40px;
@@ -47,14 +57,42 @@ const Div = styled.div`
       color: #888888;
       line-height: 1.3;
     }
+    @media (max-width: 1024px) {
+      svg {
+        width: 27px;
+        height: 27px;
+      }
+      h3 {
+        font-size: 17px;
+      }
+      p {
+        font-size: 15px;
+        white-space: nowrap;
+      }
+    }
+    @media (max-width: 600px) {
+      flex-shrink: 0;
+      padding: 0;
+      width: 90%;
+      height: 190px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transform: translateY(0%);
+    }
   }
 `;
 
-const Article = styled.article`
-  background-image: url("./Reservation.png");
+const StyledLink = styled(Link)`
+  display: block;
+  text-decoration: none;
+  color: #111111;
+  background-image: url("./Reservation_Telephone.png"),
+    linear-gradient(#92d5ba, #92d5ba);
   background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  background-size: 200px, 100%;
+  background-position: 20%;
   position: relative;
   height: 150px;
   text-align: center;
@@ -73,7 +111,6 @@ const Article = styled.article`
     line-height: 45px;
     display: block;
     text-decoration: none;
-    /* padding: 12px 20px; */
     background-color: transparent;
     border: 2px solid #111111;
     color: #111111;
@@ -86,6 +123,34 @@ const Article = styled.article`
       color: white;
       background-color: #111111;
     }
+  }
+
+  @media (max-width: 1024px) {
+    background-image: url("./Reservation_Telephone.png"),
+      linear-gradient(#92d5ba, #92d5ba);
+
+    background-position: right;
+    background-size: 120px, 100%;
+    text-align: left;
+    padding: 20px;
+    box-sizing: border-box;
+    line-height: 120px;
+    font-size: 23px;
+    font-weight: 700;
+    span {
+      border-bottom: 2px solid #111111;
+    }
+    margin-bottom: 50px;
+
+    a {
+      display: none;
+    }
+  }
+  @media (min-width: 600px) and (max-width: 1024px) {
+    text-align: center;
+    background-position: 20%;
+    background-size: 180px, 100%;
+    font-size: 25px;
   }
 `;
 export default function LocationPage() {
@@ -154,10 +219,10 @@ export default function LocationPage() {
           </li>
         </ul>
       </section>
-      <Article>
-        예약 상담 바로가기
+      <StyledLink to="/reservation">
+        <span>예약 상담 바로가기</span>
         <Link to="/reservation">바로가기</Link>
-      </Article>
+      </StyledLink>
     </Div>
   );
 }

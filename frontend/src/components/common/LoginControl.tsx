@@ -7,6 +7,15 @@ const Div = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  @media (max-width: 1024px) {
+    position: absolute;
+    top: 0px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #dddddd;
+    right: 0;
+    width: 70vw;
+  }
 
   span {
     font-weight: bold;
@@ -30,12 +39,21 @@ const Button = styled.button`
     height: 22px;
     color: #888888;
   }
+  @media (max-width: 1024px) {
+    font-size: 14px;
+    gap: 12px;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 `;
 const LoginWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 15px;
+  white-space: nowrap;
 `;
 
 export default function LoginControl() {

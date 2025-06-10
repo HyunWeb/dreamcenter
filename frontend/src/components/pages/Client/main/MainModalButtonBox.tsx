@@ -11,11 +11,18 @@ const ButtonBox = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 60px;
+  @media (max-width: 1024px) {
+    margin-top: 30px;
+  }
 `;
 const StyleButton = styled(Button)`
   padding: 15px 45px;
   font-size: 16px;
   border-radius: 8px;
+  @media (max-width: 1024px) {
+    padding: 12px 40px;
+    font-size: 15px;
+  }
 `;
 
 export default function MainModalButtonBox() {

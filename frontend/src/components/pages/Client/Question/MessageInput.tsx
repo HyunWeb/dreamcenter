@@ -9,6 +9,11 @@ const Textarea = styled.textarea`
   border: 1px solid #dddddd;
   font-size: 16px;
   width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    height: 200px;
+  }
 `;
 
 export default function MessageInput() {

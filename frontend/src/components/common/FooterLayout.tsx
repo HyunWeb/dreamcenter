@@ -11,13 +11,23 @@ const Footer = styled.footer`
     max-width: 1200px;
     width: 100%;
     padding: 20px 0;
+    @media (max-width: 1024px) {
+      padding: 20px;
+    }
 
     h2 {
       font-size: 18px;
       font-weight: 600;
       margin-bottom: 20px;
+      @media (max-width: 1024px) {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
     }
     p {
+      @media (max-width: 1024px) {
+        font-size: 12px;
+      }
       font-size: 14px;
       color: #aaaaaa;
       line-height: 1.3;

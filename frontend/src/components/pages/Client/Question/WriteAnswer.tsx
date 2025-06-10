@@ -49,6 +49,17 @@ const AMessage = styled.div`
     font-size: 16px;
     width: 100%;
   }
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    padding: 0;
+    label {
+      width: 100%;
+    }
+    textarea {
+      box-sizing: border-box;
+      height: 200px;
+    }
+  }
 `;
 const AButtonBox = styled.div`
   display: flex;
@@ -90,6 +101,7 @@ export default function WriteAnswer({ setVeiwWriteAnswer, answer }: Props) {
     const res = await PostAnswerSubmit(id, message);
 
     if (res.success) {
+      showAlert("답변이 등록되었습니다.");
       setVeiwWriteAnswer(false);
     }
   };

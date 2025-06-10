@@ -34,6 +34,9 @@ const ButtonWrap = styled.div`
   gap: 24px;
   justify-content: center;
   margin-top: 60px;
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+  }
 `;
 type Slide = {
   created_at: string;

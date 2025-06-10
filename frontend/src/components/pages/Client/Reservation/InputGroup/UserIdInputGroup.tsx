@@ -20,6 +20,9 @@ const Input = styled.input`
   box-sizing: border-box;
   height: 40px;
   padding-left: 10px;
+  @media (max-width: 1024px) {
+    margin-right: 0;
+  }
 `;
 
 type Props = {

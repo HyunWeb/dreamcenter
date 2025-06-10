@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import ImgMovBtn from "./ImgMovBtn";
-import Button from "../../../common/Button";
 import {
   UseModalStore,
   ImgPreviewStore,
@@ -14,15 +13,10 @@ const ViewBox = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-
   margin-bottom: 40px;
+  overflow: hidden;
 `;
 
-const EditButton = styled(Button)`
-  position: absolute;
-  right: 110px;
-  top: -60px;
-`;
 const ImgContainer = styled.div`
   width: 80%;
   height: 50vh;
@@ -48,16 +42,23 @@ const ImgContainer = styled.div`
       height: 20%;
     }
   }
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 `;
 
 export default function ImgViewBox() {
   const { imgPreview, index, imgList, setImagePreview, setIndex } =
     ImgPreviewStore();
-  const { role } = useUserStore();
-  const { setIsModalOpen } = UseModalStore();
-  const OpenModal = () => {
-    setIsModalOpen(true);
-  };
+  const { setIsModalOpen, setImageModal, setImageSrc } = UseModalStore();
 
   const handleRightMove = () => {
     if (!imgList.length) return;
@@ -84,20 +85,21 @@ export default function ImgViewBox() {
     setImagePreview(prevImgUrl);
     setIndex(prevIndex);
   };
+
+  const handleOverlay = (ImgSrc: string) => {
+    setImageModal(true);
+    setImageSrc(ImgSrc);
+  };
   return (
     <ViewBox>
-      {role === "admin" && (
-        <EditButton
-          name="이미지 수정"
-          Bgcolor="green"
-          TitleColor="white"
-          onClick={OpenModal}
-        />
-      )}
       <ImgMovBtn direction={"leftBig"} onClick={handleLeftMove} />
       <ImgContainer>
         {imgPreview ? (
-          <img src={imgPreview} alt="유학원 이미지" />
+          <img
+            src={imgPreview}
+            alt="유학원 이미지"
+            onClick={() => handleOverlay(imgPreview)}
+          />
         ) : (
           <div>
             <svg

@@ -37,7 +37,6 @@ export default function QuestionButtonBox() {
   const { file, userId, setFiles } = ReservationInputStore();
   const navigate = useNavigate();
   const handleBack = () => {
-    showAlert("목록으로 돌아갑니다.");
     resetForm();
     setFiles([]);
     navigate(-1);

@@ -10,6 +10,7 @@ const Div = styled.div<{ $visible: boolean }>`
   transform: translateX(-50%);
   transition: top 0.4s ease;
   width: 400px;
+  max-width: 400px;
   height: 60px;
   background-color: white;
   box-shadow: 0 2px 8px rgb(0 0 0 / 39%);
@@ -27,6 +28,10 @@ const Div = styled.div<{ $visible: boolean }>`
     width: 25px;
     height: 25px;
     color: #49b736;
+  }
+  @media (max-width: 1024px) {
+    width: 90%;
+    top: ${(props) => (props.$visible ? "75px" : "-100px")};
   }
 `;
 
