@@ -25,6 +25,11 @@ const DefaultText = styled.p`
   font-weight: 600;
   color: #888888;
   margin: 100px;
+
+  @media (max-width: 1024px) {
+    font-size: 20px;
+    margin: 100px 0 0 0;
+  }
 `;
 
 export default function ViewBox() {
