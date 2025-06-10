@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PrivateLock from "./PrivateLock";
 import Button from "../Button";
 import FloatTelePhone from "./FloatTelePhone";
+import MyReservation from "./MyReservation";
 
 const Div = styled.div`
   box-sizing: border-box;
@@ -34,6 +35,7 @@ export default function ModalUI({ type }: Props) {
     <Div>
       {type === "privateLock" && <PrivateLock />}
       {type === "FloatTelePhone" && <FloatTelePhone />}
+      {type === "MyReservation" && <MyReservation />}
     </Div>
   );
 }

@@ -21,6 +21,7 @@ const ATitle = styled.div`
   @media (max-width: 1024px) {
     flex-direction: column;
     gap: 12px;
+    padding: 20px;
 
     .meta-Info {
       font-size: 14px;

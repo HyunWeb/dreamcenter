@@ -13,6 +13,14 @@ const Section = styled.section`
   overflow-x: hidden;
   overflow-y: auto;
 
+  .ReactSortable {
+    width: 50%;
+    overflow-y: auto;
+    height: 100%;
+    scrollbar-width: thin;
+  }
+
+  // 이미지 없을 때 더미 박스
   div {
     color: #dddddd;
     width: 40%;
@@ -25,11 +33,36 @@ const Section = styled.section`
       font-weight: 600;
     }
   }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    flex-grow: 1;
+    margin-top: 0;
+
+    .PreviewImg {
+      display: none;
+    }
+    .ImgdummyText {
+      width: 100%;
+    }
+
+    /* div {
+      width: 100%;
+      height: 210px;
+      flex-shrink: 0;
+    } */
+    .ReactSortable {
+      width: 100%;
+      margin-top: 10px;
+    }
+  }
 `;
 
 const PreviewImg = styled.div`
   width: 40%;
   height: 100%;
+  max-width: 290px;
+  max-height: 210px;
   background-color: #dddddd;
   border-radius: 20px;
   display: flex;
@@ -47,6 +80,7 @@ const PreviewImg = styled.div`
     color: #888888;
   }
 `;
+
 interface Slide {
   created_at: string;
   id: number;
@@ -66,7 +100,7 @@ export default function LoadImgSection({
   const [prevImg, setPrevImg] = useState("");
   return (
     <Section>
-      <PreviewImg>
+      <PreviewImg className="PreviewImg">
         {prevImg ? (
           <img src={prevImg} alt="미리보기 사진" />
         ) : (
@@ -88,13 +122,8 @@ export default function LoadImgSection({
           tag="ul"
           list={existingImages}
           setList={setExistingImages}
+          className="ReactSortable"
           animation={150}
-          style={{
-            width: "50%",
-            overflowY: "auto",
-            height: "100%",
-            scrollbarWidth: "thin",
-          }}
         >
           {existingImages.map((file, index) => (
             <PreviewImgList
@@ -107,7 +136,7 @@ export default function LoadImgSection({
           ))}
         </ReactSortable>
       ) : (
-        <div>
+        <div className="ImgdummyText">
           <span>이미지가 없습니다.</span>
         </div>
       )}

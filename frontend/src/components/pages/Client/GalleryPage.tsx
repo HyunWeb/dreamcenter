@@ -1,18 +1,12 @@
 import Button from "@/components/common/Button";
 import PageHeader from "@/components/common/PageHeader";
 import Masonry from "react-masonry-css";
-import {
-  ControlModalStore,
-  UseModalStore,
-  useUserStore,
-} from "@/store/userStore";
+import { UseModalStore, useUserStore } from "@/store/userStore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import EditModal from "./About&Office/EditModal";
-import PageCountUI from "@/components/common/PageCountUI";
 import { GetGalleryImages, GetGalleryPage } from "@/api/postApi";
 import { GallerySlide } from "@/types/forms";
-import ImageOverlay from "@/components/common/ImageOverlay";
 
 const breakpointColumnsObj = {
   default: 3,
@@ -104,7 +98,6 @@ export default function GalleryPage() {
         ))}
       </Masonry>
 
-      {ImageModal && <ImageOverlay />}
       {isModalOpen && <EditModal />}
     </Div>
   );

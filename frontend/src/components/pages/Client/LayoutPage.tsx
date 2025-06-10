@@ -4,9 +4,14 @@ import Gnb from "../../common/Gnb";
 import styled from "styled-components";
 import FooterLayout from "../../common/FooterLayout";
 import CustomAlert from "@/components/common/CustomAlert";
-import { ControlModalStore, useUserStore } from "@/store/userStore";
+import {
+  ControlModalStore,
+  UseModalStore,
+  useUserStore,
+} from "@/store/userStore";
 import FloatingButton from "@/components/common/FloatingButton";
 import ModalUI from "@/components/common/Modal/ModalUI";
+import ImageOverlay from "@/components/common/ImageOverlay";
 
 const Layout = styled.div`
   display: flex;
@@ -58,6 +63,7 @@ const Logo = styled.img`
 `;
 export default function LayoutPage() {
   const { viewModal, type, setViewModal } = ControlModalStore();
+  const { ImageModal, setImageModal, setImageSrc } = UseModalStore();
   const location = useLocation();
   useEffect(() => {
     setViewModal(false);
@@ -79,6 +85,7 @@ export default function LayoutPage() {
       </Main>
       <FooterLayout />
       <FloatingButton />
+      {ImageModal && <ImageOverlay />}
     </Layout>
   );
 }

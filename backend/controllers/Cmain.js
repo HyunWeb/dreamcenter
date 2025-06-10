@@ -732,6 +732,60 @@ exports.PostMatchPassword = async (req, res) => {
   }
 };
 
+exports.GetMatchPassword = async (req, res) => {
+  // 관리자일경우 비밀번호를 불러와서 알려주기
+  const postId = req.body.postId;
+  const token = req.cookies.token;
+  if (!token) {
+    return res.json({ code: "NO_TOKEN", message: "로그인이 필요합니다." });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({ where: { sns_id: decoded.userID } });
+    if (user.role !== "admin") {
+      return res.status(200).json({
+        role: "user",
+        message: "관리자 권한이 존재하지않습니다.",
+      });
+    }
+    const response = await QuestionSubmit.findOne({ where: { id: postId } });
+    if (!Number(response.isPrivate)) {
+      return res.status(200).json({
+        role: "admin",
+        message: "이미 공개된 게시글입니다.",
+      });
+    }
+    return res.status(200).json({
+      role: "admin",
+      message: "관리자 권한으로 비밀번호가 제공됩니다.",
+      password: response.privatePWD,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "비밀번호 불러오기 실패(서버)" });
+  }
+};
+
+exports.GetMyReservation = async (req, res) => {
+  const postId = req.body.postId;
+  const token = req.cookies.token;
+  if (!token) {
+    return res.json({ code: "NO_TOKEN", message: "로그인이 필요합니다." });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const response = await ReservationSubmit.findOne({
+      where: { id: postId, sns_id: decoded.userID },
+    });
+    return res.status(200).json({
+      result: response,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "비밀번호 불러오기 실패(서버)" });
+  }
+};
+
 exports.GetQuestion = async (req, res) => {
   const postId = req.params.id;
   try {

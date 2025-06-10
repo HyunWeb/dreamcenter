@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ControlModalStore, useAlertStore } from "@/store/userStore";
-import { PostMatchPassword } from "@/api/postApi";
+import { GetMatchPassword, PostMatchPassword } from "@/api/postApi";
 import { useNavigate } from "react-router-dom";
 import ModalButtonBox from "../ModalButtonBox";
 
@@ -90,6 +90,18 @@ export default function PrivateLock() {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const { setViewModal, postId } = ControlModalStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!postId) return;
+    const fetchPassword = async () => {
+      const res = await GetMatchPassword(postId);
+      if (res.role === "admin" && res.password) {
+        showAlert(`관리자 권한 비밀번호 : ${res.password}`);
+      }
+    };
+    fetchPassword();
+  }, []);
+
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
     const newPassword = [...password];
@@ -113,6 +125,7 @@ export default function PrivateLock() {
       setPassword(["", "", "", ""]);
     }
   };
+
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number

@@ -58,7 +58,7 @@ const ImgContainer = styled.div`
 export default function ImgViewBox() {
   const { imgPreview, index, imgList, setImagePreview, setIndex } =
     ImgPreviewStore();
-  const { setIsModalOpen } = UseModalStore();
+  const { setIsModalOpen, setImageModal, setImageSrc } = UseModalStore();
 
   const handleRightMove = () => {
     if (!imgList.length) return;
@@ -85,12 +85,21 @@ export default function ImgViewBox() {
     setImagePreview(prevImgUrl);
     setIndex(prevIndex);
   };
+
+  const handleOverlay = (ImgSrc: string) => {
+    setImageModal(true);
+    setImageSrc(ImgSrc);
+  };
   return (
     <ViewBox>
       <ImgMovBtn direction={"leftBig"} onClick={handleLeftMove} />
       <ImgContainer>
         {imgPreview ? (
-          <img src={imgPreview} alt="유학원 이미지" />
+          <img
+            src={imgPreview}
+            alt="유학원 이미지"
+            onClick={() => handleOverlay(imgPreview)}
+          />
         ) : (
           <div>
             <svg

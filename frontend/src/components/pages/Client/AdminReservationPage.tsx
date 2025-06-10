@@ -33,6 +33,10 @@ const Ul = styled.ul`
   padding: 50px 150px;
   box-sizing: border-box;
 
+  li {
+    border-bottom: 1px solid #dddddd;
+  }
+
   strong {
     font-size: 20px;
     font-weight: 600;

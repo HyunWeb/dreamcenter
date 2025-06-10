@@ -5,6 +5,7 @@ import styled from "styled-components";
 const Div = styled.div`
   cursor: pointer;
   position: fixed;
+  z-index: 10;
 
   top: 0;
   left: 0;
@@ -20,6 +21,8 @@ const Div = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
+    object-fit: cover;
+
     max-width: 800px;
     @media (max-width: 1024px) {
       width: 90%;
@@ -37,6 +40,7 @@ const CancleButton = styled.button`
   position: absolute;
   top: 5vw;
   right: 5vh;
+  z-index: 10;
 
   svg {
     width: 30px;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CustomLink from "../../../common/CustomLink";
-import { ImgPreviewStore } from "@/store/userStore";
+import { ImgPreviewStore, UseModalStore } from "@/store/userStore";
 import { GetOfficeImages } from "@/api/postApi";
 import { ImageItem } from "@/types/forms";
 
@@ -66,6 +66,8 @@ const Ul = styled.ul`
 export default function SectionOffice() {
   const { imgList } = ImgPreviewStore();
   const [OfficeImg, setOfficeImg] = useState<ImageItem[]>();
+  const { setImageModal, setImageSrc } = UseModalStore();
+
   useEffect(() => {
     const fetchImage = async () => {
       const response = await GetOfficeImages();
@@ -73,6 +75,11 @@ export default function SectionOffice() {
     };
     fetchImage();
   }, [imgList]);
+
+  const handleOverlay = (ImgSrc: string) => {
+    setImageModal(true);
+    setImageSrc(ImgSrc);
+  };
 
   return (
     <Section>
@@ -88,7 +95,7 @@ export default function SectionOffice() {
         <Ul>
           {OfficeImg?.map((item, index) => {
             return (
-              <li key={index}>
+              <li key={index} onClick={() => handleOverlay(item.image_url)}>
                 <img
                   src={item.image_url}
                   alt="타슈켄트 사무소 사진"

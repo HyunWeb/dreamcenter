@@ -1,12 +1,16 @@
+import { UseModalStore } from "@/store/userStore";
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 
-const MapDiv = styled.div`
+const MapDiv = styled.div<{ $isMenuOpen: boolean }>`
   width: 100%;
   height: 400px;
+  transition-duration: 500ms;
+  opacity: ${({ $isMenuOpen }) => ($isMenuOpen ? "0" : "1")};
 `;
 
 export default function NaverMap() {
+  const { isMenuOpen } = UseModalStore();
   const mapRef = useRef<HTMLDivElement | null>(null);
   const latitude = 35.8705550791362; // 위도
   const longitude = 128.633896826138; // 경도
@@ -35,5 +39,5 @@ export default function NaverMap() {
     });
   }, []);
 
-  return <MapDiv ref={mapRef} />;
+  return <MapDiv ref={mapRef} $isMenuOpen={isMenuOpen} />;
 }

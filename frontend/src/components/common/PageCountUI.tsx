@@ -1,5 +1,5 @@
 import { GetPageCount } from "@/api/postApi";
-import React, { SetStateAction, useEffect } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 import { FormData, QuestionData } from "@/types/forms";
 import {
@@ -7,11 +7,13 @@ import {
   SearchStore,
   UseModalStore,
 } from "@/store/userStore";
+import { start } from "repl";
 const Div = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 70px auto 0;
+  width: 400px;
 
   .arrowButton {
     display: flex;
@@ -32,16 +34,36 @@ const Div = styled.div`
       color: #49b736;
     }
   }
-`;
 
-const Ul = styled.ul`
+  .CountWrap {
+    flex-grow: 1;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  @media (max-width: 1024px) {
+    width: 300px;
+  }
+`;
+/*
+  7, 10
+  3, 6
+*/
+const Ul = styled.ul<{ $Index: number }>`
   display: flex;
   align-items: center;
   color: #888888;
-  gap: 8px;
-  margin: 0 24px;
+  transform: translateX(calc(-25% * 0));
+  transform: ${({ $Index }) => `translateX(calc(-25% * ${$Index}))`};
+  transition-duration: 500ms;
+  /* gap: 8px; */
 
   li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% / 4);
+    flex-shrink: 0;
     .Countselected {
       background-color: #49b736;
       color: white;
@@ -73,6 +95,8 @@ export default function PageCountUI<T>({
   setForm,
   type,
 }: MyListSectionProps<T>) {
+  const [startIndex, setStartIndex] = useState(1);
+  const [endIndex, setEndIndex] = useState(4);
   const { pageCount, setPageCount, currentPage, setCurrentPage } =
     ReservationMyListStore();
   const { isModalOpen, setIsModalOpen } = UseModalStore();
@@ -120,20 +144,52 @@ export default function PageCountUI<T>({
   const handleDown = () => {
     if (currentPage === 1) return;
     setCurrentPage(currentPage - 1);
+    if (currentPage - 1 < startIndex) {
+      setEndIndex((prev) => prev - 1);
+      setStartIndex((prev) => prev - 1);
+    }
   };
 
   const handleUp = () => {
     const Maxlength = pageCount.length;
     if (currentPage === Maxlength) return;
     setCurrentPage(currentPage + 1);
+    // 다음 페이지가 마지막 인덱스(초기값 4) 보다 커지면 마지막 인덱스를 갱신
+    if (currentPage + 1 > endIndex) {
+      setEndIndex((prev) => prev + 1);
+      setStartIndex((prev) => prev + 1);
+    }
   };
 
   const handleStart = () => {
-    setCurrentPage(1);
+    if (currentPage === 1) return;
+
+    if (startIndex - 4 < 1) {
+      setCurrentPage(1);
+      setStartIndex(1);
+      setEndIndex(4);
+    } else {
+      setCurrentPage(startIndex - 4);
+      setStartIndex((prev) => prev - 4);
+      setEndIndex((prev) => prev - 4);
+    }
   };
   const handleEnd = () => {
     const Maxlength = pageCount.length;
-    setCurrentPage(Maxlength);
+    if (Maxlength < 5) {
+      setCurrentPage(Maxlength);
+      return;
+    }
+
+    if (endIndex + 4 > Maxlength) {
+      setCurrentPage(Maxlength);
+      setEndIndex(Maxlength);
+      setStartIndex(Maxlength - 3);
+    } else {
+      setCurrentPage(startIndex + 4);
+      setEndIndex((prev) => prev + 4);
+      setStartIndex((prev) => prev + 4);
+    }
   };
   return (
     <Div>
@@ -171,20 +227,22 @@ export default function PageCountUI<T>({
           />
         </svg>
       </button>
-      <Ul>
-        {pageCount.map((item, index) => {
-          return (
-            <li key={index}>
-              <PageButton
-                className={item === currentPage ? "Countselected" : ""}
-                onClick={() => handleChangePage(item)}
-              >
-                {item}
-              </PageButton>
-            </li>
-          );
-        })}
-      </Ul>
+      <div className="CountWrap">
+        <Ul $Index={startIndex - 1}>
+          {pageCount.map((item, index) => {
+            return (
+              <li key={index}>
+                <PageButton
+                  className={item === currentPage ? "Countselected" : ""}
+                  onClick={() => handleChangePage(item)}
+                >
+                  {item}
+                </PageButton>
+              </li>
+            );
+          })}
+        </Ul>
+      </div>
       <button className="arrowButton" onClick={handleUp}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -78,20 +78,24 @@ export const WriteAboutStore = create<WriteAboutStoreProps>((set) => ({
 }));
 
 interface UseModalStoreProps {
+  isMenuOpen: boolean;
   isModalOpen: boolean;
   ImageModal: boolean;
   ImageSrc: string;
   loadingUI: boolean;
+  setIsMenuOpen: (state: boolean) => void;
   setIsModalOpen: (state: boolean) => void;
   setImageModal: (state: boolean) => void;
   setImageSrc: (state: string) => void;
   setLoadingUI: (state: boolean) => void;
 }
 export const UseModalStore = create<UseModalStoreProps>((set) => ({
+  isMenuOpen: false,
   isModalOpen: false,
   ImageModal: false,
   ImageSrc: "",
   loadingUI: false,
+  setIsMenuOpen: (state: boolean) => set({ isMenuOpen: state }),
   setIsModalOpen: (state: boolean) => set({ isModalOpen: state }),
   setImageModal: (state: boolean) => set({ ImageModal: state }),
   setImageSrc: (state: string) => set({ ImageSrc: state }),

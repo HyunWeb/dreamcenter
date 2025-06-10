@@ -53,6 +53,7 @@ const LoginWrap = styled.div`
   justify-content: center;
   align-items: center;
   gap: 15px;
+  white-space: nowrap;
 `;
 
 export default function LoginControl() {

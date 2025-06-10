@@ -40,6 +40,8 @@ const {
   GetMainAbout,
   GetMainGallery,
   GetGalleryPage,
+  GetMatchPassword,
+  GetMyReservation,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -61,12 +63,14 @@ router.get("/office/getWrite", GetOfficeWrite);
 router.post("/reservation/postSubmit", PostReservationSubmit);
 router.get("/reservation/getSubmit", GetReservationSubmit);
 router.post("/reservation/postDelete", PostReservationDelete);
+router.post("/reservation/GetMyReservation", GetMyReservation);
 router.get("/pagecount", GetPageCount);
 router.post("/AdminReservation/ChangeState", PostChangeState);
 router.put("/AdminReservation/confirm", PutUpdateConfirm);
 router.put("/AdminReservation/Unconfirm", PutUnUpdateConfirm);
 router.post("/Question/submit", PostQuestionSubmit);
 router.post("/Question/Password", PostMatchPassword);
+router.post("/Question/GetPassword", GetMatchPassword);
 router.get("/Question/search", GetSearch);
 router.get("/Question/:id", GetQuestion);
 router.get("/Answer/:id", GetAnswer);

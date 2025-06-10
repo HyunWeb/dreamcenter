@@ -23,7 +23,7 @@ const Div = styled.div`
   @media (max-width: 1024px) {
     margin-bottom: 100px;
     .Question_title {
-      font-size: 20px;
+      font-size: 18px;
     }
   }
 `;

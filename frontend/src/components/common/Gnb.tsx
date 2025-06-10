@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import LoginControl from "./LoginControl";
-import { useUserStore } from "@/store/userStore";
+import { UseModalStore, useUserStore } from "@/store/userStore";
 
 const MenuBtn = styled.button`
   display: none;
+  cursor: pointer;
   @media (max-width: 1024px) {
     padding: 0;
     margin: 0;
@@ -38,6 +39,7 @@ const Nav = styled.nav<{ $isOpen: boolean }>`
     z-index: 90;
     background-color: white;
     height: calc(100vh - 70px);
+    box-shadow: -2px 4px 8px rgb(0 0 0 / 39%);
   }
 `;
 const Ul = styled.ul`
@@ -52,6 +54,7 @@ const Ul = styled.ul`
     color: #111111;
     display: block;
     padding: 20px 20px;
+    white-space: nowrap;
   }
 
   .active {
@@ -63,7 +66,7 @@ const Ul = styled.ul`
 
 export default function Gnb() {
   const { role } = useUserStore();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isMenuOpen, setIsMenuOpen } = UseModalStore();
   const navItems = [
     { to: "/", label: "Home" },
     { to: "about", label: "About" },
@@ -77,7 +80,7 @@ export default function Gnb() {
   ];
 
   const handleMenu = () => {
-    setIsMenuOpen((prev) => !prev);
+    setIsMenuOpen(!isMenuOpen);
   };
   return (
     <Nav $isOpen={isMenuOpen}>
@@ -98,7 +101,7 @@ export default function Gnb() {
       </MenuBtn>
       <Ul>
         {navItems.map((item) => (
-          <li key={item.to}>
+          <li key={item.to} onClick={handleMenu}>
             <NavLink
               to={item.to}
               className={({ isActive }) => (isActive ? "active" : "")}
@@ -108,7 +111,7 @@ export default function Gnb() {
           </li>
         ))}
         {role === "admin" && (
-          <li>
+          <li onClick={handleMenu}>
             <NavLink to="adminReservation">예약관리</NavLink>
           </li>
         )}
