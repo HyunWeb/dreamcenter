@@ -10,11 +10,13 @@ interface CurrentRootProps {
 
 const P = styled.p`
   color: #888888;
+
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
+  margin-bottom: 20px;
   svg {
     color: #888888;
   }

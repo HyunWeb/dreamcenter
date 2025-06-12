@@ -13,6 +13,8 @@ const {
   Answer,
   GalleryImage,
   MainPage,
+  Location,
+  Footer,
 } = require("../models");
 const { sequelize } = require("../models");
 
@@ -95,7 +97,8 @@ exports.getLoginState = async (req, res) => {
 
 exports.postLogin = async (req, res) => {
   const { code, state, originalState } = req.body;
-
+  const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+  console.log(adminEmails);
   if (state !== originalState) {
     return;
   }
@@ -131,6 +134,10 @@ exports.postLogin = async (req, res) => {
     let existingUser = await User.findOne({ where: { sns_id: userData.id } });
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
+    const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+    console.log(adminEmails);
+    const isAdmin = adminEmails.includes(userData.email);
+    console.log(isAdmin);
     if (!existingUser) {
       const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
       const isAdmin = adminEmails.includes(userData.email);
@@ -1075,5 +1082,104 @@ exports.GetGalleryPage = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "답변 불러오기 실패(서버)" });
+  }
+};
+
+exports.GetGeocode = async (req, res) => {
+  const { address } = req.query;
+  if (!address) {
+    return res.status(400).json({ error: "주소를 입력해주세요." });
+  }
+  try {
+    const response = await axios.get(
+      "https://maps.apigw.ntruss.com/map-geocode/v2/geocode",
+      {
+        headers: {
+          "x-ncp-apigw-api-key-id": process.env.NAVER_MAP_CLIENT_ID,
+          "x-ncp-apigw-api-key": process.env.NAVER_MAP_CLIENT_SECRET,
+          Accept: "application/json",
+        },
+        params: {
+          query: address,
+        },
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error("네이버 지오코딩 실패:", error.message);
+    res.status(500).json({ error: "Geocoding failed" });
+  }
+};
+
+exports.PostLocation = async (req, res) => {
+  const { address, phone1, phone2, OPDays, startTime, endTime } = req.body;
+  try {
+    const count = await Location.count();
+    if (!count) {
+      await Location.create({
+        address,
+        phone1,
+        phone2,
+        op_days: OPDays,
+        start_time: startTime,
+        end_time: endTime,
+      });
+    } else {
+      const existing = await Location.findOne();
+      await existing.update({
+        address,
+        phone1,
+        phone2,
+        op_days: OPDays,
+        start_time: startTime,
+        end_time: endTime,
+      });
+    }
+    res.status(200).json({ message: "오시는길 정보 저장 완료" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "오시는길 정보 수정 실패(서버)" });
+  }
+};
+
+exports.GetLocation = async (req, res) => {
+  try {
+    const existing = await Location.findOne();
+    res.status(200).json({ result: existing });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "오시는길 정보 수정 실패(서버)" });
+  }
+};
+
+exports.PostFooter = async (req, res) => {
+  const { title, description } = req.body;
+  try {
+    const count = await Footer.count();
+    if (!count) {
+      await Footer.create({
+        title,
+        description,
+      });
+    } else {
+      const existing = await Footer.findOne();
+      await existing.update({
+        title,
+        description,
+      });
+    }
+    res.status(200).json({ message: "푸터 정보 저장 완료" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "푸터 정보 저장 실패(서버)" });
+  }
+};
+exports.GetFooter = async (req, res) => {
+  try {
+    const existing = await Footer.findOne();
+    res.status(200).json({ result: existing });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "오시는길 정보 수정 실패(서버)" });
   }
 };

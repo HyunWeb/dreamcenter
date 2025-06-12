@@ -40,14 +40,8 @@ const ButtonWrap = styled.div`
 `;
 
 export default function GalleryPage() {
-  const {
-    isModalOpen,
-    setIsModalOpen,
-    ImageModal,
-    setImageModal,
-    ImageSrc,
-    setImageSrc,
-  } = UseModalStore();
+  const { isModalOpen, setIsModalOpen, setImageModal, setImageSrc } =
+    UseModalStore();
   const [form, setForm] = useState<GallerySlide[]>([]);
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
@@ -97,8 +91,6 @@ export default function GalleryPage() {
           />
         ))}
       </Masonry>
-
-      {isModalOpen && <EditModal />}
     </Div>
   );
 }

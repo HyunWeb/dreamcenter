@@ -6,12 +6,14 @@ import FooterLayout from "../../common/FooterLayout";
 import CustomAlert from "@/components/common/CustomAlert";
 import {
   ControlModalStore,
+  FooterStore,
   UseModalStore,
   useUserStore,
 } from "@/store/userStore";
 import FloatingButton from "@/components/common/FloatingButton";
 import ModalUI from "@/components/common/Modal/ModalUI";
 import ImageOverlay from "@/components/common/ImageOverlay";
+import FooterModal from "@/components/common/Modal/FooterModal";
 
 const Layout = styled.div`
   display: flex;
@@ -65,6 +67,7 @@ export default function LayoutPage() {
   const { viewModal, type, setViewModal } = ControlModalStore();
   const { ImageModal, setImageModal, setImageSrc } = UseModalStore();
   const location = useLocation();
+  const { isModalOpen } = FooterStore();
   useEffect(() => {
     setViewModal(false);
   }, [location.pathname]);
@@ -86,6 +89,7 @@ export default function LayoutPage() {
       <FooterLayout />
       <FloatingButton />
       {ImageModal && <ImageOverlay />}
+      {isModalOpen && <FooterModal />}
     </Layout>
   );
 }

@@ -424,3 +424,61 @@ export const GetGalleryPage = async () => {
     console.error("갤러리 이미지 불러오기 실패", error);
   }
 };
+
+export const GetGeocode = async (address: string) => {
+  try {
+    const response = await API.get(`api/geocode`, {
+      params: { address },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("주소 불러오기 실패", error);
+  }
+};
+
+interface LocationProps {
+  address: string;
+  phone1: string;
+  phone2: string;
+  OPDays: string;
+  startTime: string;
+  endTime: string;
+}
+export const PostLocation = async (data: LocationProps) => {
+  try {
+    const response = await API.post(`api/Location/Post`, data);
+    return response.data;
+  } catch (error) {
+    console.error("오시는길 정보 수정 실패", error);
+  }
+};
+export const GetLocation = async () => {
+  try {
+    const response = await API.get(`api/Location/Get`);
+    return response.data;
+  } catch (error) {
+    console.error("오시는길 정보 가져오기 실패", error);
+  }
+};
+
+interface FooterProps {
+  title: string;
+  description: string;
+}
+export const postFooter = async (data: FooterProps) => {
+  try {
+    const response = await API.post(`api/Footer/Post`, data);
+    return response.data;
+  } catch (error) {
+    console.error("푸터 정보 수정 실패", error);
+  }
+};
+
+export const GetFooter = async () => {
+  try {
+    const response = await API.get(`api/Footer/Get`);
+    return response.data;
+  } catch (error) {
+    console.error("푸터 정보 가져오기 실패", error);
+  }
+};

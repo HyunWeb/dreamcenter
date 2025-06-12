@@ -1,43 +1,57 @@
-import { UseModalStore } from "@/store/userStore";
-import { useEffect, useRef } from "react";
+import { MapStore } from "@/store/userStore";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { geocode } from "./geocode";
 
-const MapDiv = styled.div<{ $isMenuOpen: boolean }>`
+const MapDiv = styled.div`
+  z-index: 0;
   width: 100%;
   height: 400px;
   transition-duration: 500ms;
-  opacity: ${({ $isMenuOpen }) => ($isMenuOpen ? "0" : "1")};
 `;
 
 export default function NaverMap() {
-  const { isMenuOpen } = UseModalStore();
   const mapRef = useRef<HTMLDivElement | null>(null);
-  const latitude = 35.8705550791362; // 위도
-  const longitude = 128.633896826138; // 경도
+  // 확장 기능에 대비한 상태관리
+  const [map, setMap] = useState<naver.maps.Map | null>(null);
+  const { address, editAdress } = MapStore();
 
   useEffect(() => {
-    if (!mapRef.current) return;
+    const initMap = async () => {
+      if (!mapRef.current) return;
 
-    var map = new window.naver.maps.Map(mapRef.current, {
-      zoomControl: true,
-      zoomControlOptions: {
-        style: window.naver.maps.ZoomControlStyle.SMALL,
-        position: window.naver.maps.Position.TOP_RIGHT,
-      },
-      center: new window.naver.maps.LatLng(latitude, longitude),
-      zoom: 17,
-    });
+      try {
+        const { latitude, longitude } = await geocode(editAdress || address);
+        const position = new window.naver.maps.LatLng(latitude, longitude);
 
-    var marker = new window.naver.maps.Marker({
-      position: new window.naver.maps.LatLng(latitude, longitude),
-      map,
-    });
+        const mapInstance = new window.naver.maps.Map(mapRef.current, {
+          zoomControl: true,
+          zoomControlOptions: {
+            style: window.naver.maps.ZoomControlStyle.SMALL,
+            position: window.naver.maps.Position.TOP_RIGHT,
+          },
+          center: position,
+          zoom: 17,
+        });
 
-    window.naver.maps.Event.addListener(marker, "click", () => {
-      map?.setCenter(new window.naver.maps.LatLng(latitude, longitude));
-      map?.setZoom(17);
-    });
-  }, []);
+        var marker = new window.naver.maps.Marker({
+          position,
+          map: mapInstance,
+        });
 
-  return <MapDiv ref={mapRef} $isMenuOpen={isMenuOpen} />;
+        window.naver.maps.Event.addListener(marker, "click", () => {
+          mapInstance.setCenter(position);
+          mapInstance.setZoom(17);
+        });
+
+        setMap(mapInstance);
+      } catch (err) {
+        console.error("주소 변환 실패:", err);
+      }
+    };
+
+    initMap();
+  }, [editAdress]);
+
+  return <MapDiv ref={mapRef} />;
 }

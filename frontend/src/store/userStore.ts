@@ -354,3 +354,67 @@ export const useAlertStore = create<useAlertProps>((set, get) => ({
     set({ timeId: timeout });
   },
 }));
+
+interface MapProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (state: boolean) => void;
+  address: string;
+  setAddress: (state: string) => void;
+  editAdress: string;
+  setEditAdress: (state: string) => void;
+  phone1: string;
+  setPhone1: (state: string) => void;
+  phone2: string;
+  setPhone2: (state: string) => void;
+  OPDays: string;
+  setOPDays: (state: string) => void;
+  startTime: string;
+  setStartTime: (state: string) => void;
+  endTime: string;
+  setEndTime: (state: string) => void;
+}
+
+export const MapStore = create<MapProps>((set, get) => ({
+  isModalOpen: false,
+  setIsModalOpen: (state) => set({ isModalOpen: state }),
+  address: "대구 광역시 수성구 화랑로 8길 11-13 성화빌딩 2층",
+  setAddress: (state) => set({ address: state }),
+  editAdress: "",
+  setEditAdress: (state) => set({ editAdress: state }),
+  phone1: "",
+  setPhone1: (state) => set({ phone1: state }),
+  phone2: "",
+  setPhone2: (state) => set({ phone2: state }),
+  OPDays: "",
+  setOPDays: (state) => set({ OPDays: state }),
+  startTime: "",
+  setStartTime: (state) => set({ startTime: state }),
+  endTime: "",
+  setEndTime: (state) => set({ endTime: state }),
+}));
+
+interface FooterProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (state: boolean) => void;
+  description: string;
+  setDescription: (state: string) => void;
+  footerTitle: string;
+  setFooterTitle: (state: string) => void;
+  viewTitle: string;
+  setViewTitle: (state: string) => void;
+  viewDescription: string;
+  setViewDescription: (state: string) => void;
+}
+
+export const FooterStore = create<FooterProps>((set, get) => ({
+  isModalOpen: false,
+  setIsModalOpen: (state) => set({ isModalOpen: state }),
+  description: "",
+  setDescription: (state) => set({ description: state }),
+  footerTitle: "",
+  setFooterTitle: (state) => set({ footerTitle: state }),
+  viewTitle: "",
+  setViewTitle: (state) => set({ viewTitle: state }),
+  viewDescription: "",
+  setViewDescription: (state) => set({ viewDescription: state }),
+}));

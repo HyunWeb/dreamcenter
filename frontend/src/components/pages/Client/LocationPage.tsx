@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NaverMap from "./location/NaverMap";
 import styled from "styled-components";
 import CurrentRoot from "../../common/CurrentRoot";
 import { Link } from "react-router-dom";
 import PageHeader from "../../common/PageHeader";
+import { MapStore, UseModalStore, useUserStore } from "@/store/userStore";
+import Button from "@/components/common/Button";
+import EditModal from "./About&Office/EditModal";
+import LocationModal from "./location/LocationModal";
+import { GetLocation } from "@/api/postApi";
 
 const Div = styled.div`
   text-align: center;
@@ -35,7 +40,10 @@ const Div = styled.div`
 
   li {
     background-color: white;
-    padding: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     width: 220px;
     height: 220px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -56,6 +64,7 @@ const Div = styled.div`
       font-weight: 500;
       color: #888888;
       line-height: 1.3;
+      white-space: pre;
     }
     @media (max-width: 1024px) {
       svg {
@@ -67,7 +76,6 @@ const Div = styled.div`
       }
       p {
         font-size: 15px;
-        white-space: nowrap;
       }
     }
     @media (max-width: 600px) {
@@ -101,7 +109,8 @@ const StyledLink = styled(Link)`
   font-weight: 600;
   margin-bottom: 170px;
 
-  a {
+  button {
+    cursor: pointer;
     position: absolute;
     top: 50%;
     right: 10%;
@@ -142,7 +151,7 @@ const StyledLink = styled(Link)`
     }
     margin-bottom: 50px;
 
-    a {
+    button {
       display: none;
     }
   }
@@ -153,10 +162,65 @@ const StyledLink = styled(Link)`
     font-size: 25px;
   }
 `;
+
+const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  @media (max-width: 1024px) {
+    margin-top: 10px;
+  }
+`;
 export default function LocationPage() {
+  const {
+    isModalOpen,
+    setIsModalOpen,
+    address,
+    phone1,
+    phone2,
+    OPDays,
+    startTime,
+    endTime,
+    setAddress,
+    setPhone1,
+    setPhone2,
+    setOPDays,
+    setStartTime,
+    setEndTime,
+    setEditAdress,
+  } = MapStore();
+  const { role } = useUserStore();
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await GetLocation();
+      console.log(res.result);
+      setAddress(res.result.address);
+      setEditAdress(res.result.address);
+      setPhone1(res.result.phone1);
+      setPhone2(res.result.phone2);
+      setOPDays(res.result.op_days);
+      setStartTime(res.result.start_time);
+      setEndTime(res.result.end_time);
+    };
+    fetchData();
+  }, []);
   return (
     <Div>
       <PageHeader title={"오시는 길"} root={"오시는 길"} />
+      {role === "admin" && (
+        <ButtonWrap>
+          <Button
+            name="정보 수정"
+            Bgcolor="green"
+            TitleColor="white"
+            onClick={handleModalOpen}
+          />
+        </ButtonWrap>
+      )}
       <strong>※ 유학원 방문 상담은 꼭 사전에 예약하셔야 됩니다.</strong>
       <section>
         <NaverMap />
@@ -174,13 +238,7 @@ export default function LocationPage() {
               <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
             </svg>
             <h3>주소</h3>
-            <p>
-              대구 광역시 수성구
-              <br />
-              화랑로 8길 11-13
-              <br />
-              성화빌딩 2층
-            </p>
+            <p>{address || "-"}</p>
           </li>
           <li>
             <svg
@@ -195,8 +253,8 @@ export default function LocationPage() {
             </svg>
             <h3>전화번호</h3>
             <p>
-              1644-5161 <br />
-              02-2038-3025
+              {phone1 || "-"} <br />
+              {phone2}
             </p>
           </li>
           <li>
@@ -213,16 +271,17 @@ export default function LocationPage() {
             </svg>
             <h3>이용시간</h3>
             <p>
-              평일 <br />
-              10:00 ~18:00
+              {OPDays} <br />
+              {startTime} ~ {endTime}
             </p>
           </li>
         </ul>
       </section>
       <StyledLink to="/reservation">
         <span>예약 상담 바로가기</span>
-        <Link to="/reservation">바로가기</Link>
+        <button>바로가기</button>
       </StyledLink>
+      {isModalOpen && <LocationModal />}
     </Div>
   );
 }
