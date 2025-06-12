@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "../Button";
-import { ControlModalStore } from "@/store/userStore";
+import { ControlModalStore, MapStore } from "@/store/userStore";
 
 const Div = styled.div`
   height: 100%;
@@ -56,6 +56,12 @@ const Div = styled.div`
     color: #888888;
     margin-bottom: 50px;
   }
+
+  @media (max-width: 1024px) {
+    .Lockicon {
+      flex-shrink: 0;
+    }
+  }
 `;
 
 const StyleButton = styled(Button)`
@@ -67,6 +73,7 @@ const StyleButton = styled(Button)`
 
 export default function FloatTelePhone() {
   const { setViewModal } = ControlModalStore();
+  const { phone1, phone2 } = MapStore();
   const handleClose = () => {
     setViewModal(false);
   };
@@ -86,8 +93,8 @@ export default function FloatTelePhone() {
       </div>
       <h2>드림유학원 전화번호</h2>
       <p>
-        1644-5161 <br />
-        02-2038-3025
+        {phone1} <br />
+        {phone2}
       </p>
       <span>전화연결은 모바일에서 가능합니다.</span>
       <StyleButton

@@ -42,6 +42,9 @@ const {
   GetGalleryPage,
   GetMatchPassword,
   GetMyReservation,
+  GetGeocode,
+  PostLocation,
+  GetLocation,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -83,5 +86,8 @@ router.get("/gallery/GetGalleryPage", GetGalleryPage);
 router.post("/Main/AboutData", PostMainPage);
 router.get("/Main/GetAboutData", GetMainAbout);
 router.get("/Main/GetGalleryImg", GetMainGallery);
+router.get("/geocode", GetGeocode);
+router.post("/Location/Post", PostLocation);
+router.get("/Location/Get", GetLocation);
 
 module.exports = router;
