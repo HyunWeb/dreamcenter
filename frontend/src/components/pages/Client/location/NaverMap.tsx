@@ -1,18 +1,16 @@
-import { MapStore, UseModalStore } from "@/store/userStore";
+import { MapStore } from "@/store/userStore";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { geocode } from "./geocode";
 
-const MapDiv = styled.div<{ $isMenuOpen: boolean }>`
+const MapDiv = styled.div`
   z-index: 0;
   width: 100%;
   height: 400px;
   transition-duration: 500ms;
-  opacity: ${({ $isMenuOpen }) => ($isMenuOpen ? "0" : "1")};
 `;
 
 export default function NaverMap() {
-  const { isMenuOpen } = UseModalStore();
   const mapRef = useRef<HTMLDivElement | null>(null);
   // 확장 기능에 대비한 상태관리
   const [map, setMap] = useState<naver.maps.Map | null>(null);
@@ -55,5 +53,5 @@ export default function NaverMap() {
     initMap();
   }, [editAdress]);
 
-  return <MapDiv ref={mapRef} $isMenuOpen={isMenuOpen} />;
+  return <MapDiv ref={mapRef} />;
 }

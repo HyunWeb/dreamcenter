@@ -14,6 +14,7 @@ const {
   GalleryImage,
   MainPage,
   Location,
+  Footer,
 } = require("../models");
 const { sequelize } = require("../models");
 
@@ -96,7 +97,8 @@ exports.getLoginState = async (req, res) => {
 
 exports.postLogin = async (req, res) => {
   const { code, state, originalState } = req.body;
-
+  const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+  console.log(adminEmails);
   if (state !== originalState) {
     return;
   }
@@ -132,6 +134,10 @@ exports.postLogin = async (req, res) => {
     let existingUser = await User.findOne({ where: { sns_id: userData.id } });
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
+    const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+    console.log(adminEmails);
+    const isAdmin = adminEmails.includes(userData.email);
+    console.log(isAdmin);
     if (!existingUser) {
       const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
       const isAdmin = adminEmails.includes(userData.email);
@@ -1139,6 +1145,38 @@ exports.PostLocation = async (req, res) => {
 exports.GetLocation = async (req, res) => {
   try {
     const existing = await Location.findOne();
+    res.status(200).json({ result: existing });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "오시는길 정보 수정 실패(서버)" });
+  }
+};
+
+exports.PostFooter = async (req, res) => {
+  const { title, description } = req.body;
+  try {
+    const count = await Footer.count();
+    if (!count) {
+      await Footer.create({
+        title,
+        description,
+      });
+    } else {
+      const existing = await Footer.findOne();
+      await existing.update({
+        title,
+        description,
+      });
+    }
+    res.status(200).json({ message: "푸터 정보 저장 완료" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "푸터 정보 저장 실패(서버)" });
+  }
+};
+exports.GetFooter = async (req, res) => {
+  try {
+    const existing = await Footer.findOne();
     res.status(200).json({ result: existing });
   } catch (err) {
     console.error(err);

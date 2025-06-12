@@ -40,7 +40,6 @@ const Div = styled.div`
 
   li {
     background-color: white;
-    /* padding: 35px; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -188,6 +187,7 @@ export default function LocationPage() {
     setOPDays,
     setStartTime,
     setEndTime,
+    setEditAdress,
   } = MapStore();
   const { role } = useUserStore();
   const handleModalOpen = () => {
@@ -199,6 +199,7 @@ export default function LocationPage() {
       const res = await GetLocation();
       console.log(res.result);
       setAddress(res.result.address);
+      setEditAdress(res.result.address);
       setPhone1(res.result.phone1);
       setPhone2(res.result.phone2);
       setOPDays(res.result.op_days);

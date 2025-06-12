@@ -460,3 +460,25 @@ export const GetLocation = async () => {
     console.error("오시는길 정보 가져오기 실패", error);
   }
 };
+
+interface FooterProps {
+  title: string;
+  description: string;
+}
+export const postFooter = async (data: FooterProps) => {
+  try {
+    const response = await API.post(`api/Footer/Post`, data);
+    return response.data;
+  } catch (error) {
+    console.error("푸터 정보 수정 실패", error);
+  }
+};
+
+export const GetFooter = async () => {
+  try {
+    const response = await API.get(`api/Footer/Get`);
+    return response.data;
+  } catch (error) {
+    console.error("푸터 정보 가져오기 실패", error);
+  }
+};

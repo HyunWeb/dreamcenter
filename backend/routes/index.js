@@ -45,6 +45,8 @@ const {
   GetGeocode,
   PostLocation,
   GetLocation,
+  PostFooter,
+  GetFooter,
 } = require("../controllers/Cmain");
 
 router.get("/user/getInfo", getUserInfo);
@@ -89,5 +91,7 @@ router.get("/Main/GetGalleryImg", GetMainGallery);
 router.get("/geocode", GetGeocode);
 router.post("/Location/Post", PostLocation);
 router.get("/Location/Get", GetLocation);
+router.post("/Footer/Post", PostFooter);
+router.get("/Footer/Get", GetFooter);
 
 module.exports = router;

@@ -392,3 +392,29 @@ export const MapStore = create<MapProps>((set, get) => ({
   endTime: "",
   setEndTime: (state) => set({ endTime: state }),
 }));
+
+interface FooterProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (state: boolean) => void;
+  description: string;
+  setDescription: (state: string) => void;
+  footerTitle: string;
+  setFooterTitle: (state: string) => void;
+  viewTitle: string;
+  setViewTitle: (state: string) => void;
+  viewDescription: string;
+  setViewDescription: (state: string) => void;
+}
+
+export const FooterStore = create<FooterProps>((set, get) => ({
+  isModalOpen: false,
+  setIsModalOpen: (state) => set({ isModalOpen: state }),
+  description: "",
+  setDescription: (state) => set({ description: state }),
+  footerTitle: "",
+  setFooterTitle: (state) => set({ footerTitle: state }),
+  viewTitle: "",
+  setViewTitle: (state) => set({ viewTitle: state }),
+  viewDescription: "",
+  setViewDescription: (state) => set({ viewDescription: state }),
+}));
