@@ -364,14 +364,24 @@ interface MapProps {
   setEditAdress: (state: string) => void;
   phone1: string;
   setPhone1: (state: string) => void;
+  editphone1: string;
+  setEditPhone1: (state: string) => void;
   phone2: string;
   setPhone2: (state: string) => void;
+  editphone2: string;
+  setEditPhone2: (state: string) => void;
   OPDays: string;
   setOPDays: (state: string) => void;
+  editOPDays: string;
+  setEditOPDays: (state: string) => void;
   startTime: string;
   setStartTime: (state: string) => void;
+  editstartTime: string;
+  setEditStartTime: (state: string) => void;
   endTime: string;
   setEndTime: (state: string) => void;
+  editendTime: string;
+  setEditEndTime: (state: string) => void;
 }
 
 export const MapStore = create<MapProps>((set, get) => ({
@@ -383,14 +393,24 @@ export const MapStore = create<MapProps>((set, get) => ({
   setEditAdress: (state) => set({ editAdress: state }),
   phone1: "",
   setPhone1: (state) => set({ phone1: state }),
+  editphone1: "",
+  setEditPhone1: (state) => set({ editphone1: state }),
   phone2: "",
   setPhone2: (state) => set({ phone2: state }),
+  editphone2: "",
+  setEditPhone2: (state) => set({ editphone2: state }),
   OPDays: "",
   setOPDays: (state) => set({ OPDays: state }),
+  editOPDays: "",
+  setEditOPDays: (state) => set({ editOPDays: state }),
   startTime: "",
   setStartTime: (state) => set({ startTime: state }),
+  editstartTime: "",
+  setEditStartTime: (state) => set({ editstartTime: state }),
   endTime: "",
   setEndTime: (state) => set({ endTime: state }),
+  editendTime: "",
+  setEditEndTime: (state) => set({ editendTime: state }),
 }));
 
 interface FooterProps {

@@ -73,7 +73,7 @@ const StyleButton = styled(Button)`
 
 export default function FloatTelePhone() {
   const { setViewModal } = ControlModalStore();
-  const { phone1, phone2 } = MapStore();
+  const { editphone1, editphone2 } = MapStore();
   const handleClose = () => {
     setViewModal(false);
   };
@@ -93,8 +93,8 @@ export default function FloatTelePhone() {
       </div>
       <h2>드림유학원 전화번호</h2>
       <p>
-        {phone1} <br />
-        {phone2}
+        {editphone1} <br />
+        {editphone2}
       </p>
       <span>전화연결은 모바일에서 가능합니다.</span>
       <StyleButton

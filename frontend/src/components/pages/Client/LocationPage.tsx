@@ -176,12 +176,12 @@ export default function LocationPage() {
   const {
     isModalOpen,
     setIsModalOpen,
-    address,
-    phone1,
-    phone2,
-    OPDays,
-    startTime,
-    endTime,
+    editAdress,
+    editphone1,
+    editphone2,
+    editOPDays,
+    editstartTime,
+    editendTime,
     setAddress,
     setPhone1,
     setPhone2,
@@ -248,7 +248,7 @@ export default function LocationPage() {
               <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
             </svg>
             <h3>주소</h3>
-            <p>{address || "-"}</p>
+            <p>{editAdress || "-"}</p>
           </li>
           <li>
             <svg
@@ -263,8 +263,8 @@ export default function LocationPage() {
             </svg>
             <h3>전화번호</h3>
             <p>
-              {phone1 || "-"} <br />
-              {phone2}
+              {editphone1 || "-"} <br />
+              {editphone2}
             </p>
           </li>
           <li>
@@ -281,8 +281,8 @@ export default function LocationPage() {
             </svg>
             <h3>이용시간</h3>
             <p>
-              {OPDays} <br />
-              {startTime} ~ {endTime}
+              {editOPDays} <br />
+              {editstartTime} ~ {editendTime}
             </p>
           </li>
         </ul>

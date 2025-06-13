@@ -115,7 +115,7 @@ const MobileButton = styled.button<{ $isOpen: boolean }>`
 
 export default function FloatingButton() {
   const { viewModal, setViewModal, setType } = ControlModalStore();
-  const { phone1, phone2 } = MapStore();
+  const { editphone1 } = MapStore();
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -129,7 +129,7 @@ export default function FloatingButton() {
   const handlePhoneClick = () => {
     if (isMobile()) {
       // 모바일이면 전화 앱 실행
-      window.location.href = `tel:${phone1}`;
+      window.location.href = `tel:${editphone1}`;
     } else {
       // 데스크탑이면 모달 표시
       setViewModal(true);
