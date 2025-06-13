@@ -4,8 +4,10 @@ import PrivateLock from "./PrivateLock";
 import Button from "../Button";
 import FloatTelePhone from "./FloatTelePhone";
 import MyReservation from "./MyReservation";
+import Privacy from "./Privacy";
 
 const Div = styled.div`
+  overflow-y: auto;
   box-sizing: border-box;
   width: 490px;
   height: 410px;
@@ -36,6 +38,7 @@ export default function ModalUI({ type }: Props) {
       {type === "privateLock" && <PrivateLock />}
       {type === "FloatTelePhone" && <FloatTelePhone />}
       {type === "MyReservation" && <MyReservation />}
+      {type === "privacy" && <Privacy />}
     </Div>
   );
 }

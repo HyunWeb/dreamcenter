@@ -13,7 +13,11 @@ import SchoolInputGroup from "./InputGroup/SchoolInputGroup";
 import AdmissionInputGroup from "./InputGroup/AdmissionInputGroup";
 import RecommenderInputGroup from "./InputGroup/RecommenderInputGroup";
 import ImgInputGroup from "./InputGroup/ImgInputGroup";
-import { ReservationInputStore, useAlertStore } from "@/store/userStore";
+import {
+  ControlModalStore,
+  ReservationInputStore,
+  useAlertStore,
+} from "@/store/userStore";
 import { PostReservation } from "@/api/postApi";
 
 const Description = styled.p`
@@ -87,9 +91,6 @@ const AgreeLabel = styled.label`
     width: 16px;
     height: 16px;
   }
-  a {
-    color: #888888;
-  }
 
   &::before {
     content: "";
@@ -122,7 +123,29 @@ const SubmitButton = styled.button`
   }
 `;
 
+const PrivacyBox = styled.div`
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    color: #888888;
+    padding: 0;
+    line-height: 16px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #888888;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 38px;
+    flex-shrink: 0;
+  }
+`;
+
 export default function FormSection() {
+  const { setViewModal, setType } = ControlModalStore();
   const { showAlert } = useAlertStore();
   const {
     setMessage,
@@ -179,6 +202,11 @@ export default function FormSection() {
     const res = await PostReservation(formData);
     alert(res?.data.message);
     resetForm();
+  };
+
+  const handlePrivacy = () => {
+    setViewModal(true);
+    setType("privacy");
   };
 
   return (
@@ -258,19 +286,22 @@ export default function FormSection() {
             <ImgInputGroup />
           </FormRow>
 
-          <AgreeLabel>
-            <input
-              type="checkbox"
-              name="agreePrivacy"
-              required
-              checked={agreePrivacy}
-              onChange={handleAgreePrivacy}
-            />
-            개인정보 수집에 동의합니다.
-            <a href="/privacy" target="_blank" rel="noopener noreferrer">
+          <PrivacyBox>
+            <AgreeLabel>
+              <input
+                type="checkbox"
+                name="agreePrivacy"
+                required
+                checked={agreePrivacy}
+                onChange={handleAgreePrivacy}
+              />
+              개인정보 수집에 동의합니다.
+              {/* <a href="/privacy" target="_blank" rel="noopener noreferrer">
               내용 보기
-            </a>
-          </AgreeLabel>
+            </a> */}
+            </AgreeLabel>
+            <button onClick={handlePrivacy}>내용 보기</button>
+          </PrivacyBox>
         </Fieldset>
       </Form>
       <SubmitButton onClick={handleSubmit}>등록</SubmitButton>
