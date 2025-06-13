@@ -5,11 +5,9 @@ import styled from "styled-components";
 import { QuestionWritePageStore, useUserStore } from "@/store/userStore";
 
 const StyledButton = styled(Button)`
-  padding: 4px 12px;
+  padding: 8px 12px;
   border-radius: 3px;
   box-sizing: border-box;
-  width: 50px;
-  height: 30px;
 `;
 
 const Div = styled.div`

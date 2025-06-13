@@ -182,6 +182,11 @@ export default function LocationPage() {
     editOPDays,
     editstartTime,
     editendTime,
+    setEditPhone1,
+    setEditPhone2,
+    setEditOPDays,
+    setEditStartTime,
+    setEditEndTime,
     setAddress,
     setPhone1,
     setPhone2,
@@ -199,13 +204,14 @@ export default function LocationPage() {
     const fetchData = async () => {
       const res = await GetLocation();
       if (res.result) {
+        console.log(res.result);
         setAddress(res.result.address);
         setEditAdress(res.result.address);
-        setPhone1(res.result.phone1);
-        setPhone2(res.result.phone2);
-        setOPDays(res.result.op_days);
-        setStartTime(res.result.start_time);
-        setEndTime(res.result.end_time);
+        setEditPhone1(res.result.phone1);
+        setEditPhone2(res.result.phone2);
+        setEditOPDays(res.result.op_days);
+        setEditStartTime(res.result.start_time);
+        setEditEndTime(res.result.end_time);
       } else {
         setAddress("-");
         setEditAdress("대구 광역시 수성구 화랑로 8길 11-13 성화빌딩 2층");
