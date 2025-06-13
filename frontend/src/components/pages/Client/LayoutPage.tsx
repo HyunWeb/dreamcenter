@@ -78,7 +78,7 @@ export default function LayoutPage() {
       <Header>
         <LogoDiv>
           <Link to="/">
-            <Logo src="./logo.png" alt="메인 로고" />
+            <Logo src="/logo.png" alt="메인 로고" />
           </Link>
         </LogoDiv>
         <Gnb />

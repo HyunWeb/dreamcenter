@@ -59,6 +59,7 @@ export default function LocationButtonBox() {
       }
       const result = await geocode(address);
       const res = await PostLocation(data);
+      console.log(data);
       if (res.message) {
         showAlert("성공적으로 저장되었습니다.");
         setIsModalOpen(false);

@@ -108,13 +108,14 @@ export default function LocationModal() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await GetLocation();
-      console.log(res.result);
-      setAddress(res.result.address);
-      setPhone1(res.result.phone1);
-      setPhone2(res.result.phone2);
-      setOPDays(res.result.op_days);
-      setStartTime(res.result.start_time);
-      setEndTime(res.result.end_time);
+      if (res.result) {
+        setAddress(res.result.address);
+        setPhone1(res.result.phone1);
+        setPhone2(res.result.phone2);
+        setOPDays(res.result.op_days);
+        setStartTime(res.result.start_time);
+        setEndTime(res.result.end_time);
+      }
     };
     fetchData();
   }, []);
