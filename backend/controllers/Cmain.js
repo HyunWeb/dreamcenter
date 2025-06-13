@@ -98,7 +98,6 @@ exports.getLoginState = async (req, res) => {
 exports.postLogin = async (req, res) => {
   const { code, state, originalState } = req.body;
   const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
-  console.log(adminEmails);
   if (state !== originalState) {
     return;
   }
@@ -135,9 +134,7 @@ exports.postLogin = async (req, res) => {
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
     const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
-    console.log(adminEmails);
     const isAdmin = adminEmails.includes(userData.email);
-    console.log(isAdmin);
     if (!existingUser) {
       const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
       const isAdmin = adminEmails.includes(userData.email);

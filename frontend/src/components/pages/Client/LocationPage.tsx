@@ -39,6 +39,7 @@ const Div = styled.div`
   }
 
   li {
+    overflow: hidden;
     background-color: white;
     display: flex;
     justify-content: center;
@@ -197,14 +198,23 @@ export default function LocationPage() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await GetLocation();
-      console.log(res.result);
-      setAddress(res.result.address);
-      setEditAdress(res.result.address);
-      setPhone1(res.result.phone1);
-      setPhone2(res.result.phone2);
-      setOPDays(res.result.op_days);
-      setStartTime(res.result.start_time);
-      setEndTime(res.result.end_time);
+      if (res.result) {
+        setAddress(res.result.address);
+        setEditAdress(res.result.address);
+        setPhone1(res.result.phone1);
+        setPhone2(res.result.phone2);
+        setOPDays(res.result.op_days);
+        setStartTime(res.result.start_time);
+        setEndTime(res.result.end_time);
+      } else {
+        setAddress("-");
+        setEditAdress("대구 광역시 수성구 화랑로 8길 11-13 성화빌딩 2층");
+        setPhone1("-");
+        setPhone2("-");
+        setOPDays("평일");
+        setStartTime("00:00");
+        setEndTime("00:00");
+      }
     };
     fetchData();
   }, []);
