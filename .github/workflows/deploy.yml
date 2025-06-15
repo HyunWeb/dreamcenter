@@ -26,23 +26,16 @@ jobs:
 
             set -e  # 스크립트 에러 발생 시 즉시 종료
 
-            cd /home/ubuntu/dreamcenter/backend
+            cd /home/ubuntu/dreamcenter
 
             git pull origin main
 
-            docker system prune -af --volumes
+            cd backend
 
             docker-compose down
 
-            echo "🏗 Building Docker images (prevent idle timeout)..."
-            (while true; do echo "⏳ Building..."; sleep 60; done) &
-            ECHO_PID=$!
 
-            docker-compose build --no-cache
-
-            kill $ECHO_PID
-
-            docker-compose up -d
+            docker compose up -d --build
 
             docker system df
 
