@@ -9,25 +9,17 @@ WORKDIR /app
 COPY package*.json ./
 # 복사한 json을 기준으로 노드 모듈 패키지를 받는다. 
 RUN npm install
-
 # 서버상의 모든 프론트엔드 파일들을 복사한다 (.ignore 지정한 파일들만 제외하고)
 COPY . .
-
-# build 단계 위에 환경변수 설정 추가
-ENV GENERATE_SOURCEMAP=false
-
-
 # 복사된 프로젝트 파일들을 기반으로 빌드 진행한다.
-# RUN npm run build
-
+RUN npm run build
 
 # 2단계 배포: 정적 서버용 이미지를 생성한다. 
 FROM nginx:alpine
 
 # --from=build : 첫줄에서 지정했던 build 이미지에서 가져온다. 
 # 이전 이미지(노드 이미지)의 build 폴더속 내용을 > 현재 이미지(nginx 이미지)의 html로 복사해 가져온다. 
-# COPY --from=build /app/build /usr/share/nginx/html
-COPY ./build /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 
 # 내 EC2 프로젝트에 있는 conf 파일을 nginx 이미지의 기본 설정 파일로 덮어쓰기함
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
