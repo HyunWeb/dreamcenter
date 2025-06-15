@@ -1,6 +1,7 @@
 node_modules
 .git
 *.log
+build
 public/defaultBanner.png
 public/temp/
 dist
