@@ -91,6 +91,7 @@ export default function GalleryPage() {
           />
         ))}
       </Masonry>
+      {isModalOpen && <EditModal />}
     </Div>
   );
 }

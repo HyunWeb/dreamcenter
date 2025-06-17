@@ -38,7 +38,7 @@ export default function ReservationPage() {
         setSelectTab={setSelectTab}
       />
       {selectTab ? (
-        <FormSection />
+        <FormSection setSelectTab={setSelectTab} />
       ) : (
         <MyListSection form={form} setForm={setForm} />
       )}

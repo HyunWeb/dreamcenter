@@ -18,27 +18,27 @@ module.exports = (sequelize, DataTypes) => {
     nickname: {
       type: DataTypes.STRING,
     },
-    email: {
-      type: DataTypes.STRING,
-    },
-    profile_image: {
-      type: DataTypes.STRING,
-    },
-    age: {
-      type: DataTypes.STRING,
-    },
-    gender: {
-      type: DataTypes.STRING,
-    },
-    mobile: {
-      type: DataTypes.STRING,
-    },
-    birthyear: {
-      type: DataTypes.STRING,
-    },
-    birthday: {
-      type: DataTypes.STRING,
-    },
+    // email: {
+    //   type: DataTypes.STRING,
+    // },
+    // profile_image: {
+    //   type: DataTypes.STRING,
+    // },
+    // age: {
+    //   type: DataTypes.STRING,
+    // },
+    // gender: {
+    //   type: DataTypes.STRING,
+    // },
+    // mobile: {
+    //   type: DataTypes.STRING,
+    // },
+    // birthyear: {
+    //   type: DataTypes.STRING,
+    // },
+    // birthday: {
+    //   type: DataTypes.STRING,
+    // },
     role: {
       type: DataTypes.STRING,
       allowNull: false,
