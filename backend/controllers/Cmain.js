@@ -183,7 +183,11 @@ exports.postLogout = async (req, res) => {
 };
 
 exports.getNews = async (req, res) => {
-  const rssUrl = "https://blog.rss.naver.com/makedoc.xml";
+  // 테스트용 메이크닥 페이지
+  // const rssUrl = "https://blog.rss.naver.com/makedoc.xml";
+  // 배포용 우즈벡 유학원 페이지
+  const rssUrl = "https://blog.rss.naver.com/uzbekdoctordream.xml";
+
   try {
     const response = await axios.get(rssUrl, { responseType: "text" });
     const parsed = await parseStringPromise(response.data);
