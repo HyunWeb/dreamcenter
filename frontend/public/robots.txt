@@ -1,3 +1,10 @@
 # https://www.robotstxt.org/robotstxt.html
+# 모든 페이지에게 페이지 크롤링 적용
 User-agent: *
-Disallow:
+
+# 관리자 페이지는 검색 되지 않도록 제외
+Disallow: /adminReservation/
+
+# 그외에 페이지들은 모두 정보 수집허용
+Allow: /
+Sitemap: https://uzbekdream.co.kr/sitemap.xml
