@@ -45,7 +45,6 @@ export default function LoginInitializer() {
     const fetchLoginState = async () => {
       try {
         const res = await checkLoginStatus(); // 로그인 가능 상태 확인
-
         if (res.code === "TOKEN_EXPIRED") {
           naverLogin();
         } else if (res.code === "SUCCESS") {
@@ -55,6 +54,8 @@ export default function LoginInitializer() {
           setUser_id(res.sns_id);
         } else if (res.code === "NO_TOKEN") {
           naverLogin();
+        } else if (res.code === "NO_USER") {
+          naverLogin();
         }
       } catch (e) {
         console.error("로그인 상태 확인 실패", e);
@@ -62,13 +63,14 @@ export default function LoginInitializer() {
         setIsLoginChecked(true); // 모든 판단 완료 후 여타 컴포넌트 진입
       }
     };
+
     if (PathArr.includes(location.pathname)) {
       fetchLoginState();
     } else {
       setIsLoginChecked(true); // 예외 url은 바로 진입
       const fetchLogin = async () => {
         const res = await checkLoginStatus();
-        if (res.code === "SUCCESS") {
+        if (res?.code === "SUCCESS") {
           setIsLogin(true);
           setUserName(res.name);
           setRole(res.role);

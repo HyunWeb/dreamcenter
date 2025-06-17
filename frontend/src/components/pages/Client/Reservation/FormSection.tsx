@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import styled from "styled-components";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -143,8 +143,10 @@ const PrivacyBox = styled.div`
     flex-shrink: 0;
   }
 `;
-
-export default function FormSection() {
+type props = {
+  setSelectTab: React.Dispatch<SetStateAction<boolean>>;
+};
+export default function FormSection({ setSelectTab }: props) {
   const { setViewModal, setType } = ControlModalStore();
   const { showAlert } = useAlertStore();
   const {
@@ -200,8 +202,9 @@ export default function FormSection() {
       formData.append("images", file);
     });
     const res = await PostReservation(formData);
-    alert(res?.data.message);
+    showAlert(res?.data.message);
     resetForm();
+    setSelectTab(false);
   };
 
   const handlePrivacy = () => {

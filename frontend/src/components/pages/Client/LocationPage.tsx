@@ -204,7 +204,6 @@ export default function LocationPage() {
     const fetchData = async () => {
       const res = await GetLocation();
       if (res.result) {
-        console.log(res.result);
         setAddress(res.result.address);
         setEditAdress(res.result.address);
         setEditPhone1(res.result.phone1);

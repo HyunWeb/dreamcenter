@@ -77,6 +77,13 @@ exports.getLoginState = async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ where: { sns_id: decoded.userID } });
+
+    if (!user) {
+      return res
+        .status(200)
+        .json({ code: "NO_USER", message: "가입된 사용자가 아닙니다." });
+    }
+
     return res.status(200).json({
       code: "SUCCESS",
       name: user.name,
@@ -97,9 +104,10 @@ exports.getLoginState = async (req, res) => {
 
 exports.postLogin = async (req, res) => {
   const { code, state, originalState } = req.body;
-  const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
   if (state !== originalState) {
-    return;
+    return res
+      .status(500)
+      .json({ message: "위조된 접근일 가능성이 있습니다." });
   }
 
   try {
@@ -133,23 +141,14 @@ exports.postLogin = async (req, res) => {
     let existingUser = await User.findOne({ where: { sns_id: userData.id } });
     let user;
     // 정보가 없다면 유저 정보 기반으로 자동 회원가입 개시
-    const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
-    const isAdmin = adminEmails.includes(userData.email);
     if (!existingUser) {
-      const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
-      const isAdmin = adminEmails.includes(userData.email);
+      const admin_sns_id = process.env.ADMIN_SNS_ID?.split(",") || [];
+      const isAdmin = admin_sns_id.includes(userData.id);
       user = await User.create({
         sns_id: userData.id,
         provider: "naver",
         name: userData.name,
         nickname: userData.nickname,
-        email: userData.email,
-        profile_image: userData.profile_image,
-        age: userData.age,
-        gender: userData.gender,
-        mobile: userData.mobile,
-        birthyear: userData.birthyear,
-        birthday: userData.birthday,
         role: isAdmin ? "admin" : "user",
       });
     } else {
