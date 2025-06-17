@@ -1,4 +1,4 @@
-# https://www.robotstxt.org/robotstxt.h tml
+# https://www.robotstxt.org/robotstxt.html
 # 모든 페이지에게 페이지 크롤링 적용
 User-agent: *
 
