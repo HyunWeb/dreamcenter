@@ -80,6 +80,7 @@ const InputWrap = styled.div`
     input {
       width: 45px;
       height: 55px;
+      font-size: 18px;
     }
   }
 `;
