@@ -273,7 +273,9 @@ export default function FormSection({ setSelectTab }: props) {
           >
             <Textarea
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setMessage(e.target.value)
+              }
               name="inquiry"
               id="inquiry"
               placeholder="내용을 입력해 주세요"

@@ -22,7 +22,9 @@ export default function MessageInput() {
   return (
     <Textarea
       value={message}
-      onChange={(e) => setMessage(e.target.value)}
+      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+        setMessage(e.target.value)
+      }
       name="Message"
       id="Message"
       placeholder="내용을 입력해 주세요"

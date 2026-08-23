@@ -137,7 +137,9 @@ export default function FooterModal() {
         >
           <Textarea
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setDescription(e.target.value)
+            }
             name="description"
             id="description"
             placeholder="상세 정보를 입력해주세요"

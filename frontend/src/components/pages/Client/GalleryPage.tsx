@@ -7,6 +7,7 @@ import styled from "styled-components";
 import EditModal from "./About&Office/EditModal";
 import { GetGalleryImages, GetGalleryPage } from "@/api/postApi";
 import { GallerySlide } from "@/types/forms";
+import SeoHead from "@/components/common/SeoHead";
 
 const breakpointColumnsObj = {
   default: 3,
@@ -64,6 +65,11 @@ export default function GalleryPage() {
   };
   return (
     <Div>
+      <SeoHead
+        title="갤러리 | 드림유학원"
+        description="드림유학원과 함께한 우즈베키스탄 의대 유학생들의 생생한 현지 활동 사진을 확인하세요."
+        path="/gallery"
+      />
       <PageHeader title="갤러리" root="갤러리" />
       {role === "admin" && (
         <ButtonWrap>

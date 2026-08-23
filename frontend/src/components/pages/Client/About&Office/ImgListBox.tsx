@@ -133,7 +133,9 @@ export default function ImgListBox() {
               <ImgListItem
                 key={indexNum}
                 $imgLeng={imgLength}
-                onClick={(e) => ClickImg(e, item.image_url, item.sort_order)}
+                onClick={(e: React.MouseEvent<HTMLLIElement>) =>
+                  ClickImg(e, item.image_url, item.sort_order)
+                }
                 className={indexNum === index ? "selected" : "deSelected"}
               >
                 <img src={item.image_url} alt="유학원 사진" />

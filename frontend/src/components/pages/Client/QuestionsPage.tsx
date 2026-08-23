@@ -14,6 +14,7 @@ import {
   useUserStore,
 } from "@/store/userStore";
 import Search from "./Question/Search";
+import SeoHead from "@/components/common/SeoHead";
 
 const Div = styled.div`
   display: flex;
@@ -47,6 +48,11 @@ export default function QuestionsPage() {
 
   return (
     <Div>
+      <SeoHead
+        title="유학 상담 질문게시판 | 드림유학원"
+        description="우즈베키스탄 의대 유학 관련 궁금한 점을 드림유학원 질문게시판에서 확인하고 상담받으세요."
+        path="/questions"
+      />
       <PageHeader title="질문게시판" root="질문게시판" />
       <Search setForm={setForm} />
       <TableDiv>

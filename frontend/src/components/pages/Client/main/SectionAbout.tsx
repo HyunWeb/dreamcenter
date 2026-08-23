@@ -154,7 +154,7 @@ export default function SectionAbout() {
         </button>
       )}
       <div>
-        <h1>{MainAbout?.title_main || "해외 의대 전문 유학원"}</h1>
+        <h1>{MainAbout?.title_main || "우즈베키스탄 의대 유학 전문 드림유학원"}</h1>
         <h2>
           {MainAbout?.title_sub ||
             "드림유학원, 당신의 글로벌 미래를 응원합니다."}

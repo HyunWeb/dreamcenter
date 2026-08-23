@@ -132,7 +132,9 @@ export default function LocationModal() {
         >
           <Textarea
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setAddress(e.target.value)
+            }
             name="address"
             id="address"
             placeholder="주소를 입력해 주세요"

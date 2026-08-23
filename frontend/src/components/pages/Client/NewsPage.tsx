@@ -5,6 +5,7 @@ import styled from "styled-components";
 import NewsCard from "./News/NewsCard";
 import PageHeader from "../../common/PageHeader";
 import { useAlertStore, useUserStore } from "@/store/userStore";
+import SeoHead from "@/components/common/SeoHead";
 
 interface NewsDataProps {
   date: string;
@@ -72,6 +73,11 @@ export default function NewsPage() {
 
   return (
     <Div>
+      <SeoHead
+        title="유학 소식 | 드림유학원"
+        description="우즈베키스탄 의대 유학 관련 최신 소식과 입시 정보를 드림유학원이 전해드립니다."
+        path="/news"
+      />
       <PageHeader title={"소식"} root={"소식"} />
 
       {role === "admin" && (

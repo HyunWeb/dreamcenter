@@ -110,8 +110,10 @@ export default function MainImgInput() {
       <ImgDiv>
         <ImgLabel
           htmlFor="photoUpload"
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
+          onDragOver={(e: React.DragEvent<HTMLLabelElement>) =>
+            e.preventDefault()
+          }
+          onDrop={(e: React.DragEvent<HTMLLabelElement>) => {
             e.preventDefault();
             const droppedFiles = e.dataTransfer.files;
             const file = droppedFiles[0];

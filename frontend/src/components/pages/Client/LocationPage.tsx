@@ -9,6 +9,7 @@ import Button from "@/components/common/Button";
 import EditModal from "./About&Office/EditModal";
 import LocationModal from "./location/LocationModal";
 import { GetLocation } from "@/api/postApi";
+import SeoHead from "@/components/common/SeoHead";
 
 const Div = styled.div`
   text-align: center;
@@ -225,6 +226,11 @@ export default function LocationPage() {
   }, []);
   return (
     <Div>
+      <SeoHead
+        title="오시는 길 | 드림유학원"
+        description="드림유학원 위치와 상담 예약 방법을 안내합니다. 우즈베키스탄 의대 유학 상담은 사전 예약 후 방문해주세요."
+        path="/location"
+      />
       <PageHeader title={"오시는 길"} root={"오시는 길"} />
       {role === "admin" && (
         <ButtonWrap>

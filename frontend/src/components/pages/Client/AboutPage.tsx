@@ -12,6 +12,7 @@ import {
 } from "@/store/userStore";
 import ImgSlice from "./About&Office/ImgSlice";
 import { GetAboutImages } from "@/api/postApi";
+import SeoHead from "@/components/common/SeoHead";
 
 // type Slide = {
 //   created_at: string;
@@ -55,6 +56,11 @@ export default function AboutPage() {
 
   return (
     <Div>
+      <SeoHead
+        title="유학원 소개 | 드림유학원"
+        description="우즈베키스탄 의대 유학 전문 드림유학원을 소개합니다. 우즈벡 의대 유학 수속 경험과 노하우를 확인하세요."
+        path="/about"
+      />
       <PageHeader title={"드림유학원"} root={"드림유학원"} />
       <ImgSlice />
       {editSection ? <ViewBox /> : <WriteBox />}

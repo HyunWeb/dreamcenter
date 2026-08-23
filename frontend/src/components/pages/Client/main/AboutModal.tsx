@@ -116,7 +116,9 @@ export default function AboutModal() {
         >
           <Textarea
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setMessage(e.target.value)
+            }
             name="Description"
             id="Description"
             placeholder="내용을 입력해 주세요"

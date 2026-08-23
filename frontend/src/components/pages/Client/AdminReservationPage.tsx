@@ -14,6 +14,7 @@ import TableForm from "./Reservation/TableForm";
 import Button from "@/components/common/Button";
 import { ChangeChackState } from "@/api/postApi";
 import TableListItem from "./Reservation/TableListItem";
+import SeoHead from "@/components/common/SeoHead";
 
 const Div = styled.div`
   text-align: center;
@@ -120,6 +121,12 @@ export default function AdminReservationPage() {
   };
   return (
     <Div>
+      <SeoHead
+        title="예약관리 | 드림유학원"
+        description="관리자 전용 예약 관리 페이지입니다."
+        path="/adminReservation"
+        noindex
+      />
       <PageHeader title="예약관리" root="예약관리" />
       <Section $viewMode={viewMode[0]}>
         {viewMode[0] === "list" ? (
