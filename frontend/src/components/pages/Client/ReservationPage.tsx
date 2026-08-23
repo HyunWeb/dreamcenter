@@ -8,6 +8,7 @@ import MyListSection from "./Reservation/MyListSection";
 import FormSection from "./Reservation/FormSection";
 import PageCountUI from "@/components/common/PageCountUI";
 import { FormData } from "@/types/forms";
+import SeoHead from "@/components/common/SeoHead";
 
 const Div = styled.div`
   text-align: center;
@@ -25,6 +26,11 @@ export default function ReservationPage() {
 
   return (
     <Div>
+      <SeoHead
+        title="무료 상담 예약 | 드림유학원"
+        description="우즈베키스탄 의대 유학 상담을 예약하세요. 드림유학원이 입시상담부터 입학절차까지 안내해드립니다."
+        path="/reservation"
+      />
       <PageHeader
         title="예약상담"
         root="예약상담"

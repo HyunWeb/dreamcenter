@@ -113,8 +113,10 @@ export default function ImgInputGroup() {
       <ImgDiv>
         <ImgLabel
           htmlFor="photoUpload"
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
+          onDragOver={(e: React.DragEvent<HTMLLabelElement>) =>
+            e.preventDefault()
+          }
+          onDrop={(e: React.DragEvent<HTMLLabelElement>) => {
             e.preventDefault();
             const file = e.dataTransfer.files;
             const ArrayFile = Array.from(file);

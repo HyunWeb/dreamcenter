@@ -79,7 +79,7 @@ export default function UserIdInputGroup({ type, buttonRef }: Props) {
           name="userId"
           value={userId}
           className="readOnlyInput"
-          onChange={(e) => handleChange(e)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
           onKeyDown={handleKeyDown}
         />
       )}

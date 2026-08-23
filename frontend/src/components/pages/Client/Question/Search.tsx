@@ -113,7 +113,7 @@ export default function Search({ setForm }: MyListSectionProps) {
         type="text"
         placeholder="검색어를 입력하세요"
         value={keyword}
-        onChange={(e) => handleChange(e)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
         onKeyDown={handleKeyDown}
       />
       <SearchButtton onClick={handleSearch} ref={buttonRef}>
