@@ -1,4 +1,9 @@
-import { MainDataProps, QuestionData } from "@/types/forms";
+import {
+  MainDataProps,
+  QuestionData,
+  SchoolsContentPayload,
+  TransferContentPayload,
+} from "@/types/forms";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -437,4 +442,65 @@ export const FooterStore = create<FooterProps>((set, get) => ({
   setViewTitle: (state) => set({ viewTitle: state }),
   viewDescription: "",
   setViewDescription: (state) => set({ viewDescription: state }),
+}));
+
+const EMPTY_SCHOOLS_CONTENT: SchoolsContentPayload = {
+  intro: "",
+  tashkent_body: "",
+  samarkand_body: "",
+  andijan_body: "",
+  stat_body: "",
+};
+
+interface SchoolsStoreProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (state: boolean) => void;
+  data: SchoolsContentPayload;
+  setData: (state: SchoolsContentPayload) => void;
+  draft: SchoolsContentPayload;
+  setDraft: (state: SchoolsContentPayload) => void;
+  setDraftField: (key: keyof SchoolsContentPayload, value: string) => void;
+}
+
+// /schools 페이지: 디자인은 고정, admin이 필드별 문구만 수정
+export const SchoolsStore = create<SchoolsStoreProps>((set, get) => ({
+  isModalOpen: false,
+  setIsModalOpen: (state) => set({ isModalOpen: state }),
+  data: EMPTY_SCHOOLS_CONTENT,
+  setData: (state) => set({ data: state }),
+  draft: EMPTY_SCHOOLS_CONTENT,
+  setDraft: (state) => set({ draft: state }),
+  setDraftField: (key, value) =>
+    set({ draft: { ...get().draft, [key]: value } }),
+}));
+
+const EMPTY_TRANSFER_CONTENT: TransferContentPayload = {
+  intro: "",
+  eligibility_body: "",
+  steps_body: "",
+  procedure_note: "",
+  mou_notice_body: "",
+  contact_note: "",
+};
+
+interface TransferStoreProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (state: boolean) => void;
+  data: TransferContentPayload;
+  setData: (state: TransferContentPayload) => void;
+  draft: TransferContentPayload;
+  setDraft: (state: TransferContentPayload) => void;
+  setDraftField: (key: keyof TransferContentPayload, value: string) => void;
+}
+
+// /transfer 페이지: 디자인은 고정, admin이 필드별 문구만 수정
+export const TransferStore = create<TransferStoreProps>((set, get) => ({
+  isModalOpen: false,
+  setIsModalOpen: (state) => set({ isModalOpen: state }),
+  data: EMPTY_TRANSFER_CONTENT,
+  setData: (state) => set({ data: state }),
+  draft: EMPTY_TRANSFER_CONTENT,
+  setDraft: (state) => set({ draft: state }),
+  setDraftField: (key, value) =>
+    set({ draft: { ...get().draft, [key]: value } }),
 }));

@@ -18,6 +18,8 @@ import AdminReservationPage from "./components/pages/Client/AdminReservationPage
 import QuestionDetail from "./components/pages/Client/QuestionDetail";
 import LoginInitializer from "./components/common/LoginInitializer";
 import { useUserStore } from "./store/userStore";
+import SchoolsPage from "./components/pages/Client/SchoolsPage";
+import TransferPage from "./components/pages/Client/TransferPage";
 
 function App() {
   const { isLoginChecked } = useUserStore();
@@ -31,6 +33,8 @@ function App() {
             <Route index element={<Main />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="office" element={<Office />} />
+            <Route path="schools" element={<SchoolsPage />} />
+            <Route path="transfer" element={<TransferPage />} />
             <Route path="news" element={<NewsPage />} />
             <Route path="questions" element={<QuestionsPage />} />
             <Route path="reservation" element={<ReservationPage />} />

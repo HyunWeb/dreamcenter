@@ -1,4 +1,8 @@
-import { GallerySlide } from "@/types/forms";
+import {
+  GallerySlide,
+  SchoolsContentPayload,
+  TransferContentPayload,
+} from "@/types/forms";
 import axios from "axios";
 
 const API = axios.create({
@@ -174,6 +178,40 @@ export const GetOfficeWrite = async () => {
     return response.data;
   } catch (err) {
     console.error("Office 페이지 이미지 불러오기 실패", err);
+  }
+};
+export const GetSchoolsContent = async () => {
+  try {
+    const response = await API.get("/api/schools/get");
+    return response.data;
+  } catch (err) {
+    console.error("대학안내 페이지 텍스트 불러오기 실패", err);
+  }
+};
+export const PostSchoolsContent = async (payload: SchoolsContentPayload) => {
+  try {
+    const response = await API.post(`/api/schools/update`, payload);
+    return response;
+  } catch (err) {
+    console.error("대학안내 페이지 텍스트 저장 실패", err);
+  }
+};
+export const GetTransferContent = async () => {
+  try {
+    const response = await API.get("/api/transfer/get");
+    return response.data;
+  } catch (err) {
+    console.error("편입안내 페이지 텍스트 불러오기 실패", err);
+  }
+};
+export const PostTransferContent = async (
+  payload: TransferContentPayload
+) => {
+  try {
+    const response = await API.post(`/api/transfer/update`, payload);
+    return response;
+  } catch (err) {
+    console.error("편입안내 페이지 텍스트 저장 실패", err);
   }
 };
 

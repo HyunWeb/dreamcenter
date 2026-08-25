@@ -58,7 +58,7 @@ export default function AboutPage() {
     <Div>
       <SeoHead
         title="유학원 소개 | 드림유학원"
-        description="우즈베키스탄 의대 유학 전문 드림유학원을 소개합니다. 우즈벡 의대 유학 수속 경험과 노하우를 확인하세요."
+        description="우즈베키스탄 의대 유학 전문 드림유학원을 소개합니다. 해외의대 중에서도 우즈벡의대 유학 수속 경험과 노하우를 확인하세요."
         path="/about"
       />
       <PageHeader title={"드림유학원"} root={"드림유학원"} />
