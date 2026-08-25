@@ -73,6 +73,26 @@ export type MainDataProps = {
   image_url: string;
 };
 
+// /schools 페이지: 고정 레이아웃 안에서 admin이 필드별로 수정하는 문구
+export type SchoolsContentPayload = {
+  intro: string;
+  tashkent_body: string;
+  samarkand_body: string;
+  andijan_body: string;
+  stat_body: string;
+};
+
+// /transfer 페이지: 고정 레이아웃 안에서 admin이 필드별로 수정하는 문구
+// steps_body는 줄바꿈으로 구분된 편입 절차 목록(한 줄 = 항목 하나)
+export type TransferContentPayload = {
+  intro: string;
+  eligibility_body: string;
+  steps_body: string;
+  procedure_note: string;
+  mou_notice_body: string;
+  contact_note: string;
+};
+
 export type ImageItem = {
   id: number;
   name: string;

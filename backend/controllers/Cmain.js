@@ -7,6 +7,8 @@ const {
   AboutWrite,
   OfficeSlide,
   OfficeWrite,
+  SchoolsContent,
+  TransferContent,
   ReservationSubmit,
   Users,
   QuestionSubmit,
@@ -435,6 +437,121 @@ exports.GetAboutWrite = async (req, res) => {
       .json({ message: "About 페이지 텍스트 가져오기 실패(서버)" });
   }
 };
+// /schools, /transfer 페이지는 디자인(H1/H2 구조, 통계박스 등)은 코드에 고정하고,
+// admin은 필드별 문구만 수정한다. row가 없을 때는 처음 작성했던 실제 사실 기반
+// 문구를 기본값으로 응답해서 빈 화면이 뜨지 않도록 한다.
+const DEFAULT_SCHOOLS_CONTENT = {
+  intro:
+    "드림유학원은 해외의대 중에서도 한국 보건복지부가 인정한 우즈베키스탄 의과대학(우즈벡의대)의 신입학·편입학 수속을 지원하는 유학원입니다. 타슈켄트, 사마르칸트, 안디잔 등 우즈베키스탄 주요 도시의 의과대학 정보를 소개합니다.",
+  tashkent_body:
+    "우즈베키스탄의 수도 타슈켄트에는 타슈켄트 국립의과대학교(옛 타슈켄트 의과대학과 타슈켄트 소아의과대학이 통합)와, 새롭게 한국 보건복지부 인정 외국 의과대학 목록에 등록된 Central Asian University(CAU) 의과대학이 있습니다.\n드림유학원은 타슈켄트 현지 사무소를 직접 운영하며, 서류 준비부터 비자, 현지 정착까지 신입학·편입학 전 과정을 관리합니다.",
+  samarkand_body:
+    "드림유학원은 사마르칸트 국립의과대학교(Samarkand State Medical University)와 공식 MOU를 체결한 대한민국 공식 파트너 유학원입니다. 사마르칸트는 2,700년 역사를 가진 실크로드의 중심 도시로, 온화한 기후와 안정된 치안, 타슈켄트보다 저렴한 생활비를 갖춘 교육 도시입니다.\n공식 MOU를 통해 학교와 직접 소통하며 입학 후에도 학생 관리를 지속할 수 있다는 점이 드림유학원을 통한 사마르칸트 의대 진학의 가장 큰 강점입니다.",
+  andijan_body:
+    "안디잔 국립의과대학교(Andijan State Medical Institute) 역시 한국 보건복지부가 인정한 우즈베키스탄 의과대학 목록에 포함되어 있습니다. 드림유학원은 안디잔 의대 신입학·편입학 상담도 함께 진행하고 있으니, 우즈베키스탄 내 여러 의과대학을 비교해보고 싶으신 분은 편하게 문의해주세요.",
+  stat_body:
+    "국회 보건복지위원회 자료에 따르면 2001~2023년 외국 의대 졸업자의 한국 의사 국가고시 평균 합격률은 60.4%이며, 이 중 우즈베키스탄 의대 출신 합격률은 76.3%로 높은 수준을 기록했습니다.",
+};
+
+const DEFAULT_TRANSFER_CONTENT = {
+  intro:
+    "우즈베키스탄 의대는 신입학뿐만 아니라 편입학도 함께 모집합니다. 국내외 4년제 대학을 졸업했거나 졸업 예정인 분이라면, 처음부터 다시 시작하지 않고 의대편입을 통해 진학할 수 있습니다.",
+  eligibility_body:
+    "타슈켄트 국립의과대학교, 사마르칸트 국립의과대학교, 안디잔 국립의과대학교 등 한국 보건복지부가 인정한 우즈베키스탄 의과대학들이 신입학과 편입학을 동시에 모집합니다. 4년제 대학 학사 학위를 소지했거나 졸업 예정인 국내외 대학생이 편입 대상이 됩니다.",
+  steps_body:
+    "무료 상담 — 현재 학력과 상황에 맞는 편입 가능 여부 확인\n서류 준비 — 성적증명서 등 학교 제출용 서류 준비\n서류 제출 및 접수확인서 발급 — 학교의 공식 검토 및 승인\n입학허가서 발급 및 비자 신청\n출국 및 현지 정착 지원",
+  procedure_note:
+    "우즈베키스탄 의대는 통상 9월학기를 정규 입학 시즌으로 운영하며, 학기별로 지원 마감일이 정해져 있어 미리 상담을 시작하는 것이 좋습니다.",
+  mou_notice_body:
+    "해외의대 편입은 학교와 직접 소통할 수 있는 공식 파트너 유학원을 통해 진행하는 것이 중요합니다. 드림유학원은 사마르칸트 국립의과대학교와 공식 MOU를 체결한 대한민국 공식 파트너 유학원으로, 입학 이후의 학생 관리까지 책임집니다.",
+  contact_note:
+    "편입 관련 문의 및 성적증명서 제출은 uzbekdoctordream@gmail.com 으로도 보내주실 수 있습니다.",
+};
+
+const SCHOOLS_FIELDS = [
+  "intro",
+  "tashkent_body",
+  "samarkand_body",
+  "andijan_body",
+  "stat_body",
+];
+const TRANSFER_FIELDS = [
+  "intro",
+  "eligibility_body",
+  "steps_body",
+  "procedure_note",
+  "mou_notice_body",
+  "contact_note",
+];
+
+const pickFields = (source, fields) =>
+  fields.reduce((acc, key) => {
+    acc[key] = typeof source[key] === "string" ? source[key] : "";
+    return acc;
+  }, {});
+
+exports.PostSchoolsContent = async (req, res) => {
+  try {
+    const payload = pickFields(req.body, SCHOOLS_FIELDS);
+    const existing = await SchoolsContent.findOne({ where: { id: 1 } });
+    if (existing) {
+      await existing.update(payload);
+    } else {
+      await SchoolsContent.create({ id: 1, ...payload });
+    }
+    return res.status(200).json({ message: "저장 및 업데이트 완료" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "대학안내 페이지 텍스트 수정 실패(서버)" });
+  }
+};
+
+exports.PostTransferContent = async (req, res) => {
+  try {
+    const payload = pickFields(req.body, TRANSFER_FIELDS);
+    const existing = await TransferContent.findOne({ where: { id: 1 } });
+    if (existing) {
+      await existing.update(payload);
+    } else {
+      await TransferContent.create({ id: 1, ...payload });
+    }
+    return res.status(200).json({ message: "저장 및 업데이트 완료" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "편입안내 페이지 텍스트 수정 실패(서버)" });
+  }
+};
+
+exports.GetSchoolsContent = async (req, res) => {
+  try {
+    const existing = await SchoolsContent.findOne({ where: { id: 1 } });
+    if (!existing) {
+      return res.status(200).json({ result: DEFAULT_SCHOOLS_CONTENT });
+    }
+    return res.status(200).json({ result: existing });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "대학안내 페이지 텍스트 가져오기 실패(서버)" });
+  }
+};
+
+exports.GetTransferContent = async (req, res) => {
+  try {
+    const existing = await TransferContent.findOne({ where: { id: 1 } });
+    if (!existing) {
+      return res.status(200).json({ result: DEFAULT_TRANSFER_CONTENT });
+    }
+    return res.status(200).json({ result: existing });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "편입안내 페이지 텍스트 가져오기 실패(서버)" });
+  }
+};
+
 exports.GetOfficeWrite = async (req, res) => {
   try {
     const existing = await OfficeWrite.findOne({ where: { id: 1 } });

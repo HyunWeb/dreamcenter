@@ -18,6 +18,10 @@ const {
   PostOfficeWrite,
   GetAboutWrite,
   GetOfficeWrite,
+  PostSchoolsContent,
+  GetSchoolsContent,
+  PostTransferContent,
+  GetTransferContent,
   PostReservationSubmit,
   getUserInfo,
   GetReservationSubmit,
@@ -65,6 +69,10 @@ router.post("/about/postWrite", PostAboutWrite);
 router.post("/office/postWrite", PostOfficeWrite);
 router.get("/about/getWrite", GetAboutWrite);
 router.get("/office/getWrite", GetOfficeWrite);
+router.post("/schools/update", PostSchoolsContent);
+router.get("/schools/get", GetSchoolsContent);
+router.post("/transfer/update", PostTransferContent);
+router.get("/transfer/get", GetTransferContent);
 router.post("/reservation/postSubmit", PostReservationSubmit);
 router.get("/reservation/getSubmit", GetReservationSubmit);
 router.post("/reservation/postDelete", PostReservationDelete);
