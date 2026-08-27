@@ -70,9 +70,7 @@ export default function Gnb() {
   const navItems = [
     { to: "/", label: "Home" },
     { to: "about", label: "About" },
-    { to: "office", label: "사무소" },
     { to: "schools", label: "대학안내" },
-    { to: "transfer", label: "편입안내" },
     { to: "news", label: "소식" },
     { to: "questions", label: "질문게시판" },
     { to: "reservation", label: "예약상담" },

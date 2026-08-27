@@ -90,7 +90,7 @@ export default function SchoolsEditModal() {
 
       <FormRow
         htmlFor="tashkent_body"
-        label="타슈켄트의대"
+        label="타슈켄트"
         required
         NeedWrapper={false}
       >
@@ -103,7 +103,7 @@ export default function SchoolsEditModal() {
 
       <FormRow
         htmlFor="samarkand_body"
-        label="사마르칸트국립의과대학교"
+        label="사마르칸트"
         required
         NeedWrapper={false}
       >
@@ -116,7 +116,7 @@ export default function SchoolsEditModal() {
 
       <FormRow
         htmlFor="andijan_body"
-        label="안디잔국립의과대학교"
+        label="부하라"
         required
         NeedWrapper={false}
       >
@@ -125,19 +125,7 @@ export default function SchoolsEditModal() {
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDraftField("andijan_body", e.target.value)}
         />
       </FormRow>
-      <Hint>💡 검색노출 유지 권장 키워드: 안디잔의대</Hint>
-
-      <FormRow
-        htmlFor="stat_body"
-        label="국시 합격률 통계"
-        required={false}
-        NeedWrapper={false}
-      >
-        <Textarea
-          value={draft.stat_body}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDraftField("stat_body", e.target.value)}
-        />
-      </FormRow>
+      <Hint>💡 검색노출 유지 권장 키워드: 부하라의대</Hint>
 
       <ButtonBox>
         <Button
