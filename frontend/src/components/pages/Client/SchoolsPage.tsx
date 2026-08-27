@@ -66,27 +66,6 @@ const SchoolSection = styled.section`
   }
 `;
 
-const StatBox = styled.div`
-  max-width: 860px;
-  margin: 0 auto 80px;
-  padding: 30px;
-  background-color: #f8f8f8;
-  border-radius: 12px;
-  text-align: left;
-
-  strong {
-    display: block;
-    margin-bottom: 8px;
-    color: #49b736;
-  }
-  p {
-    line-height: 1.6;
-    font-size: 14px;
-    color: #555555;
-    white-space: pre-line;
-  }
-`;
-
 const CTA = styled(Link)`
   display: inline-block;
   padding: 14px 40px;
@@ -124,8 +103,8 @@ export default function SchoolsPage() {
   return (
     <Div>
       <SeoHead
-        title="우즈베키스탄 의과대학 안내(타슈켄트·사마르칸트·안디잔) | 드림유학원"
-        description="우즈베키스탄 의대 유학, 타슈켄트의대·사마르칸트의대·안디잔의대를 드림유학원이 안내합니다. 한국 보건복지부 인정 의과대학 정보와 신입학·편입학 절차를 확인하세요."
+        title="우즈베키스탄 의과대학 안내(타슈켄트·사마르칸트·부하라) | 드림유학원"
+        description="우즈베키스탄 의대 유학, 타슈켄트의대·사마르칸트의대·부하라의대를 드림유학원이 안내합니다. 한국 보건복지부 인정 의과대학 정보와 신입학·편입학 절차를 확인하세요."
         path="/schools"
       />
       <PageHeader title="대학안내" root="대학안내" />
@@ -144,26 +123,19 @@ export default function SchoolsPage() {
       <Intro>{data.intro}</Intro>
 
       <SchoolSection>
-        <h2>타슈켄트의대</h2>
+        <h2>타슈켄트</h2>
         <p>{data.tashkent_body}</p>
       </SchoolSection>
 
       <SchoolSection>
-        <h2>사마르칸트국립의과대학교</h2>
+        <h2>사마르칸트</h2>
         <p>{data.samarkand_body}</p>
       </SchoolSection>
 
       <SchoolSection>
-        <h2>안디잔국립의과대학교</h2>
+        <h2>부하라</h2>
         <p>{data.andijan_body}</p>
       </SchoolSection>
-
-      {data.stat_body && (
-        <StatBox>
-          <strong>우즈베키스탄 의대 졸업 후 한국 의사 국가고시</strong>
-          <p>{data.stat_body}</p>
-        </StatBox>
-      )}
 
       <CTA to="/reservation">무료 입학 상담 예약하기</CTA>
 
