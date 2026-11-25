@@ -101,7 +101,7 @@ export default function ButtonWrap({
     // setForm(result.result);
     setCurrentPage(1); // 지웠으면 페이지 1로 돌아가기
 
-    if (res.message === "삭제 성공") {
+    if (res?.message === "삭제 성공") {
       showAlert("예약 내역이 삭제되었습니다.");
       PageCount();
     }

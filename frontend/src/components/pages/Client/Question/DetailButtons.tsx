@@ -71,7 +71,7 @@ export default function DetailButtons({
     if (!id) return;
     const res = await DeleteQuestion(id);
 
-    if (res.success) {
+    if (res?.success) {
       showAlert("삭제가 완료되었습니다.");
       naviagte(-1);
     }
