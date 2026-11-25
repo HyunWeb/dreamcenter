@@ -28,8 +28,9 @@ const ImageList = styled.ul<{ $imgLeng: number }>`
   }
 `;
 
+// 아래 썸네일도 큰 사진과 같은 정사각형으로 맞춘다.
 const ImgListItem = styled.li<{ $imgLeng: number }>`
-  height: 20vh;
+  aspect-ratio: 1 / 1;
   width: ${(props) => `calc(100% / ${props.$imgLeng})`};
   box-sizing: border-box;
   flex-shrink: 0;
@@ -40,6 +41,8 @@ const ImgListItem = styled.li<{ $imgLeng: number }>`
   cursor: pointer;
   img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   div {
     width: 100%;
@@ -57,14 +60,8 @@ const ImgListItem = styled.li<{ $imgLeng: number }>`
   }
 
   @media (max-width: 1024px) {
-    aspect-ratio: 4 / 3;
     flex-shrink: 0;
     width: 40%;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
   }
 `;
 export default function ImgListBox() {

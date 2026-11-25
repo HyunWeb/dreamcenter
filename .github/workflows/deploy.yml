@@ -32,9 +32,18 @@ jobs:
 
             cd backend
 
-            docker-compose down
+            # 1) 기존 컨테이너를 켜 둔 채 새 이미지를 먼저 빌드한다.
+            #    (예전에는 down 후 빌드해서 빌드 시간 약 2분 동안 사이트가 꺼져 있었다.
+            #     빌드가 실패해도 기존 사이트는 그대로 유지된다.)
+            docker-compose build
 
-            docker-compose up -d --build
+            # 2) 바뀐 컨테이너만 새 이미지로 교체한다. DB(mysql)는 바뀐 게 없으면 재시작하지 않는다.
+            echo "교체 시작: $(date -u +%H:%M:%S)"
+            docker-compose up -d
+            echo "교체 완료: $(date -u +%H:%M:%S)"
+
+            # 3) 교체되고 남은 옛 이미지(dangling)만 정리해 디스크가 차지 않게 한다.
+            docker image prune -f
 
             docker system df
 
