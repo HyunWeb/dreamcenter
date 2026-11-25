@@ -1,0 +1,32 @@
+# 노트북 테스트 서버용. 운영(docker-compose.yml)과 컨테이너·볼륨 이름이 겹치지 않는다.
+# 실행: docker compose -f docker-compose.local.yml up --build
+# 종료: docker compose -f docker-compose.local.yml down   (데이터 삭제까지: down -v)
+# 프론트는 컨테이너 대신 frontend에서 npm start (.env.development.local 사용)
+name: dreamcenter-local
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      # 로컬 전용 값. backend/.env.local의 DB_USER/DB_PASSWORD/DB_NAME과 맞춘다.
+      MYSQL_ROOT_PASSWORD: localroot
+      MYSQL_DATABASE: study_agency
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: localpass
+    ports:
+      - "127.0.0.1:3307:3306" # DB 툴로 들여다볼 때만 사용 (노트북 내부에서만 접속 가능)
+    volumes:
+      - mysql-data-local:/var/lib/mysql
+
+  backend:
+    build:
+      context: .
+    env_file:
+      - .env.local
+    ports:
+      - "127.0.0.1:3001:3001"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data-local:

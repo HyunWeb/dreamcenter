@@ -63,18 +63,24 @@ export default function ButtonWrap({
   const { pageCount, setPageCount, currentPage, setCurrentPage } =
     ReservationMyListStore();
 
+  // 관리자 화면은 전체 예약, 사용자 화면은 내 예약을 불러온다.
+  const listType = type === "AdminPage" ? "AdminSubmitList" : "mySubmitList";
+
   // 페이지가 변경되면 (항목을 지워서 1로 돌아갔으면) 새로받아오기
   useEffect(() => {
     // 현재 페이지 값이 바뀐게 확인되어야만 데이터를 새로 요청한다.
-    PageCount();
+    PageCount(currentPage);
   }, [currentPage]);
 
-  const PageCount = async () => {
+  const PageCount = async (page: number) => {
     if (!setForm) return;
-    const res = await GetPageCount("mySubmitList", currentPage);
-    if (!res || !res.result) return;
-    setPageCount(Array.from({ length: res.result }, (_, i) => i + 1));
-    setForm(res.TotalItems);
+    const res = await GetPageCount(listType, page);
+    if (!res) return;
+    // 남은 항목이 0개여도 목록을 비워야 삭제가 화면에 바로 반영된다.
+    setPageCount(
+      Array.from({ length: Math.max(res.result || 0, 1) }, (_, i) => i + 1)
+    );
+    setForm(res.TotalItems ?? []);
   };
 
   const handleChecked = () => {
@@ -101,9 +107,9 @@ export default function ButtonWrap({
     // setForm(result.result);
     setCurrentPage(1); // 지웠으면 페이지 1로 돌아가기
 
-    if (res.message === "삭제 성공") {
+    if (res?.message === "삭제 성공") {
       showAlert("예약 내역이 삭제되었습니다.");
-      PageCount();
+      PageCount(1);
     }
   };
 

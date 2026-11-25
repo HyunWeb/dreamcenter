@@ -7,7 +7,6 @@ import {
   SearchStore,
   UseModalStore,
 } from "@/store/userStore";
-import { start } from "repl";
 const Div = styled.div`
   display: flex;
   align-items: center;
@@ -49,9 +48,11 @@ const Div = styled.div`
   7, 10
   3, 6
 */
-const Ul = styled.ul<{ $Index: number }>`
+const Ul = styled.ul<{ $Index: number; $center: boolean }>`
   display: flex;
   align-items: center;
+  /* 페이지가 4개 미만이면 슬라이드할 일이 없으니 가운데 정렬 */
+  justify-content: ${({ $center }) => ($center ? "center" : "flex-start")};
   color: #888888;
   transform: translateX(calc(-25% * 0));
   transform: ${({ $Index }) => `translateX(calc(-25% * ${$Index}))`};
@@ -228,7 +229,10 @@ export default function PageCountUI<T>({
         </svg>
       </button>
       <div className="CountWrap">
-        <Ul $Index={startIndex - 1}>
+        <Ul
+          $Index={pageCount.length < 4 ? 0 : startIndex - 1}
+          $center={pageCount.length < 4}
+        >
           {pageCount.map((item, index) => {
             return (
               <li key={index}>

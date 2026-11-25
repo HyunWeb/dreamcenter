@@ -4,6 +4,7 @@ import {
   TransferContentPayload,
 } from "@/types/forms";
 import axios from "axios";
+import { useAlertStore } from "@/store/userStore";
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -12,6 +13,20 @@ const API = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+// 서버가 로그인 만료·권한 없음을 알려주면 안내를 띄운다.
+// 서버가 code를 붙인 응답에만 반응하므로, 기존 401 응답(비로그인 방문자 등)에는 영향이 없다.
+const AUTH_ERROR_CODES = ["LOGIN_REQUIRED", "ADMIN_REQUIRED", "FORBIDDEN"];
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const data = error?.response?.data;
+    if (data && AUTH_ERROR_CODES.includes(data.code)) {
+      useAlertStore.getState().showAlert(data.message);
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const getUserInfo = async () => {
   try {

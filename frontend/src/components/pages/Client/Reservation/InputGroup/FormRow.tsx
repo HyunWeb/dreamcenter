@@ -13,6 +13,17 @@ const Inputdiv = styled.div`
     flex-direction: column;
     margin-bottom: 10px;
   }
+
+  /* 필수 항목을 비운 채 제출했을 때 강조 */
+  &.invalid label {
+    color: #d93025;
+  }
+  &.invalid input,
+  &.invalid select,
+  &.invalid textarea {
+    border-color: #d93025;
+    background-color: #fff6f5;
+  }
 `;
 
 const Label = styled.label`
@@ -43,6 +54,7 @@ interface FormRowProps {
   required: boolean;
   children: React.ReactNode;
   NeedWrapper?: boolean;
+  invalid?: boolean;
 }
 
 export default function FormRow({
@@ -51,9 +63,10 @@ export default function FormRow({
   required,
   children,
   NeedWrapper = true,
+  invalid = false,
 }: FormRowProps) {
   return (
-    <Inputdiv>
+    <Inputdiv className={invalid ? "invalid" : undefined}>
       <Label htmlFor={htmlFor}>
         {label}
         {required && <span className="required">*</span>}

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Div = styled.div<{ $visible: boolean }>`
   position: fixed;
-  z-index: 90;
+  z-index: 100; /* 모달(95~96)보다 위에 보이도록 */
   top: ${(props) => (props.$visible ? "20px" : "-100px")};
   left: 50%;
   transform: translateX(-50%);

@@ -1,6 +1,9 @@
 frontend/node_modules/
 backend/node_modules/
-package-lock.json
 .DS_Store
 frontend/.env
 backend/.env
+frontend/docs/init.md
+
+# 노트북 테스트 서버 전용 env
+backend/.env.local
