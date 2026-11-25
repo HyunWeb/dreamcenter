@@ -20,7 +20,7 @@ export default function AgeInputGroup() {
     <>
       <SingleInput
         type="number"
-        id=" age"
+        id="age"
         name="age"
         max={90}
         placeholder="만 나이를 입력해주세요"
