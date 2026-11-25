@@ -1,5 +1,4 @@
 import SectionAbout from "./SectionAbout";
-import SectionOffice from "./SectionOffice";
 import SectionNews from "./SectionNews";
 import SectionGallery from "./SectionGallery";
 import { MainStore, useAlertStore } from "@/store/userStore";
@@ -19,7 +18,6 @@ export default function Main() {
         path="/"
       />
       <SectionAbout />
-      <SectionOffice />
       <SectionNews />
       <SectionGallery />
       {isModalOpen && <AboutModal />}

@@ -17,9 +17,12 @@ const ViewBox = styled.div`
   overflow: hidden;
 `;
 
+// 큰 사진: PC·모바일 모두 정사각형 틀에 사진을 꽉 채워 보여준다.
+// (예전에는 PC가 가로 80% × 세로 50vh라 사진 위아래가 크게 잘렸고,
+//  모바일은 기기 높이에 따라 비율이 달라졌다.)
 const ImgContainer = styled.div`
-  width: 80%;
-  height: 50vh;
+  width: min(80%, 640px);
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -28,6 +31,8 @@ const ImgContainer = styled.div`
   position: relative;
   img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   div {
     width: 100%;
@@ -45,13 +50,6 @@ const ImgContainer = styled.div`
 
   @media (max-width: 1024px) {
     width: 100%;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
   }
 `;
 
