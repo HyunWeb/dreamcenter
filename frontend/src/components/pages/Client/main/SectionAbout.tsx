@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { MainStore, useUserStore } from "@/store/userStore";
 import { GetMainAbout } from "@/api/postApi";
 
-const AboutSection = styled.section<{ $imageUrl: string }>`
+const AboutSection = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,19 +47,14 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
     }
   }
 
+  /* 이미지가 오기 전 자리를 채우는 어두운 바탕 (기본 사진이 잠깐 보이지 않도록) */
   &::before {
     content: "";
     width: 100vw;
     height: 100%;
     position: absolute;
     z-index: 0;
-
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-      url(${(props) => props.$imageUrl});
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    /* filter: blur(1.8px); */
+    background-color: #1c1f1b;
   }
 
   div {
@@ -113,28 +108,101 @@ const AboutSection = styled.section<{ $imageUrl: string }>`
   }
 `;
 
+// 설정된 배경 사진 레이어. 사진을 다 받은 뒤에만 보이게 해서 깜빡임을 없앤다.
+const BackgroundLayer = styled.span<{ $imageUrl: string; $visible: boolean }>`
+  width: 100vw;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url(${(props) => props.$imageUrl});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: ${(props) => (props.$visible ? 1 : 0)};
+  transition: opacity 0.4s ease;
+`;
+
+const Content = styled.div<{ $visible: boolean }>`
+  opacity: ${(props) => (props.$visible ? 1 : 0)};
+  transition: opacity 0.3s ease;
+`;
+
 const Paragraph = styled.p`
   white-space: pre-line;
 `;
+const DEFAULT_IMAGE = "defaultBanner.png";
+const CACHE_KEY = "dreamcenter:mainAbout";
+
+// 지난 방문 때 받은 메인 데이터. 재방문 시 기본값 대신 바로 이 값으로 그린다.
+const readCache = () => {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
 export default function SectionAbout() {
   const { setIsModalOpen, MainAbout, setMainAbout } = MainStore();
   const { role } = useUserStore();
-  const [imageUrl, setImageUrl] = useState<string>(
-    "https://dreamcenter-image-bucket.s3.ap-northeast-2.amazonaws.com/uploads/Layer+3.png"
-  );
+  // 서버(또는 캐시) 데이터를 받았는지. 받기 전에는 기본 문구·사진을 보여주지 않는다.
+  const [dataReady, setDataReady] = useState(false);
+  // 화면에 띄울 수 있게 다 받아진 사진 주소
+  const [loadedImage, setLoadedImage] = useState<string | null>(null);
 
   useEffect(() => {
+    const cached = readCache();
+    if (cached) {
+      setMainAbout(cached);
+      setDataReady(true);
+    }
+
     const fetchMain = async () => {
       const res = await GetMainAbout();
-      if (res.result) {
+      if (res?.result) {
         setMainAbout(res.result);
-        setImageUrl(res.result.image_url);
+      } else if (!cached) {
+        // 서버 응답이 없으면 기본 사진으로 대신한다.
+        setLoadedImage(DEFAULT_IMAGE);
       }
+      setDataReady(true);
     };
     fetchMain();
   }, []);
+
+  // 사진 주소가 정해지거나 관리자가 사진을 바꾸면, 미리 받아둔 뒤 교체한다.
+  const imageUrl = MainAbout?.image_url;
+  useEffect(() => {
+    if (!imageUrl) return;
+    let cancelled = false;
+    const img = new Image();
+    img.onload = () => !cancelled && setLoadedImage(imageUrl);
+    img.onerror = () => !cancelled && setLoadedImage(DEFAULT_IMAGE);
+    img.src = imageUrl;
+    return () => {
+      cancelled = true;
+    };
+  }, [imageUrl]);
+
+  // 최신 메인 데이터를 다음 방문용으로 저장
+  useEffect(() => {
+    if (!MainAbout?.image_url) return;
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(MainAbout));
+    } catch {
+      // 저장 공간을 쓸 수 없는 환경이면 캐시 없이 동작한다.
+    }
+  }, [MainAbout]);
+
   return (
-    <AboutSection $imageUrl={imageUrl || "defaultBanner.png"}>
+    <AboutSection>
+      <BackgroundLayer
+        $imageUrl={loadedImage ?? ""}
+        $visible={loadedImage !== null}
+        aria-hidden="true"
+      />
       {role === "admin" && (
         <button onClick={() => setIsModalOpen(true)}>
           <svg
@@ -153,7 +221,7 @@ export default function SectionAbout() {
           </svg>
         </button>
       )}
-      <div>
+      <Content $visible={dataReady}>
         <h1>{MainAbout?.title_main || "우즈베키스탄 의대 유학 전문 드림유학원"}</h1>
         <h2>
           {MainAbout?.title_sub ||
@@ -164,7 +232,7 @@ export default function SectionAbout() {
             "2020 ~ 2025 우즈베키스탄 의대 전체 수속 학생수 1위"}
         </Paragraph>
         <Link to="/about">자세히 보기</Link>
-      </div>
+      </Content>
     </AboutSection>
   );
 }
