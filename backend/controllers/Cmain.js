@@ -665,6 +665,25 @@ exports.GetReservationSubmit = async (req, res) => {
 exports.PostReservationDelete = async (req, res) => {
   try {
     const IdArr = req.body.deleteArray;
+    if (!Array.isArray(IdArr) || IdArr.length === 0) {
+      return res.status(400).json({ message: "삭제할 항목이 없습니다." });
+    }
+
+    // 관리자는 모든 예약을, 일반 사용자는 본인 예약만 삭제할 수 있다.
+    // 남의 예약이 하나라도 섞여 있으면 아무것도 지우지 않는다.
+    if (req.user.role !== "admin") {
+      const uniqueIds = [...new Set(IdArr)];
+      const ownedCount = await ReservationSubmit.count({
+        where: { id: uniqueIds, sns_id: req.user.sns_id },
+      });
+      if (ownedCount !== uniqueIds.length) {
+        return res.status(403).json({
+          code: "FORBIDDEN",
+          message: "본인의 예약만 삭제할 수 있습니다.",
+        });
+      }
+    }
+
     await ReservationSubmit.destroy({ where: { id: IdArr } });
     res.status(200).json({ message: "삭제 성공" });
   } catch (err) {
@@ -703,7 +722,15 @@ exports.GetPageCount = async (req, res) => {
         });
         break;
 
-      case "AdminSubmitList":
+      case "AdminSubmitList": {
+        // 전체 예약(이름·연락처 포함)은 관리자만 볼 수 있다.
+        const requester = await User.findOne({ where: { sns_id: userId } });
+        if (!requester || requester.role !== "admin") {
+          return res.status(403).json({
+            code: "ADMIN_REQUIRED",
+            message: "관리자 권한이 필요합니다.",
+          });
+        }
         result = await ReservationSubmit.count();
         TotalItems = await ReservationSubmit.findAll({
           limit: limit,
@@ -711,10 +738,12 @@ exports.GetPageCount = async (req, res) => {
           order: [["createdAt", "DESC"]],
         });
         break;
+      }
 
       case "QuestionSubmitList":
         result = await QuestionSubmit.count();
         TotalItems = await QuestionSubmit.findAll({
+          attributes: { exclude: ["privatePWD"] },
           limit: limit,
           offset: startIndex,
           order: [["createdAt", "DESC"]],
@@ -914,7 +943,11 @@ exports.GetMyReservation = async (req, res) => {
 exports.GetQuestion = async (req, res) => {
   const postId = req.params.id;
   try {
-    const result = await QuestionSubmit.findOne({ where: { id: postId } });
+    // 비공개 글 비밀번호는 응답에 포함하지 않는다. (확인은 /Question/Password에서 서버가 한다)
+    const result = await QuestionSubmit.findOne({
+      where: { id: postId },
+      attributes: { exclude: ["privatePWD"] },
+    });
     return res.status(200).json({ result: result });
   } catch (err) {
     console.error(err);
@@ -967,13 +1000,21 @@ exports.PostAnswerSubmit = async (req, res) => {
 exports.DeleteQuestion = async (req, res) => {
   const postId = req.params.id;
   try {
-    const result = await QuestionSubmit.destroy({ where: { id: postId } });
-    if (result === 0) {
-      // 삭제된 row 없음
+    const question = await QuestionSubmit.findOne({ where: { id: postId } });
+    if (!question) {
       return res
         .status(404)
         .json({ success: false, message: "존재하지 않는 질문입니다." });
     }
+    // 작성자 본인 또는 관리자만 삭제할 수 있다.
+    if (req.user.role !== "admin" && question.sns_id !== req.user.sns_id) {
+      return res.status(403).json({
+        code: "FORBIDDEN",
+        success: false,
+        message: "본인이 작성한 질문만 삭제할 수 있습니다.",
+      });
+    }
+    const result = await QuestionSubmit.destroy({ where: { id: postId } });
     return res.status(200).json({ success: true, result });
   } catch (err) {
     console.error(err);
@@ -983,6 +1024,14 @@ exports.DeleteQuestion = async (req, res) => {
 
 exports.GetSearch = async (req, res) => {
   const { keyword, searchField } = req.query;
+
+  // 화면에서 제공하는 검색 항목(제목, 글쓴이)만 허용한다.
+  // 임의 컬럼(privatePWD, message 등)으로 검색해 비공개 정보를 추측하지 못하게 막는다.
+  if (!["title", "nickname"].includes(searchField)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "지원하지 않는 검색 항목입니다." });
+  }
 
   try {
     let where;
@@ -1003,6 +1052,7 @@ exports.GetSearch = async (req, res) => {
 
     const result = await QuestionSubmit.findAll({
       where,
+      attributes: { exclude: ["privatePWD"] },
       order: [["createdAt", "DESC"]],
     });
     res.status(200).json({ success: true, result });

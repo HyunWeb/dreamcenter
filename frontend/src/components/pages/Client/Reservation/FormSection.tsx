@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -142,6 +142,15 @@ const PrivacyBox = styled.div`
     margin-top: 38px;
     flex-shrink: 0;
   }
+
+  /* 동의하지 않고 제출했을 때 강조 */
+  &.invalid label {
+    color: #d93025;
+  }
+  &.invalid input[type="checkbox"] {
+    outline: 2px solid #d93025;
+    outline-offset: 2px;
+  }
 `;
 type props = {
   setSelectTab: React.Dispatch<SetStateAction<boolean>>;
@@ -171,18 +180,67 @@ export default function FormSection({ setSelectTab }: props) {
     setAgreePrivacy(e.target.checked);
   };
 
+  // 필수 항목 검사. focusId는 비어 있을 때 커서를 옮길 입력칸.
+  const requiredChecks: {
+    key: string;
+    label: string;
+    ok: boolean;
+    focusId: string;
+  }[] = [
+    { key: "name", label: "이름", ok: name.trim() !== "", focusId: "name" },
+    {
+      key: "phone",
+      label: "연락처",
+      ok: phone.length === 13,
+      focusId: "phone1",
+    },
+    {
+      key: "date",
+      label: "상담날짜",
+      ok: date !== "" && time !== "",
+      focusId: date === "" ? "consultDate" : "consultTime",
+    },
+    { key: "age", label: "나이", ok: age !== "", focusId: "age" },
+    {
+      key: "school",
+      label: "학교명/전공/최종학력",
+      ok: school.trim() !== "",
+      focusId: "school",
+    },
+    {
+      key: "admission",
+      label: "신입학/편입학",
+      ok: admission !== "",
+      focusId: "admissionType",
+    },
+    {
+      key: "agreePrivacy",
+      label: "개인정보 수집 동의",
+      ok: agreePrivacy,
+      focusId: "agreePrivacy",
+    },
+  ];
+  const [invalidKeys, setInvalidKeys] = useState<string[]>([]);
+  const isInvalid = (key: string) => invalidKeys.includes(key);
+
+  // 강조된 칸을 채우면 그 칸의 강조를 바로 지운다.
+  useEffect(() => {
+    if (invalidKeys.length === 0) return;
+    setInvalidKeys((prev) =>
+      prev.filter((key) => !requiredChecks.find((c) => c.key === key)?.ok)
+    );
+  }, [name, phone, date, time, age, school, admission, agreePrivacy]);
+
   const handleSubmit = async () => {
-    if (
-      name === "" ||
-      phone.length !== 13 ||
-      date === "" ||
-      time === "" ||
-      age === "" ||
-      school === "" ||
-      admission === "" ||
-      agreePrivacy === false
-    ) {
-      showAlert("필수 항목을 모두 입력해주세요");
+    const missing = requiredChecks.filter((c) => !c.ok);
+    if (missing.length > 0) {
+      setInvalidKeys(missing.map((c) => c.key));
+      showAlert(
+        `필수 항목을 입력해주세요: ${missing.map((c) => c.label).join(", ")}`
+      );
+      const first = document.getElementById(missing[0].focusId);
+      first?.scrollIntoView({ behavior: "smooth", block: "center" });
+      first?.focus({ preventScroll: true });
       return;
     }
     const formData = new FormData();
@@ -225,19 +283,39 @@ export default function FormSection({ setSelectTab }: props) {
             <UserIdInputGroup type="readOnly" />
           </FormRow>
 
-          <FormRow htmlFor="name" label="이름" required={true}>
+          <FormRow
+            htmlFor="name"
+            label="이름"
+            required={true}
+            invalid={isInvalid("name")}
+          >
             <NameInputGroup />
           </FormRow>
 
-          <FormRow htmlFor="phone1" label="연락처" required={true}>
+          <FormRow
+            htmlFor="phone1"
+            label="연락처"
+            required={true}
+            invalid={isInvalid("phone")}
+          >
             <PhoneInputGroup />
           </FormRow>
 
-          <FormRow htmlFor="consultDate" label="상담날짜" required={true}>
+          <FormRow
+            htmlFor="consultDate"
+            label="상담날짜"
+            required={true}
+            invalid={isInvalid("date")}
+          >
             <DateInputGroup />
           </FormRow>
 
-          <FormRow htmlFor="age" label="나이" required={true}>
+          <FormRow
+            htmlFor="age"
+            label="나이"
+            required={true}
+            invalid={isInvalid("age")}
+          >
             <AgeInputGroup />
           </FormRow>
 
@@ -245,14 +323,16 @@ export default function FormSection({ setSelectTab }: props) {
             htmlFor="school"
             label="학교명/전공/최종학력"
             required={true}
+            invalid={isInvalid("school")}
           >
             <SchoolInputGroup />
           </FormRow>
 
           <FormRow
             htmlFor="admissionType"
-            label="신입합/편입학"
+            label="신입학/편입학"
             required={true}
+            invalid={isInvalid("admission")}
           >
             <AdmissionInputGroup />
           </FormRow>
@@ -291,10 +371,11 @@ export default function FormSection({ setSelectTab }: props) {
             <ImgInputGroup />
           </FormRow>
 
-          <PrivacyBox>
+          <PrivacyBox className={isInvalid("agreePrivacy") ? "invalid" : undefined}>
             <AgreeLabel>
               <input
                 type="checkbox"
+                id="agreePrivacy"
                 name="agreePrivacy"
                 required
                 checked={agreePrivacy}
@@ -305,7 +386,9 @@ export default function FormSection({ setSelectTab }: props) {
               내용 보기
             </a> */}
             </AgreeLabel>
-            <button onClick={handlePrivacy}>내용 보기</button>
+            <button type="button" onClick={handlePrivacy}>
+              내용 보기
+            </button>
           </PrivacyBox>
         </Fieldset>
       </Form>
