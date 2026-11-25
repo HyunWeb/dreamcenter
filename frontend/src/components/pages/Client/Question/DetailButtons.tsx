@@ -85,7 +85,7 @@ export default function DetailButtons({
             {ViewWriteAnswer ? "입력취소" : answer ? "답변수정" : "답변달기"}
           </ConfirmButton>
         )}
-        {sns_id === user_id && (
+        {(sns_id === user_id || role === "admin") && (
           <DeleteButton onClick={handleDelete}>질문삭제</DeleteButton>
         )}
       </Wrap>

@@ -86,7 +86,7 @@ const ButtonBox = styled.div`
 export default function AdminReservationPage() {
   const { showAlert } = useAlertStore();
   const [form, setForm] = useState<FormData[]>([]);
-  const { isLogin } = useUserStore();
+  const { isLogin, role } = useUserStore();
   const navigate = useNavigate();
   const { viewMode, setViewMode } = ReservationMyListStore();
   const currentDetail = form.find((item) => item.id === viewMode[1]);
@@ -105,9 +105,18 @@ export default function AdminReservationPage() {
     if (!isLogin) {
       showAlert("로그인 후 이용해주세요");
       navigate("/", { replace: true });
+      return;
+    }
+    // 화면 차단은 편의용이고, 실제 데이터는 서버가 관리자만 내려준다.
+    if (role !== "admin") {
+      showAlert("관리자만 이용할 수 있는 페이지입니다.");
+      navigate("/", { replace: true });
+      return;
     }
     setViewMode(["list", 0]);
   }, []);
+
+  if (!isLogin || role !== "admin") return null;
 
   const handleViewMode = () => {
     setViewMode(["list", 0]);

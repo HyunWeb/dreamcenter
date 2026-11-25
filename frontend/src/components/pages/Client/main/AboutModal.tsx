@@ -109,9 +109,9 @@ export default function AboutModal() {
         </FormRow>
 
         <FormRow
-          htmlFor="inquiry"
-          label="핵심문의사항"
-          required={false}
+          htmlFor="Description"
+          label="설명"
+          required={true}
           NeedWrapper={false}
         >
           <Textarea

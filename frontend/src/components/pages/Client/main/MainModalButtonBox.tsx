@@ -44,8 +44,8 @@ export default function MainModalButtonBox() {
   };
 
   const handleSubmit = async () => {
-    if (title1 === "" || title2 === "" || message === "") {
-      showAlert("필수 항목을 모두 입력해주세요");
+    if (title1.trim() === "" || title2.trim() === "" || message.trim() === "") {
+      showAlert("타이틀1, 타이틀2, 설명을 모두 입력해주세요");
       return;
     }
     if (!MainAbout.image_url) {
